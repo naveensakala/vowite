@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — Vowite</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{--gold:#C9A84C;--gold-dark:#9C7A2E;--ivory:#FFFDF7;--espresso:#2C1A0E;--espresso-mid:#5C3D22;--border:rgba(201,168,76,0.2);}
+body{font-family:'DM Sans',sans-serif;background:#f8f5f0;color:var(--espresso);min-height:100vh;display:flex;}
+
+/* SIDEBAR */
+.sidebar{width:220px;background:var(--espresso);min-height:100vh;flex-shrink:0;display:flex;flex-direction:column;}
+.sidebar-logo{padding:1.5rem;border-bottom:0.5px solid rgba(255,255,255,0.08);}
+.sidebar-logo img{height:36px;width:auto;}
+.sidebar-nav{padding:1rem 0;flex:1;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 1.5rem;font-size:13px;color:rgba(255,253,247,0.6);cursor:pointer;transition:all 0.2s;border-left:3px solid transparent;}
+.nav-item:hover{color:var(--ivory);background:rgba(255,255,255,0.04);}
+.nav-item.active{color:var(--gold);border-left-color:var(--gold);background:rgba(201,168,76,0.06);}
+.nav-item-icon{font-size:16px;width:20px;text-align:center;}
+.sidebar-footer{padding:1rem 1.5rem;border-top:0.5px solid rgba(255,255,255,0.08);}
+.btn-signout-admin{width:100%;background:transparent;border:0.5px solid rgba(255,255,255,0.15);border-radius:100px;padding:8px;font-size:12px;color:rgba(255,253,247,0.5);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s;}
+.btn-signout-admin:hover{border-color:var(--gold);color:var(--gold);}
+
+/* MAIN */
+.main{flex:1;overflow-y:auto;}
+.topbar{background:white;border-bottom:0.5px solid var(--border);padding:0 2rem;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10;}
+.topbar-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:500;}
+.topbar-badge{background:rgba(201,168,76,0.1);border:0.5px solid rgba(201,168,76,0.3);color:var(--gold-dark);font-size:11px;padding:3px 10px;border-radius:100px;}
+.page{padding:2rem;display:none;}
+.page.active{display:block;}
+
+/* CARDS */
+.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:2rem;}
+.stat-card{background:white;border:0.5px solid var(--border);border-radius:16px;padding:1.25rem;}
+.stat-num{font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:600;color:var(--espresso);line-height:1;}
+.stat-lbl{font-size:12px;color:var(--espresso-mid);margin-top:4px;font-weight:300;}
+.stat-change{font-size:11px;color:#4CAF82;margin-top:4px;}
+
+/* TABLE */
+.table-card{background:white;border:0.5px solid var(--border);border-radius:16px;overflow:hidden;margin-bottom:1.5rem;}
+.table-header{padding:1rem 1.5rem;border-bottom:0.5px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+.table-title{font-size:15px;font-weight:500;color:var(--espresso);}
+.table-wrap{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+th{text-align:left;padding:10px 16px;font-size:11px;font-weight:500;color:var(--espresso-mid);letter-spacing:0.06em;text-transform:uppercase;border-bottom:0.5px solid var(--border);white-space:nowrap;}
+td{padding:10px 16px;border-bottom:0.5px solid rgba(201,168,76,0.06);color:var(--espresso-mid);vertical-align:middle;}
+tr:last-child td{border:none;}
+tr:hover td{background:rgba(201,168,76,0.02);}
+
+/* BADGES */
+.badge{display:inline-block;padding:2px 8px;border-radius:100px;font-size:11px;font-weight:500;}
+.badge-green{background:rgba(76,175,130,0.1);color:#2e7d57;border:0.5px solid rgba(76,175,130,0.2);}
+.badge-gold{background:rgba(201,168,76,0.1);color:var(--gold-dark);border:0.5px solid rgba(201,168,76,0.2);}
+.badge-red{background:rgba(229,115,115,0.1);color:#c62828;border:0.5px solid rgba(229,115,115,0.2);}
+.badge-gray{background:rgba(92,61,34,0.08);color:var(--espresso-mid);border:0.5px solid rgba(92,61,34,0.1);}
+
+/* BUTTONS */
+.btn-sm{padding:5px 12px;border-radius:100px;font-size:12px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s;border:none;}
+.btn-primary-sm{background:var(--espresso);color:var(--ivory);}
+.btn-primary-sm:hover{background:var(--gold-dark);}
+.btn-outline-sm{background:transparent;color:var(--espresso);border:0.5px solid var(--border)!important;}
+.btn-outline-sm:hover{border-color:var(--gold)!important;color:var(--gold-dark);}
+.btn-danger-sm{background:transparent;color:#c62828;border:0.5px solid rgba(229,115,115,0.3)!important;}
+.btn-danger-sm:hover{background:rgba(229,115,115,0.08);}
+
+/* FORMS */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;}
+.form-field label{display:block;font-size:12px;color:var(--espresso-mid);margin-bottom:5px;font-weight:500;}
+.form-field input,.form-field select{width:100%;padding:9px 12px;border:0.5px solid var(--border);border-radius:10px;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--espresso);background:var(--ivory);outline:none;}
+.form-field input:focus,.form-field select:focus{border-color:var(--gold);}
+
+/* TOGGLE */
+.toggle-wrap{display:flex;align-items:center;gap:8px;}
+.tog{width:36px;height:20px;border-radius:10px;background:var(--gold);border:none;cursor:pointer;position:relative;transition:background 0.2s;flex-shrink:0;}
+.tog::after{content:'';position:absolute;width:16px;height:16px;border-radius:50%;background:white;top:2px;right:2px;transition:right 0.2s;}
+.tog.off{background:rgba(92,61,34,0.15);}
+.tog.off::after{right:18px;}
+
+/* LOADING */
+.loading-page{text-align:center;padding:4rem;color:var(--espresso-mid);}
+.spinner{width:32px;height:32px;border:2px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 1rem;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:100;display:none;align-items:center;justify-content:center;}
+.modal-overlay.open{display:flex;}
+.modal{background:white;border-radius:20px;padding:2rem;width:100%;max-width:480px;margin:1rem;}
+.modal-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:500;margin-bottom:1.5rem;}
+.modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:1.5rem;}
+
+@media(max-width:768px){.sidebar{display:none;}.stats-row{grid-template-columns:repeat(2,1fr);}.form-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="sidebar-logo"><a href="index.html"><img src="images/logo-white.png" alt="Vowite"></a></div>
+  <nav class="sidebar-nav">
+    <div class="nav-item active" onclick="showPage('overview',this)"><span class="nav-item-icon">📊</span> Overview</div>
+    <div class="nav-item" onclick="showPage('themes',this)"><span class="nav-item-icon">🎨</span> Themes</div>
+    <div class="nav-item" onclick="showPage('orders',this)"><span class="nav-item-icon">📋</span> Orders</div>
+    <div class="nav-item" onclick="showPage('users',this)"><span class="nav-item-icon">👥</span> Users</div>
+    <div class="nav-item" onclick="showPage('coupons',this)"><span class="nav-item-icon">🎟</span> Coupons</div>
+    <div class="nav-item" onclick="showPage('dfy',this)"><span class="nav-item-icon">✍️</span> Done for you</div>
+    <div class="nav-item" onclick="showPage('revenue',this)"><span class="nav-item-icon">💰</span> Revenue</div>
+    <div class="nav-item" onclick="showPage('announce',this)"><span class="nav-item-icon">📢</span> Announcement</div>
+  </nav>
+  <div class="sidebar-footer"><button class="btn-signout-admin" onclick="signOut()">Sign out</button></div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-title" id="pageTitle">Overview</div>
+    <div class="topbar-badge">Admin</div>
+  </div>
+
+  <!-- LOADING -->
+  <div class="loading-page" id="loadingPage">
+    <div class="spinner"></div>
+    Loading...
+  </div>
+
+  <!-- OVERVIEW -->
+  <div class="page" id="page-overview">
+    <div class="stats-row">
+      <div class="stat-card"><div class="stat-num" id="ov-users">—</div><div class="stat-lbl">Total users</div></div>
+      <div class="stat-card"><div class="stat-num" id="ov-invites">—</div><div class="stat-lbl">Invites created</div></div>
+      <div class="stat-card"><div class="stat-num" id="ov-published">—</div><div class="stat-lbl">Published</div></div>
+      <div class="stat-card"><div class="stat-num" id="ov-rsvps">—</div><div class="stat-lbl">Total RSVPs</div></div>
+    </div>
+    <div class="table-card">
+      <div class="table-header"><div class="table-title">Recent invites</div></div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Couple</th><th>Theme</th><th>Status</th><th>RSVP</th><th>Created</th></tr></thead>
+        <tbody id="ov-table"></tbody>
+      </table></div>
+    </div>
+  </div>
+
+  <!-- THEMES -->
+  <div class="page" id="page-themes">
+    <div class="table-card">
+      <div class="table-header">
+        <div class="table-title">Themes</div>
+        <button class="btn-sm btn-primary-sm" onclick="openAddTheme()">+ Add theme</button>
+      </div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Theme</th><th>Category</th><th>Price</th><th>Tag</th><th>Active</th><th>Actions</th></tr></thead>
+        <tbody id="themes-table"></tbody>
+      </table></div>
+    </div>
+  </div>
+
+  <!-- ORDERS -->
+  <div class="page" id="page-orders">
+    <div class="table-card">
+      <div class="table-header"><div class="table-title">All orders</div></div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Couple</th><th>Theme</th><th>Slug</th><th>RSVP</th><th>Published</th><th>Date</th><th>Actions</th></tr></thead>
+        <tbody id="orders-table"></tbody>
+      </table></div>
+    </div>
+  </div>
+
+  <!-- USERS -->
+  <div class="page" id="page-users">
+    <div class="table-card">
+      <div class="table-header"><div class="table-title">All users</div></div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Email</th><th>Name</th><th>Joined</th><th>Invite</th><th>Admin</th></tr></thead>
+        <tbody id="users-table"></tbody>
+      </table></div>
+    </div>
+  </div>
+
+  <!-- COUPONS -->
+  <div class="page" id="page-coupons">
+    <div class="table-card">
+      <div class="table-header">
+        <div class="table-title">Coupons</div>
+        <button class="btn-sm btn-primary-sm" onclick="openAddCoupon()">+ Add coupon</button>
+      </div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Code</th><th>Discount</th><th>Used</th><th>Max uses</th><th>Active</th><th>Actions</th></tr></thead>
+        <tbody id="coupons-table"></tbody>
+      </table></div>
+    </div>
+  </div>
+
+  <!-- DONE FOR YOU -->
+  <div class="page" id="page-dfy">
+    <div class="table-card">
+      <div class="table-header"><div class="table-title">Done-for-you orders</div></div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Couple</th><th>Email</th><th>Theme</th><th>Package</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody id="dfy-table"></tbody>
+      </table></div>
+    </div>
+  </div>
+
+  <!-- REVENUE -->
+  <div class="page" id="page-revenue">
+    <div class="stats-row">
+      <div class="stat-card"><div class="stat-num" id="rev-total">—</div><div class="stat-lbl">Total revenue</div></div>
+      <div class="stat-card"><div class="stat-num" id="rev-invites">—</div><div class="stat-lbl">Paid invites</div></div>
+      <div class="stat-card"><div class="stat-num" id="rev-rsvp">—</div><div class="stat-lbl">RSVP add-ons</div></div>
+      <div class="stat-card"><div class="stat-num" id="rev-dfy">—</div><div class="stat-lbl">Done-for-you</div></div>
+    </div>
+    <div class="table-card">
+      <div class="table-header"><div class="table-title">Revenue by theme</div></div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Theme</th><th>Invites sold</th><th>Revenue</th></tr></thead>
+        <tbody id="rev-table"></tbody>
+      </table></div>
+    </div>
+  </div>
+
+  <!-- ANNOUNCEMENT -->
+  <div class="page" id="page-announce">
+    <div class="table-card">
+      <div class="table-header"><div class="table-title">Announcement banner</div></div>
+      <div style="padding:1.5rem;">
+        <div class="form-field" style="margin-bottom:1rem;">
+          <label>Banner message</label>
+          <input type="text" id="announceText" placeholder="e.g. New Keerthana theme is live! 🎉">
+        </div>
+        <div class="form-field" style="margin-bottom:1rem;">
+          <label>Link (optional)</label>
+          <input type="text" id="announceLink" placeholder="https://vowite.vercel.app/keerthana.html">
+        </div>
+        <div class="toggle-wrap" style="margin-bottom:1.5rem;">
+          <button class="tog off" id="announceTog" onclick="this.classList.toggle('off')"></button>
+          <span style="font-size:13px;color:var(--espresso-mid);">Show banner on site</span>
+        </div>
+        <button class="btn-sm btn-primary-sm" onclick="saveAnnouncement()">Save announcement</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ADD THEME MODAL -->
+<div class="modal-overlay" id="themeModal">
+  <div class="modal">
+    <div class="modal-title" id="themeModalTitle">Add theme</div>
+    <div class="form-grid">
+      <div class="form-field"><label>Theme ID</label><input id="th-id" placeholder="e.g. sindoor"></div>
+      <div class="form-field"><label>Display name</label><input id="th-name" placeholder="e.g. Sindoor"></div>
+      <div class="form-field"><label>Category</label><input id="th-cat" placeholder="e.g. North Indian Hindu"></div>
+      <div class="form-field"><label>Price (₹)</label><input id="th-price" type="number" placeholder="1999"></div>
+      <div class="form-field"><label>Tag</label>
+        <select id="th-tag"><option>Popular</option><option>New</option><option>Premium</option></select>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-sm btn-outline-sm" onclick="closeModal('themeModal')">Cancel</button>
+      <button class="btn-sm btn-primary-sm" onclick="saveTheme()">Save theme</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD COUPON MODAL -->
+<div class="modal-overlay" id="couponModal">
+  <div class="modal">
+    <div class="modal-title">Add coupon</div>
+    <div class="form-grid">
+      <div class="form-field"><label>Coupon code</label><input id="cp-code" placeholder="e.g. VOWITE20"></div>
+      <div class="form-field"><label>Discount type</label>
+        <select id="cp-type"><option value="percent">Percent (%)</option><option value="flat">Flat (₹)</option></select>
+      </div>
+      <div class="form-field"><label>Discount value</label><input id="cp-value" type="number" placeholder="20"></div>
+      <div class="form-field"><label>Max uses</label><input id="cp-max" type="number" placeholder="100"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-sm btn-outline-sm" onclick="closeModal('couponModal')">Cancel</button>
+      <button class="btn-sm btn-primary-sm" onclick="saveCoupon()">Save coupon</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL='https://kopmbvpvgclrnchrdpty.supabase.co';
+const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtvcG1idnB2Z2Nscm5jaHJkcHR5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc1Njg5MDMsImV4cCI6MjA5MzE0NDkwM30.xFt_YA109wDqI6KOIXHWC4Xy2WdNO5Tnacd2_jO4MP4';
+const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+let currentPage='overview';
+
+// INIT
+(async()=>{
+  const {data:{session}}=await sb.auth.getSession();
+  if(!session){window.location.href='auth.html';return;}
+  // Check admin
+  const {data:couple}=await sb.from('couples').select('is_admin').eq('id',session.user.id).single();
+  if(!couple||!couple.is_admin){window.location.href='index.html';return;}
+  document.getElementById('loadingPage').style.display='none';
+  showPage('overview',document.querySelector('.nav-item'));
+})();
+
+// NAVIGATION
+function showPage(page,el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  el.classList.add('active');
+  currentPage=page;
+  const titles={overview:'Overview',themes:'Themes',orders:'Orders',users:'Users',coupons:'Coupons',dfy:'Done for you',revenue:'Revenue',announce:'Announcement'};
+  document.getElementById('pageTitle').textContent=titles[page]||page;
+  loadPage(page);
+}
+
+async function loadPage(page){
+  if(page==='overview') await loadOverview();
+  else if(page==='themes') await loadThemes();
+  else if(page==='orders') await loadOrders();
+  else if(page==='users') await loadUsers();
+  else if(page==='coupons') await loadCoupons();
+  else if(page==='revenue') await loadRevenue();
+}
+
+// OVERVIEW
+async function loadOverview(){
+  const [{data:users},{data:invites},{data:rsvps}]=await Promise.all([
+    sb.from('couples').select('*'),
+    sb.from('invites').select('*'),
+    sb.from('rsvps').select('*'),
+  ]);
+  const published=(invites||[]).filter(i=>i.is_published).length;
+  document.getElementById('ov-users').textContent=(users||[]).length;
+  document.getElementById('ov-invites').textContent=(invites||[]).length;
+  document.getElementById('ov-published').textContent=published;
+  document.getElementById('ov-rsvps').textContent=(rsvps||[]).length;
+  const tbody=document.getElementById('ov-table');
+  tbody.innerHTML=(invites||[]).slice(0,10).map(i=>{
+    const d=i.data||{};
+    return `<tr>
+      <td>${d.name1||'—'} & ${d.name2||'—'}</td>
+      <td><span class="badge badge-gold">${i.theme}</span></td>
+      <td><span class="badge ${i.is_published?'badge-green':'badge-gray'}">${i.is_published?'Published':'Draft'}</span></td>
+      <td>${i.rsvp_enabled?'✓':'—'}</td>
+      <td>${new Date(i.created_at).toLocaleDateString('en-IN')}</td>
+    </tr>`;}).join('');
+}
+
+// THEMES
+async function loadThemes(){
+  const {data:themes}=await sb.from('themes').select('*').order('sort_order');
+  const tbody=document.getElementById('themes-table');
+  tbody.innerHTML=(themes||[]).map(t=>`<tr>
+    <td><strong>${t.name}</strong></td>
+    <td>${t.category}</td>
+    <td>₹${t.price.toLocaleString('en-IN')}</td>
+    <td><span class="badge badge-gold">${t.tag}</span></td>
+    <td><button class="tog${t.is_active?'':' off'}" onclick="toggleTheme('${t.id}',${!t.is_active},this)"></button></td>
+    <td style="display:flex;gap:6px;">
+      <button class="btn-sm btn-outline-sm" onclick="editTheme('${t.id}','${t.name}','${t.category}',${t.price},'${t.tag}')">Edit</button>
+      <button class="btn-sm btn-danger-sm" onclick="deleteTheme('${t.id}')">Delete</button>
+    </td>
+  </tr>`).join('');
+}
+
+async function toggleTheme(id,val,btn){
+  btn.classList.toggle('off',!val);
+  await sb.from('themes').update({is_active:val}).eq('id',id);
+}
+
+function openAddTheme(){
+  document.getElementById('themeModalTitle').textContent='Add theme';
+  ['th-id','th-name','th-cat','th-price'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('themeModal').classList.add('open');
+}
+
+function editTheme(id,name,cat,price,tag){
+  document.getElementById('themeModalTitle').textContent='Edit theme';
+  document.getElementById('th-id').value=id;
+  document.getElementById('th-id').disabled=true;
+  document.getElementById('th-name').value=name;
+  document.getElementById('th-cat').value=cat;
+  document.getElementById('th-price').value=price;
+  document.getElementById('th-tag').value=tag;
+  document.getElementById('themeModal').classList.add('open');
+}
+
+async function saveTheme(){
+  const id=document.getElementById('th-id').value.trim();
+  const name=document.getElementById('th-name').value.trim();
+  const cat=document.getElementById('th-cat').value.trim();
+  const price=parseInt(document.getElementById('th-price').value)||1999;
+  const tag=document.getElementById('th-tag').value;
+  if(!id||!name){alert('Please fill in theme ID and name');return;}
+  await sb.from('themes').upsert({id,name,category:cat,price,tag,is_active:true});
+  closeModal('themeModal');
+  document.getElementById('th-id').disabled=false;
+  await loadThemes();
+}
+
+async function deleteTheme(id){
+  if(!confirm('Delete this theme?'))return;
+  await sb.from('themes').delete().eq('id',id);
+  await loadThemes();
+}
+
+// ORDERS
+async function loadOrders(){
+  const {data:invites}=await sb.from('invites').select('*').order('created_at',{ascending:false});
+  const tbody=document.getElementById('orders-table');
+  tbody.innerHTML=(invites||[]).map(i=>{
+    const d=i.data||{};
+    return `<tr>
+      <td>${d.name1||'—'} & ${d.name2||'—'}</td>
+      <td><span class="badge badge-gold">${i.theme}</span></td>
+      <td style="font-size:11px;color:var(--espresso-mid);">${i.slug||'—'}</td>
+      <td>${i.rsvp_enabled?'<span class="badge badge-green">Yes</span>':'<span class="badge badge-gray">No</span>'}</td>
+      <td>${i.is_published?'<span class="badge badge-green">Published</span>':'<span class="badge badge-gray">Draft</span>'}</td>
+      <td>${new Date(i.created_at).toLocaleDateString('en-IN')}</td>
+      <td><a href="/invite/${i.slug}" target="_blank" class="btn-sm btn-outline-sm" style="text-decoration:none;">View</a></td>
+    </tr>`;}).join('');
+}
+
+// USERS
+async function loadUsers(){
+  const [{data:couples},{data:invites}]=await Promise.all([
+    sb.from('couples').select('*').order('created_at',{ascending:false}),
+    sb.from('invites').select('couple_id'),
+  ]);
+  const hasInvite=new Set((invites||[]).map(i=>i.couple_id));
+  const tbody=document.getElementById('users-table');
+  tbody.innerHTML=(couples||[]).map(c=>`<tr>
+    <td>${c.email}</td>
+    <td>${c.name||'—'}</td>
+    <td>${new Date(c.created_at).toLocaleDateString('en-IN')}</td>
+    <td>${hasInvite.has(c.id)?'<span class="badge badge-green">Yes</span>':'<span class="badge badge-gray">No</span>'}</td>
+    <td>${c.is_admin?'<span class="badge badge-gold">Admin</span>':'—'}</td>
+  </tr>`).join('');
+}
+
+// COUPONS
+async function loadCoupons(){
+  const {data:coupons}=await sb.from('coupons').select('*').order('created_at',{ascending:false});
+  const tbody=document.getElementById('coupons-table');
+  tbody.innerHTML=(coupons||[]).map(c=>`<tr>
+    <td><strong>${c.code}</strong></td>
+    <td>${c.discount_type==='percent'?c.discount_value+'%':'₹'+c.discount_value}</td>
+    <td>${c.used_count}</td>
+    <td>${c.max_uses}</td>
+    <td><button class="tog${c.is_active?'':' off'}" onclick="toggleCoupon('${c.id}',${!c.is_active},this)"></button></td>
+    <td><button class="btn-sm btn-danger-sm" onclick="deleteCoupon('${c.id}')">Delete</button></td>
+  </tr>`).join('');
+}
+
+function openAddCoupon(){
+  ['cp-code','cp-value','cp-max'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('couponModal').classList.add('open');
+}
+
+async function saveCoupon(){
+  const code=document.getElementById('cp-code').value.trim().toUpperCase();
+  const type=document.getElementById('cp-type').value;
+  const value=parseInt(document.getElementById('cp-value').value)||0;
+  const max=parseInt(document.getElementById('cp-max').value)||100;
+  if(!code||!value){alert('Please fill in all fields');return;}
+  const {error}=await sb.from('coupons').insert({code,discount_type:type,discount_value:value,max_uses:max});
+  if(error){alert('Error: '+error.message);return;}
+  closeModal('couponModal');
+  await loadCoupons();
+}
+
+async function toggleCoupon(id,val,btn){
+  btn.classList.toggle('off',!val);
+  await sb.from('coupons').update({is_active:val}).eq('id',id);
+}
+
+async function deleteCoupon(id){
+  if(!confirm('Delete this coupon?'))return;
+  await sb.from('coupons').delete().eq('id',id);
+  await loadCoupons();
+}
+
+// REVENUE
+async function loadRevenue(){
+  const {data:invites}=await sb.from('invites').select('*').eq('is_published',true);
+  const themePrices={sindoor:1999,maangalyam:1999,midnight:2499,gulabi:2499,keerthana:2499};
+  let total=0,rsvpTotal=0;
+  const byTheme={};
+  (invites||[]).forEach(i=>{
+    const base=themePrices[i.theme]||1999;
+    const rsvp=i.rsvp_enabled?999:0;
+    total+=base+rsvp;
+    if(i.rsvp_enabled)rsvpTotal+=999;
+    if(!byTheme[i.theme])byTheme[i.theme]={count:0,rev:0};
+    byTheme[i.theme].count++;
+    byTheme[i.theme].rev+=base+rsvp;
+  });
+  document.getElementById('rev-total').textContent='₹'+total.toLocaleString('en-IN');
+  document.getElementById('rev-invites').textContent=(invites||[]).length;
+  document.getElementById('rev-rsvp').textContent='₹'+rsvpTotal.toLocaleString('en-IN');
+  document.getElementById('rev-dfy').textContent='₹0';
+  const tbody=document.getElementById('rev-table');
+  tbody.innerHTML=Object.entries(byTheme).map(([theme,d])=>`<tr>
+    <td><span class="badge badge-gold">${theme}</span></td>
+    <td>${d.count}</td>
+    <td>₹${d.rev.toLocaleString('en-IN')}</td>
+  </tr>`).join('');
+}
+
+// ANNOUNCEMENT
+async function saveAnnouncement(){
+  const text=document.getElementById('announceText').value.trim();
+  const link=document.getElementById('announceLink').value.trim();
+  const active=!document.getElementById('announceTog').classList.contains('off');
+  await sb.from('themes').upsert({id:'__announcement__',name:text,category:link,is_active:active,price:0,tag:'',sort_order:999});
+  alert('Announcement saved!');
+}
+
+// HELPERS
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+async function signOut(){await sb.auth.signOut();window.location.href='index.html';}
+</script>
+</body>
+</html>
