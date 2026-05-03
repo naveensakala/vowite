@@ -5,7 +5,7 @@ import { supabase } from '@/lib/supabase'
 import { THEME_STYLES } from '@/lib/themes'
 
 export default function InvitePage({ params }) {
-  const { slug } = use(params)
+  const { slug } = params
   const [invite, setInvite] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
