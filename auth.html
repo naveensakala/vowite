@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign in — Vowite</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  :root{--gold:#C9A84C;--gold-dark:#9C7A2E;--ivory:#FFFDF7;--espresso:#2C1A0E;--espresso-mid:#5C3D22;}
+  body{font-family:'DM Sans',sans-serif;background:var(--ivory);color:var(--espresso);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:2rem;}
+  .auth-wrap{width:100%;max-width:420px;}
+  .auth-logo{text-align:center;margin-bottom:2.5rem;}
+  .auth-logo img{height:48px;width:auto;}
+  .auth-card{background:white;border:0.5px solid rgba(201,168,76,0.2);border-radius:24px;padding:2.5rem;box-shadow:0 8px 40px rgba(44,26,14,0.08);}
+  .auth-title{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:500;color:var(--espresso);margin-bottom:0.4rem;text-align:center;}
+  .auth-sub{font-size:14px;color:var(--espresso-mid);text-align:center;margin-bottom:2rem;font-weight:300;}
+  .auth-tabs{display:flex;background:rgba(201,168,76,0.06);border-radius:100px;padding:4px;margin-bottom:2rem;}
+  .auth-tab{flex:1;text-align:center;padding:8px;border-radius:100px;font-size:14px;cursor:pointer;transition:all 0.2s;color:var(--espresso-mid);font-weight:400;}
+  .auth-tab.active{background:var(--espresso);color:var(--ivory);font-weight:500;}
+  .field{margin-bottom:1.25rem;}
+  .field label{display:block;font-size:13px;color:var(--espresso-mid);margin-bottom:6px;font-weight:400;}
+  .field input{width:100%;padding:12px 16px;border:0.5px solid rgba(44,26,14,0.2);border-radius:12px;font-size:14px;font-family:'DM Sans',sans-serif;color:var(--espresso);background:var(--ivory);outline:none;transition:border 0.2s;}
+  .field input:focus{border-color:var(--gold);}
+  .btn-auth{width:100%;padding:14px;background:var(--espresso);color:var(--ivory);border:none;border-radius:100px;font-size:15px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s;margin-top:0.5rem;}
+  .btn-auth:hover{background:var(--gold-dark);}
+  .btn-auth:disabled{opacity:0.6;cursor:not-allowed;}
+  .auth-msg{text-align:center;font-size:13px;margin-top:1rem;padding:10px;border-radius:10px;display:none;}
+  .auth-msg.error{background:rgba(220,53,53,0.08);color:#c0392b;display:block;}
+  .auth-msg.success{background:rgba(76,175,130,0.08);color:#27ae60;display:block;}
+  .auth-divider{text-align:center;font-size:12px;color:rgba(44,26,14,0.3);margin:1.5rem 0;position:relative;}
+  .auth-divider::before{content:'';position:absolute;top:50%;left:0;right:0;height:0.5px;background:rgba(201,168,76,0.2);}
+  .auth-divider span{background:white;padding:0 12px;position:relative;}
+  .auth-footer{text-align:center;margin-top:1.5rem;font-size:13px;color:var(--espresso-mid);}
+  .auth-footer a{color:var(--gold-dark);text-decoration:none;}
+</style>
+</head>
+<body>
+<div class="auth-wrap">
+  <div class="auth-logo">
+    <a href="index.html"><img src="images/logo.png" alt="Vowite"></a>
+  </div>
+  <div class="auth-card">
+    <h1 class="auth-title">Welcome to Vowite</h1>
+    <p class="auth-sub">Create or manage your wedding invite</p>
+    <div class="auth-tabs">
+      <div class="auth-tab active" onclick="setTab('login')" id="tab-login">Sign in</div>
+      <div class="auth-tab" onclick="setTab('signup')" id="tab-signup">Create account</div>
+    </div>
+
+    <!-- LOGIN -->
+    <div id="form-login">
+      <div class="field"><label>Email</label><input type="email" id="login-email" placeholder="you@email.com"></div>
+      <div class="field"><label>Password</label><input type="password" id="login-pass" placeholder="••••••••"></div>
+      <button class="btn-auth" onclick="doLogin()" id="btn-login">Sign in ✦</button>
+      <div class="auth-msg" id="login-msg"></div>
+    </div>
+
+    <!-- SIGNUP -->
+    <div id="form-signup" style="display:none;">
+      <div class="field"><label>Your name</label><input type="text" id="signup-name" placeholder="Priya & Arjun"></div>
+      <div class="field"><label>Email</label><input type="email" id="signup-email" placeholder="you@email.com"></div>
+      <div class="field"><label>Password</label><input type="password" id="signup-pass" placeholder="Min 6 characters"></div>
+      <button class="btn-auth" onclick="doSignup()" id="btn-signup">Create account ✦</button>
+      <div class="auth-msg" id="signup-msg"></div>
+    </div>
+
+    <div class="auth-footer">
+      <a href="index.html">← Back to Vowite</a>
+    </div>
+  </div>
+</div>
+
+<script src="supabase.js"></script>
+<script>
+function setTab(tab){
+  document.getElementById('tab-login').classList.toggle('active', tab==='login');
+  document.getElementById('tab-signup').classList.toggle('active', tab==='signup');
+  document.getElementById('form-login').style.display = tab==='login'?'block':'none';
+  document.getElementById('form-signup').style.display = tab==='signup'?'block':'none';
+}
+
+async function doLogin(){
+  const email = document.getElementById('login-email').value.trim();
+  const pass = document.getElementById('login-pass').value;
+  const msg = document.getElementById('login-msg');
+  const btn = document.getElementById('btn-login');
+  if(!email||!pass){showMsg(msg,'Please fill in all fields','error');return;}
+  btn.disabled=true; btn.textContent='Signing in...';
+  await waitForSB();
+  const {data,error} = await window.sb.auth.signInWithPassword({email,password:pass});
+  if(error){showMsg(msg,error.message,'error');btn.disabled=false;btn.textContent='Sign in ✦';return;}
+  window.location.href='dashboard.html';
+}
+
+async function doSignup(){
+  const name = document.getElementById('signup-name').value.trim();
+  const email = document.getElementById('signup-email').value.trim();
+  const pass = document.getElementById('signup-pass').value;
+  const msg = document.getElementById('signup-msg');
+  const btn = document.getElementById('btn-signup');
+  if(!name||!email||!pass){showMsg(msg,'Please fill in all fields','error');return;}
+  if(pass.length<6){showMsg(msg,'Password must be at least 6 characters','error');return;}
+  btn.disabled=true; btn.textContent='Creating account...';
+  await waitForSB();
+  const {data,error} = await window.sb.auth.signUp({email,password:pass,options:{data:{name}}});
+  if(error){showMsg(msg,error.message,'error');btn.disabled=false;btn.textContent='Create account ✦';return;}
+  showMsg(msg,'Account created! Check your email to confirm, then sign in.','success');
+  btn.disabled=false; btn.textContent='Create account ✦';
+}
+
+function showMsg(el,text,type){
+  el.textContent=text;
+  el.className='auth-msg '+type;
+}
+
+function waitForSB(){
+  return new Promise(resolve=>{
+    if(window.sb) return resolve();
+    window.onSupabaseReady=resolve;
+  });
+}
+</script>
+</body>
+</html>

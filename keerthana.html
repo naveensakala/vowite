@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="favicon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Keerthana Theme — Vowite</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,600&family=DM+Sans:wght@300;400;500&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --cream:#FDF6EC;--green:#1A3A1A;--green-mid:#2D5A2D;
+  --gold:#C9A84C;--gold-dark:#9C7A2E;--pink:#C4315A;
+  --brown:#5C3A1A;--brown-light:#8B6040;
+}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--green);overflow-x:hidden;}
+
+/* TOPBAR */
+.topbar{position:fixed;top:0;left:0;right:0;z-index:100;padding:0.9rem 2rem;display:flex;justify-content:space-between;align-items:center;background:rgba(253,246,236,0.96);backdrop-filter:blur(10px);border-bottom:0.5px solid rgba(201,168,76,0.3);}
+.topbar-logo{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:var(--green);}
+.topbar-logo span{color:var(--gold-dark);}
+.topbar-back{font-size:13px;color:var(--brown-light);text-decoration:none;transition:color 0.2s;}
+.topbar-back:hover{color:var(--gold-dark);}
+.topbar-cta{background:var(--green);color:var(--cream);padding:8px 20px;border-radius:100px;font-size:13px;font-weight:500;text-decoration:none;transition:all 0.2s;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;}
+.topbar-cta:hover{background:var(--green-mid);}
+
+.theme-banner{margin-top:54px;background:rgba(201,168,76,0.08);border-bottom:0.5px solid rgba(201,168,76,0.2);padding:10px 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+.theme-badge{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--green);}
+.theme-badge-dot{width:8px;height:8px;border-radius:50%;background:var(--gold);}
+.theme-price-tag{font-size:13px;color:var(--brown-light);}
+.theme-price-tag strong{color:var(--gold-dark);font-weight:500;}
+
+main{max-width:520px;margin:0 auto;}
+
+/* ===================== HERO ===================== */
+.hero{position:relative;min-height:100vh;overflow:hidden;display:flex;flex-direction:column;align-items:center;}
+
+/* Full bleed watercolour bg */
+.hero-bg{position:absolute;inset:0;background-image:url('images/Color1.jpg');background-size:cover;background-position:center;opacity:0.35;}
+
+/* BG3 bells overlay at top */
+.hero-bells{position:absolute;top:0;left:0;right:0;height:55%;background-image:url('images/BG3.jpg');background-size:cover;background-position:top center;opacity:0.9;mask-image:linear-gradient(to bottom,rgba(0,0,0,1) 60%,rgba(0,0,0,0));-webkit-mask-image:linear-gradient(to bottom,rgba(0,0,0,1) 60%,rgba(0,0,0,0));}
+
+/* BG1 leaves bottom overlay */
+.hero-leaves{position:absolute;bottom:0;left:0;right:0;height:50%;background-image:url('images/BG1.jpg');background-size:cover;background-position:bottom center;opacity:0.85;mask-image:linear-gradient(to top,rgba(0,0,0,1) 60%,rgba(0,0,0,0));-webkit-mask-image:linear-gradient(to top,rgba(0,0,0,1) 60%,rgba(0,0,0,0));}
+
+/* Content */
+.hero-content{position:relative;z-index:2;width:100%;text-align:center;padding:80px 50px 60px;}
+
+.blessing{font-family:'Cormorant Garamond',serif;font-size:13px;color:var(--brown);letter-spacing:0.08em;font-style:italic;margin-bottom:4px;line-height:1.8;}
+.blessing2{font-size:11px;color:var(--brown-light);letter-spacing:0.05em;margin-bottom:24px;line-height:1.7;}
+
+.ornament{display:flex;align-items:center;gap:10px;justify-content:center;margin:14px 0;}
+.ornament span{height:0.5px;flex:1;max-width:70px;}
+.ornament span:first-child{background:linear-gradient(90deg,transparent,rgba(201,168,76,0.6));}
+.ornament span:last-child{background:linear-gradient(90deg,rgba(201,168,76,0.6),transparent);}
+.ornament i{font-style:normal;font-size:16px;color:var(--gold-dark);}
+
+.together{font-size:11px;letter-spacing:0.1em;color:var(--brown-light);text-transform:uppercase;margin-bottom:10px;}
+.ceremony-of{font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--brown);font-style:italic;margin-bottom:14px;}
+
+.bride-name{font-family:'Playfair Display',serif;font-size:38px;font-weight:500;color:var(--green);line-height:1.15;letter-spacing:-0.01em;}
+.parents-name{font-size:12px;color:var(--brown-light);margin:4px 0 16px;line-height:1.6;}
+.and-word{font-family:'Great Vibes',cursive;font-size:34px;color:var(--gold-dark);margin:4px 0;}
+.groom-name{font-family:'Playfair Display',serif;font-size:38px;font-weight:500;color:var(--green);line-height:1.15;letter-spacing:-0.01em;}
+
+.on-text{font-family:'Cormorant Garamond',serif;font-size:14px;color:var(--brown-light);font-style:italic;margin:18px 0 10px;}
+
+.date-pill{display:inline-flex;align-items:center;gap:8px;background:rgba(201,168,76,0.12);border:0.5px solid rgba(201,168,76,0.4);border-radius:100px;padding:8px 22px;font-size:13px;color:var(--green);font-weight:500;margin-bottom:14px;}
+
+.love-story{font-family:'Cormorant Garamond',serif;font-size:14px;font-style:italic;color:var(--brown-light);max-width:280px;margin:0 auto 24px;line-height:1.8;}
+
+.scroll-hint{display:flex;flex-direction:column;align-items:center;gap:5px;font-size:10px;letter-spacing:0.1em;color:rgba(90,58,26,0.45);animation:bounce 2s ease-in-out infinite;}
+@keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(5px);}}
+.scroll-arrow{width:13px;height:13px;border-right:0.5px solid rgba(201,168,76,0.5);border-bottom:0.5px solid rgba(201,168,76,0.5);transform:rotate(45deg);}
+
+/* ===================== TEMPLE SECTION ===================== */
+.temple-hero{width:100%;position:relative;overflow:hidden;}
+.temple-hero img{width:100%;display:block;object-fit:cover;}
+.temple-overlay{position:absolute;bottom:0;left:0;right:0;height:40%;background:linear-gradient(transparent,var(--cream));}
+
+/* ===================== MUSIC BAR ===================== */
+.music-bar{background:rgba(201,168,76,0.08);border-top:0.5px solid rgba(201,168,76,0.2);border-bottom:0.5px solid rgba(201,168,76,0.2);padding:10px 20px;display:flex;align-items:center;gap:12px;}
+.music-icon{width:30px;height:30px;border-radius:50%;background:rgba(201,168,76,0.15);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;border:0.5px solid rgba(201,168,76,0.3);}
+.music-info{flex:1;}
+.music-name{font-size:12px;font-weight:500;color:var(--green);}
+.music-artist{font-size:10px;color:var(--brown-light);}
+.music-wave{display:flex;align-items:center;gap:2px;height:16px;}
+.wave-bar{width:2px;border-radius:2px;background:var(--gold);animation:wave 1s ease-in-out infinite;}
+.wave-bar:nth-child(1){height:4px;animation-delay:0s;}
+.wave-bar:nth-child(2){height:11px;animation-delay:0.1s;}
+.wave-bar:nth-child(3){height:7px;animation-delay:0.2s;}
+.wave-bar:nth-child(4){height:14px;animation-delay:0.3s;}
+.wave-bar:nth-child(5){height:5px;animation-delay:0.4s;}
+@keyframes wave{0%,100%{transform:scaleY(1);}50%{transform:scaleY(0.3);}}
+
+/* ===================== COUNTDOWN ===================== */
+.countdown-section{background:var(--green);padding:22px 20px;text-align:center;position:relative;overflow:hidden;}
+.countdown-section::before{content:'';position:absolute;inset:0;background-image:url('images/temple3.jpg');background-size:cover;background-position:center;opacity:0.06;}
+.cd-label{font-size:10px;letter-spacing:0.14em;color:rgba(253,246,236,0.5);text-transform:uppercase;margin-bottom:12px;position:relative;}
+.cd-boxes{display:flex;justify-content:center;align-items:center;gap:8px;position:relative;}
+.cbox{text-align:center;min-width:56px;background:rgba(253,246,236,0.06);border-radius:10px;padding:10px 8px;border:0.5px solid rgba(201,168,76,0.25);}
+.cbox-num{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:600;color:var(--gold);line-height:1;}
+.cbox-lbl{font-size:8px;letter-spacing:0.1em;color:rgba(253,246,236,0.4);text-transform:uppercase;margin-top:3px;}
+.cbox-sep{font-size:26px;color:rgba(201,168,76,0.3);margin-bottom:14px;}
+
+/* ===================== EVENTS ===================== */
+.events-wrap{position:relative;overflow:hidden;}
+.events-bg{position:absolute;inset:0;background-image:url('images/BG2.jpg');background-size:cover;background-position:center;opacity:0.25;}
+.events-section{position:relative;z-index:1;padding:28px 20px 16px;}
+.sec-eyebrow{font-size:10px;letter-spacing:0.16em;color:var(--gold-dark);text-transform:uppercase;text-align:center;margin-bottom:5px;}
+.sec-title{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:500;color:var(--green);text-align:center;line-height:1.2;}
+.sec-title em{font-style:italic;color:var(--gold-dark);}
+.sec-divider{display:flex;align-items:center;gap:10px;justify-content:center;margin:10px 0 18px;}
+.sec-divider span{height:0.5px;flex:1;max-width:70px;}
+.sec-divider span:first-child{background:linear-gradient(90deg,transparent,rgba(201,168,76,0.4));}
+.sec-divider span:last-child{background:linear-gradient(90deg,rgba(201,168,76,0.4),transparent);}
+.sec-divider i{font-style:normal;font-size:14px;color:var(--gold);}
+
+.event-card{background:rgba(255,255,255,0.85);backdrop-filter:blur(8px);border:0.5px solid rgba(201,168,76,0.25);border-radius:16px;padding:14px 16px;margin-bottom:10px;display:flex;gap:12px;align-items:flex-start;box-shadow:0 4px 20px rgba(26,58,26,0.06);}
+.event-icon-box{width:42px;height:42px;border-radius:12px;background:rgba(201,168,76,0.1);border:0.5px solid rgba(201,168,76,0.3);display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0;}
+.event-name{font-family:'Playfair Display',serif;font-size:17px;font-weight:500;color:var(--green);margin-bottom:3px;}
+.event-meta{font-size:11px;color:var(--brown-light);line-height:1.7;}
+.event-meta strong{color:var(--green);font-weight:500;}
+.map-btn{display:inline-flex;align-items:center;gap:4px;margin-top:6px;font-size:10px;color:var(--gold-dark);border:0.5px solid rgba(201,168,76,0.35);border-radius:100px;padding:3px 10px;text-decoration:none;transition:all 0.2s;}
+.map-btn:hover{background:rgba(201,168,76,0.1);}
+
+/* ===================== GALLERY ===================== */
+.gallery-wrap{position:relative;overflow:hidden;}
+.gallery-bg{position:absolute;inset:0;background-image:url('images/BG1.jpg');background-size:cover;background-position:center;opacity:0.2;}
+.gallery-section{position:relative;z-index:1;padding:24px 20px;}
+.gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:16px;}
+.g-item{aspect-ratio:1;border-radius:10px;overflow:hidden;box-shadow:0 2px 12px rgba(26,58,26,0.1);}
+.g-item.big{grid-column:span 2;grid-row:span 2;}
+.g-item img{width:100%;height:100%;object-fit:cover;}
+.g-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:22px;}
+.gp1{background:linear-gradient(135deg,#E8D5B0,#C9A84C);}
+.gp2{background:linear-gradient(135deg,#C4E8C4,#2D5A2D);}
+.gp3{background:linear-gradient(135deg,#F2C4CE,#C4315A);}
+.gp4{background:linear-gradient(135deg,#E8D5B0,#9C7A2E);}
+.gp5{background:linear-gradient(135deg,#C4E8C4,#1A3A1A);}
+
+/* ===================== VIDEO ===================== */
+.video-section{padding:0 20px 24px;background:var(--cream);}
+.video-wrap{border-radius:16px;overflow:hidden;aspect-ratio:16/9;background:rgba(26,58,26,0.05);border:0.5px solid rgba(201,168,76,0.25);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(26,58,26,0.08);}
+.video-wrap iframe{width:100%;height:100%;border:none;}
+.video-ph{text-align:center;color:var(--brown-light);font-size:12px;opacity:0.5;}
+
+/* ===================== RSVP ===================== */
+.rsvp-section{padding:0 20px 24px;background:var(--cream);}
+.rsvp-btn{width:100%;background:var(--green);color:var(--cream);border:none;border-radius:100px;padding:14px;font-size:14px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;letter-spacing:0.04em;transition:all 0.2s;box-shadow:0 4px 16px rgba(26,58,26,0.2);}
+.rsvp-btn:hover{background:var(--green-mid);}
+
+/* ===================== BOTTOM TEMPLE CTA ===================== */
+.temple-cta{position:relative;overflow:hidden;}
+.temple-cta-img{width:100%;display:block;object-fit:cover;max-height:300px;}
+.temple-cta-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(26,58,26,0.3),rgba(26,58,26,0.85));}
+.temple-cta-content{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:2rem;text-align:center;}
+.temple-cta-title{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:500;color:var(--cream);margin-bottom:6px;line-height:1.2;}
+.temple-cta-title em{color:var(--gold);font-style:italic;}
+.temple-cta-sub{font-size:12px;color:rgba(253,246,236,0.55);margin-bottom:16px;line-height:1.5;}
+.cta-row{display:flex;flex-direction:column;gap:8px;width:100%;max-width:260px;}
+.btn-gold-solid{background:var(--gold);color:var(--green);padding:12px 24px;border-radius:100px;font-size:13px;font-weight:500;text-decoration:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;display:block;text-align:center;transition:all 0.2s;}
+.btn-gold-solid:hover{background:var(--gold-dark);color:var(--cream);}
+.btn-ghost{background:transparent;color:rgba(253,246,236,0.6);padding:12px 24px;border-radius:100px;font-size:12px;text-decoration:none;border:0.5px solid rgba(253,246,236,0.2);transition:all 0.2s;display:block;text-align:center;}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold);}
+.price-note{font-size:10px;color:rgba(253,246,236,0.25);margin-top:8px;}
+
+/* ===================== FOOTER ===================== */
+.invite-footer{background:var(--green);padding:2.5rem 2rem;text-align:center;position:relative;overflow:hidden;}
+.invite-footer::before{content:'';position:absolute;inset:0;background-image:url('images/temple3.jpg');background-size:cover;background-position:center;opacity:0.05;}
+.footer-names{font-family:'Great Vibes',cursive;font-size:42px;color:var(--gold);margin-bottom:6px;position:relative;}
+.footer-date{font-size:11px;letter-spacing:0.12em;color:rgba(253,246,236,0.35);text-transform:uppercase;position:relative;}
+.footer-quote{font-family:'Cormorant Garamond',serif;font-size:14px;font-style:italic;color:rgba(253,246,236,0.4);margin-top:10px;line-height:1.7;max-width:280px;margin-left:auto;margin-right:auto;position:relative;}
+.vowite-tag{font-size:10px;color:rgba(253,246,236,0.2);margin-top:14px;letter-spacing:0.04em;position:relative;}
+.vowite-tag span{color:rgba(201,168,76,0.4);}
+
+.fade-up{opacity:0;transform:translateY(24px);transition:opacity 0.7s ease,transform 0.7s ease;}
+.fade-up.visible{opacity:1;transform:translateY(0);}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="index.html" class="topbar-back">← Back to themes</a>
+  <div class="topbar-logo"><img src="images/logo.png" alt="Vowite" style="height:32px;width:auto;"></div>
+  <a href="editor.html?theme=keerthana" class="topbar-cta">Use this theme ✦</a>
+</div>
+
+<div class="theme-banner">
+  <div class="theme-badge"><div class="theme-badge-dot"></div> Keerthana — Traditional South Indian · Live preview</div>
+  <div class="theme-price-tag">From <strong>₹2,499</strong> one-time</div>
+</div>
+
+<main>
+
+  <!-- HERO -->
+  <section class="hero fade-up">
+    <div class="hero-bg"></div>
+    <div class="hero-bells"></div>
+    <div class="hero-leaves"></div>
+
+    <div class="hero-content">
+      <div class="blessing">|| Shree LaxmiVenkatesh Prasanna ||</div>
+      <div class="blessing">|| Shree LaxmiChandralamba Prasanna ||</div>
+      <div class="blessing2">Together with our families we cordially invite you to join the</div>
+
+      <div class="ornament"><span></span><i>🪷</i><span></span></div>
+
+      <div class="ceremony-of">Wedding Ceremony of</div>
+
+      <div class="bride-name">Keerthana</div>
+      <div class="parents-name">D/o Smt. Radhika & Shri Krishnamurthy Joshi</div>
+
+      <div class="and-word">and</div>
+
+      <div class="groom-name">Naveen</div>
+      <div class="parents-name">S/o Smt. Bhagyashri & Shri Madhav Mokashi</div>
+
+      <div class="on-text">on</div>
+
+      <div class="date-pill"><span style="color:var(--gold-dark);">🌸</span> Saturday, 15th February 2026</div>
+
+      <div class="love-story">A bond woven in tradition, blessed by the divine, and celebrated with love.</div>
+
+      <div class="scroll-hint"><span>Scroll to preview</span><div class="scroll-arrow"></div></div>
+    </div>
+  </section>
+
+  <!-- TEMPLE -->
+  <div class="temple-hero fade-up">
+    <img src="images/temple1.jpg" alt="Temple" loading="lazy">
+    <div class="temple-overlay"></div>
+  </div>
+
+  <!-- MUSIC BAR -->
+  <div class="music-bar fade-up">
+    <div class="music-icon">♪</div>
+    <div class="music-info">
+      <div class="music-name">Kannaana Kanney — D. Imman</div>
+      <div class="music-artist">Background music · plays for your guests</div>
+    </div>
+    <div class="music-wave">
+      <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
+      <div class="wave-bar"></div><div class="wave-bar"></div>
+    </div>
+  </div>
+
+  <!-- COUNTDOWN -->
+  <div class="countdown-section fade-up">
+    <div class="cd-label">Counting down to forever</div>
+    <div class="cd-boxes">
+      <div class="cbox"><div class="cbox-num" id="cd-d">42</div><div class="cbox-lbl">Days</div></div>
+      <div class="cbox-sep">:</div>
+      <div class="cbox"><div class="cbox-num" id="cd-h">08</div><div class="cbox-lbl">Hours</div></div>
+      <div class="cbox-sep">:</div>
+      <div class="cbox"><div class="cbox-num" id="cd-m">35</div><div class="cbox-lbl">Mins</div></div>
+      <div class="cbox-sep">:</div>
+      <div class="cbox"><div class="cbox-num" id="cd-s">00</div><div class="cbox-lbl">Secs</div></div>
+    </div>
+  </div>
+
+  <!-- EVENTS -->
+  <div class="events-wrap fade-up">
+    <div class="events-bg"></div>
+    <div class="events-section">
+      <div class="sec-eyebrow">Auspicious Celebrations</div>
+      <div class="sec-title">Join us for <em>every ritual</em></div>
+      <div class="sec-divider"><span></span><i>🪷</i><span></span></div>
+
+      <div class="event-card">
+        <div class="event-icon-box">🪔</div>
+        <div>
+          <div class="event-name">Naandi Ceremony</div>
+          <div class="event-meta"><strong>Friday, 14th Feb 2026</strong><br>8:00 AM – 10:00 AM<br>Residence, Jayanagar, Bengaluru</div>
+          <a class="map-btn" href="#">📍 Get directions</a>
+        </div>
+      </div>
+      <div class="event-card">
+        <div class="event-icon-box">💛</div>
+        <div>
+          <div class="event-name">Haldi & Mehendi</div>
+          <div class="event-meta"><strong>Friday, 14th Feb 2026</strong><br>11:00 AM – 2:00 PM<br>The Chancery Pavilion, Bengaluru</div>
+          <a class="map-btn" href="#">📍 Get directions</a>
+        </div>
+      </div>
+      <div class="event-card">
+        <div class="event-icon-box">🌺</div>
+        <div>
+          <div class="event-name">Muhurtam</div>
+          <div class="event-meta"><strong>Saturday, 15th Feb 2026</strong><br>9:15 AM – 12:00 PM<br>Shri Krishna Kalyan Mantap</div>
+          <a class="map-btn" href="#">📍 Get directions</a>
+        </div>
+      </div>
+      <div class="event-card">
+        <div class="event-icon-box">🌸</div>
+        <div>
+          <div class="event-name">Reception & Lunch</div>
+          <div class="event-meta"><strong>Saturday, 15th Feb 2026</strong><br>12:45 PM – 3:00 PM<br>Shri Krishna Kalyan Mantap</div>
+          <a class="map-btn" href="#">📍 Get directions</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GALLERY -->
+  <div class="gallery-wrap fade-up">
+    <div class="gallery-bg"></div>
+    <div class="gallery-section">
+      <div class="sec-eyebrow" style="text-align:center;">Our Story</div>
+      <div class="sec-title" style="text-align:center;">A glimpse of <em>us</em></div>
+      <div class="sec-divider"><span></span><i>🪷</i><span></span></div>
+      <div class="gallery-grid">
+        <div class="g-item big"><div class="g-placeholder gp1">💑</div></div>
+        <div class="g-item"><div class="g-placeholder gp2">🌺</div></div>
+        <div class="g-item"><div class="g-placeholder gp3">🪷</div></div>
+        <div class="g-item"><div class="g-placeholder gp4">🪔</div></div>
+        <div class="g-item big"><div class="g-placeholder gp5">💍</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIDEO -->
+  <div class="video-section fade-up">
+    <div class="sec-eyebrow" style="text-align:center;margin-bottom:8px;">Our Film</div>
+    <div class="video-wrap">
+      <div class="video-ph">🎬<br>Pre-wedding video</div>
+    </div>
+  </div>
+
+  <!-- RSVP -->
+  <div class="rsvp-section fade-up">
+    <div class="sec-eyebrow" style="text-align:center;margin-bottom:12px;">Will you join us?</div>
+    <button class="rsvp-btn">RSVP Now 🪷</button>
+  </div>
+
+  <!-- BOTTOM TEMPLE CTA -->
+  <div class="temple-cta fade-up">
+    <img class="temple-cta-img" src="images/temple2.jpg" alt="Temple" loading="lazy">
+    <div class="temple-cta-overlay"></div>
+    <div class="temple-cta-content">
+      <div class="temple-cta-title">Love this theme? <em>Make it yours.</em></div>
+      <div class="temple-cta-sub">Replace the demo details with yours. Your story, your tradition.</div>
+      <div class="cta-row">
+        <a href="editor.html?theme=keerthana" class="btn-gold-solid">Use this theme ✦</a>
+        <a href="index.html" class="btn-ghost">Browse other themes</a>
+      </div>
+      <div class="price-note">From ₹2,499 one-time · Hosted for 1 year</div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="invite-footer fade-up">
+    <div class="footer-names">Keerthana & Naveen</div>
+    <div class="footer-date">February 15, 2026 · Bengaluru</div>
+    <div class="footer-quote">"Two souls, one sacred thread. Thank you for your blessings."</div>
+    <div class="vowite-tag">Made with love on <span>Vowite</span></div>
+  </div>
+
+</main>
+
+<script>
+const target=new Date('2026-02-15T09:15:00');
+function tick(){
+  const diff=target-Date.now();
+  if(diff<=0)return;
+  document.getElementById('cd-d').textContent=String(Math.floor(diff/86400000)).padStart(2,'0');
+  document.getElementById('cd-h').textContent=String(Math.floor((diff%86400000)/3600000)).padStart(2,'0');
+  document.getElementById('cd-m').textContent=String(Math.floor((diff%3600000)/60000)).padStart(2,'0');
+  document.getElementById('cd-s').textContent=String(Math.floor((diff%60000)/1000)).padStart(2,'0');
+}
+tick();setInterval(tick,1000);
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});
+},{threshold:0.08});
+document.querySelectorAll('.fade-up').forEach(el=>obs.observe(el));
+</script>
+<script src="nav.js"></script>
+</body>
+</html>

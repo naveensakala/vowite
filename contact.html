@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="favicon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Done For You — Vowite</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --gold:#C9A84C;--gold-light:#E8D5B0;--gold-dark:#9C7A2E;
+  --blush:#F2C4CE;--ivory:#FFFDF7;--ivory-dark:#F5EDD8;
+  --espresso:#2C1A0E;--espresso-mid:#5C3D22;--border:rgba(201,168,76,0.2);
+}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:var(--ivory);color:var(--espresso);overflow-x:hidden;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center;background:rgba(255,253,247,0.92);backdrop-filter:blur(8px);border-bottom:0.5px solid var(--border);}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:600;color:var(--espresso);}
+.nav-logo span{color:var(--gold);}
+.nav-back{font-size:13px;color:var(--espresso-mid);text-decoration:none;display:flex;align-items:center;gap:6px;transition:color 0.2s;}
+.nav-back:hover{color:var(--gold-dark);}
+.nav-cta{background:var(--espresso);color:var(--ivory);padding:8px 20px;border-radius:100px;font-size:13px;font-weight:500;text-decoration:none;transition:all 0.2s;}
+.nav-cta:hover{background:var(--gold-dark);}
+
+/* HERO */
+.hero{min-height:60vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:8rem 2rem 4rem;position:relative;overflow:hidden;}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(242,196,206,0.2) 0%,transparent 70%),radial-gradient(ellipse 50% 40% at 80% 80%,rgba(201,168,76,0.1) 0%,transparent 60%);}
+.hero-content{position:relative;max-width:680px;}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(201,168,76,0.1);border:0.5px solid rgba(201,168,76,0.3);border-radius:100px;padding:5px 14px;font-size:12px;color:var(--gold-dark);font-weight:500;margin-bottom:1.5rem;letter-spacing:0.04em;}
+.hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(40px,7vw,72px);font-weight:500;line-height:1.05;color:var(--espresso);margin-bottom:1rem;}
+.hero h1 em{font-style:italic;color:var(--gold);}
+.hero-sub{font-size:17px;color:var(--espresso-mid);line-height:1.7;max-width:500px;margin:0 auto 2rem;font-weight:300;}
+
+/* HOW IT WORKS */
+.how-section{padding:4rem 2rem;max-width:900px;margin:0 auto;}
+.sec-eyebrow{font-size:11px;letter-spacing:0.12em;color:var(--gold-dark);font-weight:500;text-transform:uppercase;text-align:center;margin-bottom:0.5rem;}
+.sec-title{font-family:'Cormorant Garamond',serif;font-size:clamp(28px,4vw,44px);font-weight:500;text-align:center;color:var(--espresso);margin-bottom:0.5rem;}
+.sec-title em{font-style:italic;color:var(--gold);}
+.sec-divider{display:flex;align-items:center;gap:10px;justify-content:center;margin:12px 0 2.5rem;}
+.sec-divider span{height:0.5px;width:60px;background:linear-gradient(90deg,transparent,rgba(201,168,76,0.4));}
+.sec-divider span:last-child{background:linear-gradient(90deg,rgba(201,168,76,0.4),transparent);}
+.sec-divider i{font-style:normal;font-size:12px;color:var(--gold);}
+
+.steps-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;}
+.step-card{background:white;border:0.5px solid var(--border);border-radius:16px;padding:1.5rem;text-align:center;transition:all 0.2s;}
+.step-card:hover{border-color:rgba(201,168,76,0.4);transform:translateY(-2px);box-shadow:0 8px 24px rgba(201,168,76,0.08);}
+.step-num{width:40px;height:40px;border-radius:50%;background:rgba(201,168,76,0.1);border:0.5px solid rgba(201,168,76,0.3);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--gold-dark);margin:0 auto 1rem;font-weight:600;}
+.step-title{font-size:14px;font-weight:500;color:var(--espresso);margin-bottom:6px;}
+.step-desc{font-size:12px;color:var(--espresso-mid);line-height:1.6;font-weight:300;}
+
+/* WHAT'S INCLUDED */
+.included-section{background:var(--ivory-dark);padding:4rem 2rem;}
+.included-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;max-width:900px;margin:0 auto;}
+.inc-card{background:white;border:0.5px solid var(--border);border-radius:14px;padding:1.25rem;display:flex;gap:12px;align-items:flex-start;}
+.inc-icon{width:38px;height:38px;border-radius:10px;background:rgba(201,168,76,0.1);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
+.inc-title{font-size:13px;font-weight:500;color:var(--espresso);margin-bottom:3px;}
+.inc-desc{font-size:12px;color:var(--espresso-mid);line-height:1.5;font-weight:300;}
+
+/* PRICING */
+.pricing-section{padding:4rem 2rem;max-width:900px;margin:0 auto;}
+.price-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;}
+.price-card{background:white;border:0.5px solid var(--border);border-radius:20px;padding:2rem;}
+.price-card.featured{border:2px solid var(--gold);}
+.price-badge{display:inline-block;background:var(--gold);color:white;font-size:11px;padding:3px 10px;border-radius:100px;font-weight:500;margin-bottom:0.75rem;}
+.price-name{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:500;color:var(--espresso);margin-bottom:4px;}
+.price-amount{font-size:34px;font-weight:500;color:var(--espresso);margin:0.75rem 0 0.25rem;}
+.price-amount span{font-size:15px;font-weight:400;color:var(--espresso-mid);}
+.price-desc{font-size:13px;color:var(--espresso-mid);margin-bottom:1.25rem;line-height:1.5;font-weight:300;}
+.price-features{list-style:none;margin-bottom:1.5rem;}
+.price-features li{font-size:12px;color:var(--espresso-mid);padding:5px 0;display:flex;align-items:center;gap:8px;border-bottom:0.5px solid rgba(201,168,76,0.1);}
+.price-features li:last-child{border:none;}
+.check{width:15px;height:15px;border-radius:50%;background:rgba(201,168,76,0.15);display:flex;align-items:center;justify-content:center;font-size:8px;color:var(--gold-dark);flex-shrink:0;}
+
+/* FORM SECTION */
+.form-section{padding:4rem 2rem;background:var(--espresso);}
+.form-wrap{max-width:620px;margin:0 auto;}
+.form-section .sec-eyebrow{color:var(--gold);}
+.form-section .sec-title{color:var(--ivory);}
+.form-section .sec-title em{color:var(--gold);}
+.form-card{background:rgba(255,253,247,0.05);border:0.5px solid rgba(201,168,76,0.2);border-radius:20px;padding:2.5rem;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
+.form-group{margin-bottom:14px;}
+.form-label{font-size:11px;font-weight:500;color:rgba(255,253,247,0.5);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:6px;display:block;}
+.form-input{width:100%;background:rgba(255,253,247,0.06);border:0.5px solid rgba(201,168,76,0.2);border-radius:10px;padding:11px 14px;font-size:13px;color:var(--ivory);font-family:'DM Sans',sans-serif;outline:none;transition:all 0.2s;}
+.form-input:focus{border-color:rgba(201,168,76,0.5);background:rgba(201,168,76,0.06);}
+.form-input::placeholder{color:rgba(255,253,247,0.2);}
+select.form-input option{background:var(--espresso);color:var(--ivory);}
+.form-submit{width:100%;background:var(--gold);color:var(--espresso);border:none;border-radius:100px;padding:14px;font-size:14px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;letter-spacing:0.04em;transition:all 0.2s;margin-top:8px;}
+.form-submit:hover{background:var(--gold-dark);color:var(--ivory);}
+.form-note{text-align:center;font-size:12px;color:rgba(255,253,247,0.3);margin-top:12px;line-height:1.6;}
+
+/* SUCCESS STATE */
+.form-success{display:none;text-align:center;padding:3rem 2rem;}
+.success-icon{font-size:48px;margin-bottom:1rem;}
+.success-title{font-family:'Cormorant Garamond',serif;font-size:32px;color:var(--ivory);margin-bottom:0.75rem;}
+.success-sub{font-size:14px;color:rgba(255,253,247,0.5);line-height:1.7;max-width:360px;margin:0 auto;}
+
+/* TESTIMONIALS */
+.testi-section{padding:4rem 2rem;max-width:900px;margin:0 auto;}
+.testi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;}
+.testi-card{background:white;border:0.5px solid var(--border);border-radius:16px;padding:1.5rem;}
+.testi-stars{color:var(--gold);font-size:11px;margin-bottom:0.75rem;}
+.testi-quote{font-family:'Cormorant Garamond',serif;font-size:16px;color:var(--espresso);line-height:1.6;margin-bottom:1rem;font-style:italic;}
+.testi-author{display:flex;align-items:center;gap:10px;}
+.testi-avatar{width:34px;height:34px;border-radius:50%;background:rgba(201,168,76,0.15);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;color:var(--gold-dark);}
+.testi-name{font-size:13px;font-weight:500;color:var(--espresso);}
+.testi-detail{font-size:11px;color:var(--espresso-mid);}
+
+/* FAQ */
+.faq-section{background:var(--ivory-dark);padding:4rem 2rem;}
+.faq-wrap{max-width:680px;margin:0 auto;}
+.faq-item{background:white;border:0.5px solid var(--border);border-radius:14px;margin-bottom:10px;overflow:hidden;}
+.faq-q{padding:1rem 1.25rem;font-size:14px;font-weight:500;color:var(--espresso);cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:all 0.2s;}
+.faq-q:hover{color:var(--gold-dark);}
+.faq-icon{font-size:16px;color:var(--gold);transition:transform 0.2s;flex-shrink:0;}
+.faq-a{max-height:0;overflow:hidden;transition:max-height 0.3s ease,padding 0.3s ease;}
+.faq-a.open{max-height:200px;padding:0 1.25rem 1rem;}
+.faq-a p{font-size:13px;color:var(--espresso-mid);line-height:1.7;font-weight:300;}
+
+/* CTA BANNER */
+.cta-banner{background:linear-gradient(135deg,var(--espresso),#5C3D22);margin:4rem 2rem;border-radius:24px;padding:3.5rem 2rem;text-align:center;max-width:900px;margin-left:auto;margin-right:auto;}
+.cta-banner h2{font-family:'Cormorant Garamond',serif;font-size:clamp(26px,4vw,44px);color:var(--ivory);font-weight:500;margin-bottom:0.75rem;}
+.cta-banner h2 em{color:var(--gold);font-style:italic;}
+.cta-banner p{color:rgba(255,253,247,0.5);font-size:15px;margin-bottom:1.5rem;font-weight:300;}
+.btn-gold{background:var(--gold);color:var(--espresso);padding:13px 32px;border-radius:100px;font-size:14px;font-weight:500;text-decoration:none;transition:all 0.2s;display:inline-block;}
+.btn-gold:hover{background:var(--gold-dark);color:var(--ivory);}
+
+/* FOOTER */
+footer{background:var(--espresso);border-top:0.5px solid rgba(201,168,76,0.15);padding:2rem;text-align:center;}
+.footer-logo{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--ivory);margin-bottom:0.5rem;}
+.footer-logo span{color:var(--gold);}
+.footer-links{display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap;margin:0.75rem 0;}
+.footer-links a{font-size:13px;color:rgba(255,253,247,0.4);text-decoration:none;transition:color 0.2s;}
+.footer-links a:hover{color:var(--gold);}
+.footer-copy{font-size:12px;color:rgba(255,253,247,0.2);}
+
+.fade-up{opacity:0;transform:translateY(24px);transition:opacity 0.6s ease,transform 0.6s ease;}
+.fade-up.visible{opacity:1;transform:translateY(0);}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content fade-up">
+    <div class="hero-badge">✦ Done For You Service</div>
+    <h1>We build your invite. <em>You just share it.</em></h1>
+    <p class="hero-sub">Tell us your details, pick a theme, and we'll craft a stunning invite for you. No editing needed — just review, approve and send.</p>
+    <a href="#form" class="btn-gold">Start your invite ✦</a>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-section">
+  <p class="sec-eyebrow fade-up">Simple process</p>
+  <h2 class="sec-title fade-up">How it <em>works</em></h2>
+  <div class="sec-divider fade-up"><span></span><i>✦</i><span></span></div>
+  <div class="steps-grid">
+    <div class="step-card fade-up">
+      <div class="step-num">1</div>
+      <div class="step-title">Fill the form</div>
+      <div class="step-desc">Share your details — names, dates, events, venue and any special requests.</div>
+    </div>
+    <div class="step-card fade-up">
+      <div class="step-num">2</div>
+      <div class="step-title">We build it</div>
+      <div class="step-desc">Our team crafts your invite within 48 hours using your chosen theme.</div>
+    </div>
+    <div class="step-card fade-up">
+      <div class="step-num">3</div>
+      <div class="step-title">You review</div>
+      <div class="step-desc">We send you a preview link. Request changes — up to 2 rounds included.</div>
+    </div>
+    <div class="step-card fade-up">
+      <div class="step-num">4</div>
+      <div class="step-title">Share & celebrate</div>
+      <div class="step-desc">Once approved, your invite goes live. Share the link on WhatsApp instantly.</div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT'S INCLUDED -->
+<section class="included-section">
+  <div style="max-width:900px;margin:0 auto;">
+    <p class="sec-eyebrow fade-up">Everything included</p>
+    <h2 class="sec-title fade-up" style="margin-bottom:0.5rem;">What you <em>get</em></h2>
+    <div class="sec-divider fade-up"><span></span><i>✦</i><span></span></div>
+    <div class="included-grid">
+      <div class="inc-card fade-up"><div class="inc-icon">✨</div><div><div class="inc-title">Animated reveal</div><div class="inc-desc">Stunning opening animation when guests tap the link.</div></div></div>
+      <div class="inc-card fade-up"><div class="inc-icon">⏳</div><div><div class="inc-title">Live countdown</div><div class="inc-desc">Real-time countdown ticking to your wedding day.</div></div></div>
+      <div class="inc-card fade-up"><div class="inc-icon">📸</div><div><div class="inc-title">Photo gallery</div><div class="inc-desc">Your pre-wedding photos in a beautiful lightbox gallery.</div></div></div>
+      <div class="inc-card fade-up"><div class="inc-icon">🎵</div><div><div class="inc-title">Background music</div><div class="inc-desc">Your favourite song playing softly for guests.</div></div></div>
+      <div class="inc-card fade-up"><div class="inc-icon">📍</div><div><div class="inc-title">Venue maps</div><div class="inc-desc">Google Maps embedded for every event.</div></div></div>
+      <div class="inc-card fade-up"><div class="inc-icon">✅</div><div><div class="inc-title">RSVP tracking</div><div class="inc-desc">Guest RSVP form + couple dashboard included.</div></div></div>
+      <div class="inc-card fade-up"><div class="inc-icon">🎬</div><div><div class="inc-title">Pre-wedding video</div><div class="inc-desc">Embed your film right inside the invite.</div></div></div>
+      <div class="inc-card fade-up"><div class="inc-icon">🔄</div><div><div class="inc-title">2 revision rounds</div><div class="inc-desc">We refine until you're completely happy.</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing-section">
+  <p class="sec-eyebrow fade-up">Pricing</p>
+  <h2 class="sec-title fade-up">Simple, <em>transparent</em> pricing</h2>
+  <div class="sec-divider fade-up"><span></span><i>✦</i><span></span></div>
+  <div class="price-cards">
+    <div class="price-card fade-up">
+      <div class="price-name">Done For You</div>
+      <div class="price-amount">₹4,999 <span>one-time</span></div>
+      <div class="price-desc">We build your entire invite. You just review and share.</div>
+      <ul class="price-features">
+        <li><div class="check">✓</div> All invite features included</li>
+        <li><div class="check">✓</div> We design & build it for you</li>
+        <li><div class="check">✓</div> RSVP dashboard included</li>
+        <li><div class="check">✓</div> 2 revision rounds</li>
+        <li><div class="check">✓</div> 48 hour delivery</li>
+        <li><div class="check">✓</div> Hosted for 1 year</li>
+      </ul>
+      <a href="#form" style="display:block;text-align:center;padding:12px;border-radius:100px;font-size:14px;font-weight:500;background:var(--espresso);color:var(--ivory);text-decoration:none;transition:all 0.2s;" onmouseover="this.style.background='#9C7A2E'" onmouseout="this.style.background='#2C1A0E'">Get started ✦</a>
+    </div>
+    <div class="price-card featured fade-up">
+      <div class="price-badge">Most popular</div>
+      <div class="price-name">Done For You + Rush</div>
+      <div class="price-amount">₹6,999 <span>one-time</span></div>
+      <div class="price-desc">Everything in Done For You but delivered within 24 hours.</div>
+      <ul class="price-features">
+        <li><div class="check">✓</div> Everything in Done For You</li>
+        <li><div class="check">✓</div> 24 hour delivery</li>
+        <li><div class="check">✓</div> Priority support</li>
+        <li><div class="check">✓</div> 3 revision rounds</li>
+        <li><div class="check">✓</div> WhatsApp coordination</li>
+        <li><div class="check">✓</div> Hosted for 1 year</li>
+      </ul>
+      <a href="#form" style="display:block;text-align:center;padding:12px;border-radius:100px;font-size:14px;font-weight:500;background:var(--gold);color:var(--espresso);text-decoration:none;transition:all 0.2s;" onmouseover="this.style.background='#9C7A2E';this.style.color='#FFFDF7'" onmouseout="this.style.background='#C9A84C';this.style.color='#2C1A0E'">Get started ✦</a>
+    </div>
+  </div>
+</section>
+
+<!-- FORM -->
+<section class="form-section" id="form">
+  <div class="form-wrap">
+    <p class="sec-eyebrow fade-up">Let's get started</p>
+    <h2 class="sec-title fade-up" style="margin-bottom:2rem;">Tell us about your <em>wedding</em></h2>
+    <div class="form-card fade-up">
+      <div id="formContent">
+        <div class="form-row">
+          <div class="form-group" style="margin-bottom:0;">
+            <label class="form-label">Partner 1 name</label>
+            <input class="form-input" id="f-name1" placeholder="e.g. Priya" type="text">
+          </div>
+          <div class="form-group" style="margin-bottom:0;">
+            <label class="form-label">Partner 2 name</label>
+            <input class="form-input" id="f-name2" placeholder="e.g. Arjun" type="text">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group" style="margin-bottom:0;">
+            <label class="form-label">Wedding date</label>
+            <input class="form-input" id="f-date" type="date">
+          </div>
+          <div class="form-group" style="margin-bottom:0;">
+            <label class="form-label">City</label>
+            <input class="form-input" id="f-city" placeholder="e.g. Chennai" type="text">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Preferred theme</label>
+          <select class="form-input" id="f-theme">
+            <option value="">Select a theme</option>
+            <option>Sindoor — North Indian Hindu</option>
+            <option>Maangalyam — South Indian</option>
+            <option>Midnight Gold — Modern Luxury</option>
+            <option>Gulabi — Floral Romance</option>
+            <option>Keerthana — Traditional South Indian</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Package</label>
+          <select class="form-input" id="f-package">
+            <option>Done For You — ₹4,999</option>
+            <option>Done For You + Rush — ₹6,999</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Your email</label>
+          <input class="form-input" id="f-email" placeholder="we'll send your preview here" type="email">
+        </div>
+        <div class="form-group">
+          <label class="form-label">WhatsApp number</label>
+          <input class="form-input" id="f-phone" placeholder="+91 XXXXX XXXXX" type="tel">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Events (list all your wedding events)</label>
+          <textarea class="form-input" id="f-events" rows="3" placeholder="e.g. Haldi on 14 Feb morning, Sangeet on 14 Feb evening, Wedding on 15 Feb 9AM at Sri Kapali Temple..."></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Anything special you want included?</label>
+          <textarea class="form-input" id="f-special" rows="2" placeholder="e.g. Our love story, specific photos, a particular song..."></textarea>
+        </div>
+        <button class="form-submit" onclick="submitForm()">Submit enquiry ✦</button>
+        <p class="form-note">We'll get back to you within 2 hours via email & WhatsApp. No payment needed yet.</p>
+      </div>
+      <div class="form-success" id="formSuccess">
+        <div class="success-icon">🎉</div>
+        <div class="success-title">We've received your enquiry!</div>
+        <div class="success-sub">We'll reach out to you within 2 hours via email and WhatsApp to get started on your Vowite.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testi-section">
+  <p class="sec-eyebrow fade-up">Love stories</p>
+  <h2 class="sec-title fade-up">What couples are <em>saying</em></h2>
+  <div class="sec-divider fade-up"><span></span><i>✦</i><span></span></div>
+  <div class="testi-grid">
+    <div class="testi-card fade-up">
+      <div class="testi-stars">★★★★★</div>
+      <div class="testi-quote">"I was too busy with wedding prep to build it myself. They built it in a day and it was perfect."</div>
+      <div class="testi-author"><div class="testi-avatar">SR</div><div><div class="testi-name">Sindhu & Rajan</div><div class="testi-detail">Bengaluru · South Indian</div></div></div>
+    </div>
+    <div class="testi-card fade-up">
+      <div class="testi-stars">★★★★★</div>
+      <div class="testi-quote">"Submitted the form at night, had a preview by morning. Shared it the same day. Guests were blown away."</div>
+      <div class="testi-author"><div class="testi-avatar">NK</div><div><div class="testi-name">Neha & Karthik</div><div class="testi-detail">Dubai · Tamil Brahmin</div></div></div>
+    </div>
+    <div class="testi-card fade-up">
+      <div class="testi-stars">★★★★★</div>
+      <div class="testi-quote">"The rush package was worth every rupee. Got it in under 24 hours, exactly as I imagined."</div>
+      <div class="testi-author"><div class="testi-avatar">PA</div><div><div class="testi-name">Priya & Arjun</div><div class="testi-detail">Chennai · Hindu wedding</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-section">
+  <div class="faq-wrap">
+    <p class="sec-eyebrow fade-up" style="text-align:center;">FAQ</p>
+    <h2 class="sec-title fade-up" style="margin-bottom:0.5rem;">Common <em>questions</em></h2>
+    <div class="sec-divider fade-up"><span></span><i>✦</i><span></span></div>
+    <div class="faq-item fade-up">
+      <div class="faq-q" onclick="toggleFaq(this)">How long does it take? <span class="faq-icon">+</span></div>
+      <div class="faq-a"><p>Standard package: 48 hours from when we receive all your details. Rush package: within 24 hours. We'll confirm via WhatsApp once we start.</p></div>
+    </div>
+    <div class="faq-item fade-up">
+      <div class="faq-q" onclick="toggleFaq(this)">When do I pay? <span class="faq-icon">+</span></div>
+      <div class="faq-a"><p>You pay only after you see the preview and are happy with it. We'll send a Razorpay payment link before publishing your invite.</p></div>
+    </div>
+    <div class="faq-item fade-up">
+      <div class="faq-q" onclick="toggleFaq(this)">What if I want changes? <span class="faq-icon">+</span></div>
+      <div class="faq-a"><p>Standard includes 2 revision rounds, Rush includes 3. We want you to be completely happy before publishing.</p></div>
+    </div>
+    <div class="faq-item fade-up">
+      <div class="faq-q" onclick="toggleFaq(this)">Can I provide my own photos and music? <span class="faq-icon">+</span></div>
+      <div class="faq-a"><p>Absolutely! Share your pre-wedding photos and your favourite song via WhatsApp after submitting the form. We'll include everything.</p></div>
+    </div>
+    <div class="faq-item fade-up">
+      <div class="faq-q" onclick="toggleFaq(this)">How long is the invite hosted? <span class="faq-icon">+</span></div>
+      <div class="faq-a"><p>Your invite stays live for 1 full year from the date of publishing. After that, you can renew hosting at a small fee.</p></div>
+    </div>
+    <div class="faq-item fade-up">
+      <div class="faq-q" onclick="toggleFaq(this)">Can guests outside India open the invite? <span class="faq-icon">+</span></div>
+      <div class="faq-a"><p>Yes! Your Vowite link works everywhere in the world. Perfect for guests in the US, UK, UAE, Singapore and beyond.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BANNER -->
+<div style="padding:0 2rem;">
+  <div class="cta-banner fade-up">
+    <h2>Ready to make your invite <em>unforgettable?</em></h2>
+    <p>Fill the form and we'll get started within 2 hours.</p>
+    <a href="#form" class="btn-gold">Start your invite ✦</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo"><img src="images/logo-white.png" alt="Vowite" style="height:40px;width:auto;opacity:0.9;"></div>
+  <div class="footer-links">
+    <a href="index.html">Home</a>
+    <a href="index.html#themes">Themes</a>
+    <a href="index.html#pricing">Pricing</a>
+    <a href="contact.html">Done for you</a>
+  </div>
+  <div class="footer-copy">© 2025 Vowite. Made with love in India.</div>
+</footer>
+
+<script>
+async function submitForm(){
+  const n1=document.getElementById('f-name1').value.trim();
+  const n2=document.getElementById('f-name2').value.trim();
+  const email=document.getElementById('f-email').value.trim();
+  const phone=document.getElementById('f-phone').value.trim();
+  const date=document.getElementById('f-date').value;
+  const city=document.getElementById('f-city').value.trim();
+  const theme=document.getElementById('f-theme').value;
+  const pkg=document.getElementById('f-package').value;
+  const events=document.getElementById('f-events').value.trim();
+  const special=document.getElementById('f-special').value.trim();
+  if(!n1||!email||!phone){
+    alert('Please fill in at least your name, email and WhatsApp number.');
+    return;
+  }
+  const btn=document.querySelector('.form-submit');
+  btn.textContent='Sending...';
+  btn.disabled=true;
+  try{
+    const res=await fetch('https://formspree.io/f/xykozdzq',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body:JSON.stringify({
+        'Partner 1':n1,'Partner 2':n2,
+        'Email':email,'WhatsApp':phone,
+        'Wedding Date':date,'City':city,
+        'Theme':theme,'Package':pkg,
+        'Events':events,'Special Requests':special,
+      })
+    });
+    if(res.ok){
+      document.getElementById('formContent').style.display='none';
+      document.getElementById('formSuccess').style.display='block';
+    } else {
+      alert('Something went wrong. Please try again or WhatsApp us directly.');
+      btn.textContent='Submit enquiry ✦';
+      btn.disabled=false;
+    }
+  } catch(e){
+    alert('Something went wrong. Please check your connection and try again.');
+    btn.textContent='Submit enquiry ✦';
+    btn.disabled=false;
+  }
+}
+
+function toggleFaq(el){
+  const ans=el.nextElementSibling;
+  const icon=el.querySelector('.faq-icon');
+  const isOpen=ans.classList.contains('open');
+  document.querySelectorAll('.faq-a').forEach(a=>a.classList.remove('open'));
+  document.querySelectorAll('.faq-icon').forEach(i=>i.textContent='+');
+  if(!isOpen){ans.classList.add('open');icon.textContent='−';}
+}
+
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});
+},{threshold:0.1});
+document.querySelectorAll('.fade-up').forEach(el=>obs.observe(el));
+</script>
+<script src="nav.js"></script>
+</body>
+</html>

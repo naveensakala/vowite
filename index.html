@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta property="og:title" content="Vowite — Make it Memorable">
+<meta property="og:description" content="Create stunning interactive wedding invites with live countdowns, photo galleries, music and RSVP tracking. Share on WhatsApp in seconds. Made for Indian weddings.">
+<meta property="og:image" content="https://vowite.vercel.app//images/temple1.jpg">
+<meta property="og:url" content="https://vowite.vercel.app/">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" href="favicon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vowite — Make it Memorable</title>
+<meta name="description" content="Beautiful interactive wedding invites your guests will never forget. Share on WhatsApp instantly.">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@300;400;500&family=Great+Vibes&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --gold: #C9A84C; --gold-light: #E8D5B0; --gold-dark: #9C7A2E;
+    --blush: #F2C4CE; --ivory: #FFFDF7; --ivory-dark: #F5EDD8;
+    --espresso: #2C1A0E; --espresso-mid: #5C3D22; --champagne: #E8D5B0;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--ivory); color: var(--espresso); overflow-x: hidden; }
+
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; background: rgba(255,253,247,0.92); backdrop-filter: blur(8px); border-bottom: 0.5px solid rgba(201,168,76,0.2); }
+.hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
+.hamburger span { width: 22px; height: 1.5px; background: var(--espresso); border-radius: 2px; transition: all 0.3s; display: block; }
+.mobile-menu { display: none; position: fixed; top: 54px; left: 0; right: 0; background: rgba(255,253,247,0.98); backdrop-filter: blur(12px); border-bottom: 0.5px solid rgba(201,168,76,0.2); padding: 1rem 2rem; flex-direction: column; gap: 0; z-index: 99; }
+.mobile-menu.open { display: flex; }
+.mobile-menu a { font-size: 15px; color: var(--espresso-mid); text-decoration: none; padding: 12px 0; border-bottom: 0.5px solid rgba(201,168,76,0.1); transition: color 0.2s; }
+.mobile-menu a:last-child { border-bottom: none; }
+.mobile-menu a:hover { color: var(--gold-dark); }
+.mobile-menu .mob-cta { background: var(--espresso); color: var(--ivory) !important; padding: 12px 20px; border-radius: 100px; text-align: center; margin-top: 8px; border-bottom: none !important; font-weight: 500; }
+@media(max-width:768px) { .nav-links { display: none; } .hamburger { display: flex; } }
+  .nav-logo { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 600; color: var(--espresso); letter-spacing: 0.02em; }
+  .nav-logo span { color: var(--gold); }
+  .nav-links { display: flex; gap: 2rem; align-items: center; }
+  .nav-links a { font-size: 14px; color: var(--espresso-mid); text-decoration: none; font-weight: 400; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-cta { background: var(--espresso); color: var(--ivory) !important; padding: 8px 20px; border-radius: 100px; font-size: 13px !important; font-weight: 500 !important; transition: background 0.2s !important; }
+  .nav-cta:hover { background: var(--gold-dark) !important; }
+
+  .hero { min-height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 7rem 2rem 4rem; position: relative; overflow: hidden; }
+  .hero-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(242,196,206,0.25) 0%, transparent 70%), radial-gradient(ellipse 60% 40% at 80% 80%, rgba(201,168,76,0.12) 0%, transparent 60%); pointer-events: none; }
+  .hero-petals { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+  .petal { position: absolute; opacity: 0; animation: fall linear infinite; }
+  @keyframes fall { 0% { transform: translateY(-20px) rotate(0deg); opacity: 0.7; } 100% { transform: translateY(110vh) rotate(360deg); opacity: 0; } }
+  .hero-content { position: relative; max-width: 780px; }
+  .hero-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(201,168,76,0.12); border: 0.5px solid rgba(201,168,76,0.35); border-radius: 100px; padding: 5px 14px; font-size: 12px; color: var(--gold-dark); font-weight: 500; margin-bottom: 1.5rem; letter-spacing: 0.04em; }
+  .hero-badge-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); animation: pulse 2s ease-in-out infinite; }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+  .hero h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(48px, 8vw, 88px); font-weight: 500; line-height: 1.05; color: var(--espresso); margin-bottom: 1.2rem; }
+  .hero h1 em { font-style: italic; color: var(--gold); }
+  .hero-sub { font-size: clamp(16px, 2vw, 19px); color: var(--espresso-mid); line-height: 1.6; max-width: 540px; margin: 0 auto 2.5rem; font-weight: 300; }
+  .hero-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 3rem; }
+  .btn-primary { background: var(--espresso); color: var(--ivory); padding: 14px 32px; border-radius: 100px; font-size: 15px; font-weight: 500; text-decoration: none; transition: all 0.2s; border: none; cursor: pointer; display: inline-block; }
+  .btn-primary:hover { background: var(--gold-dark); transform: translateY(-1px); }
+  .btn-secondary { background: transparent; color: var(--espresso); padding: 14px 32px; border-radius: 100px; font-size: 15px; font-weight: 400; text-decoration: none; border: 0.5px solid rgba(44,26,14,0.25); transition: all 0.2s; display: inline-block; }
+  .btn-secondary:hover { border-color: var(--gold); color: var(--gold-dark); }
+  .hero-social-proof { display: flex; align-items: center; gap: 10px; justify-content: center; font-size: 13px; color: var(--espresso-mid); }
+  .avatar-stack { display: flex; }
+  .avatar { width: 30px; height: 30px; border-radius: 50%; border: 2px solid var(--ivory); margin-left: -8px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 500; overflow: hidden; }
+  .avatar:first-child { margin-left: 0; }
+
+  .preview-section { padding: 2rem 2rem 5rem; }
+  .preview-label { text-align: center; font-size: 12px; letter-spacing: 0.1em; color: var(--gold-dark); font-weight: 500; text-transform: uppercase; margin-bottom: 1rem; }
+  .phone-frame { width: 280px; margin: 0 auto; background: var(--espresso); border-radius: 36px; padding: 10px; box-shadow: 0 40px 80px rgba(44,26,14,0.2); }
+  .phone-screen { border-radius: 28px; overflow: hidden; background: var(--ivory); }
+  .invite-header { background: linear-gradient(160deg, #2C1A0E 0%, #5C3D22 100%); padding: 28px 20px 24px; text-align: center; }
+  .invite-bismillah { font-size: 11px; color: rgba(201,168,76,0.7); letter-spacing: 0.15em; margin-bottom: 10px; }
+  .invite-names { font-family: 'Great Vibes', cursive; font-size: 34px; color: var(--gold); line-height: 1.1; }
+  .invite-and { font-family: 'Cormorant Garamond', serif; font-size: 13px; color: rgba(232,213,176,0.7); display: block; font-style: italic; margin: 2px 0; }
+  .invite-tagline { font-size: 10px; color: rgba(232,213,176,0.5); letter-spacing: 0.12em; margin-top: 8px; }
+  .invite-divider { height: 0.5px; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+  .invite-body { padding: 16px; background: #2C1A0E; }
+  .invite-event { display: flex; gap: 10px; align-items: flex-start; padding: 10px; background: rgba(201,168,76,0.06); border-radius: 10px; margin-bottom: 8px; border: 0.5px solid rgba(201,168,76,0.15); }
+  .invite-event-icon { width: 32px; height: 32px; border-radius: 8px; background: rgba(201,168,76,0.15); display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+  .invite-event-name { font-size: 12px; font-weight: 500; color: var(--ivory); }
+  .invite-event-detail { font-size: 10px; color: rgba(255,253,247,0.5); margin-top: 1px; }
+  .invite-countdown { text-align: center; padding: 12px; border-top: 0.5px solid rgba(201,168,76,0.15); background: #8B1A1A; }
+  .invite-countdown-label { font-size: 9px; letter-spacing: 0.1em; color: rgba(255,253,247,0.5); text-transform: uppercase; margin-bottom: 6px; }
+  .countdown-boxes { display: flex; justify-content: center; gap: 6px; align-items: center; }
+  .cbox { text-align: center; }
+  .cbox-num { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 600; color: var(--gold); line-height: 1; }
+  .cbox-lbl { font-size: 8px; color: rgba(255,253,247,0.5); letter-spacing: 0.05em; }
+  .cbox-sep { font-size: 18px; color: rgba(201,168,76,0.4); margin-bottom: 10px; }
+  .invite-rsvp { margin: 0 16px 16px; background: var(--gold); color: var(--espresso); border: none; border-radius: 100px; padding: 10px; font-size: 12px; font-weight: 500; width: calc(100% - 32px); cursor: pointer; letter-spacing: 0.05em; display: block; background: #2C1A0E; }
+
+  .section { padding: 5rem 2rem; max-width: 1100px; margin: 0 auto; }
+  .section-eyebrow { font-size: 12px; letter-spacing: 0.1em; color: var(--gold-dark); font-weight: 500; text-transform: uppercase; margin-bottom: 0.75rem; text-align: center; }
+  .section-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(32px, 5vw, 52px); font-weight: 500; text-align: center; color: var(--espresso); margin-bottom: 0.75rem; line-height: 1.15; }
+  .section-title em { font-style: italic; color: var(--gold); }
+  .section-sub { text-align: center; color: var(--espresso-mid); font-size: 16px; max-width: 500px; margin: 0 auto 3.5rem; font-weight: 300; line-height: 1.6; }
+  .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+  .feat-card { background: white; border: 0.5px solid rgba(201,168,76,0.2); border-radius: 16px; padding: 1.5rem; transition: all 0.2s; }
+  .feat-card:hover { border-color: rgba(201,168,76,0.5); transform: translateY(-2px); }
+  .feat-icon { width: 40px; height: 40px; border-radius: 10px; background: rgba(201,168,76,0.1); display: flex; align-items: center; justify-content: center; font-size: 18px; margin-bottom: 1rem; }
+  .feat-title { font-size: 15px; font-weight: 500; color: var(--espresso); margin-bottom: 6px; }
+  .feat-desc { font-size: 13px; color: var(--espresso-mid); line-height: 1.6; font-weight: 300; }
+
+  .themes-section { background: var(--ivory-dark); padding: 5rem 2rem; }
+  .themes-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; max-width: 900px; margin: 0 auto; }
+  @media(max-width:768px){ .themes-grid{ grid-template-columns: repeat(2, 1fr); } }
+  @media(max-width:400px){ .themes-grid{ grid-template-columns: 1fr; } }
+  .theme-card { border-radius: 16px; overflow: hidden; border: 0.5px solid rgba(201,168,76,0.2); cursor: pointer; transition: all 0.2s; background: white; }
+  .theme-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(44,26,14,0.12); }
+  .theme-thumb { height: 140px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+  .theme-name-overlay { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.6)); padding: 20px 12px 10px; }
+  .theme-name { font-family: 'Cormorant Garamond', serif; font-size: 18px; color: white; font-weight: 500; }
+  .theme-sub { font-size: 11px; color: rgba(255,255,255,0.7); }
+  .theme-footer { padding: 10px 12px; display: flex; justify-content: space-between; align-items: center; }
+  .theme-price { font-size: 13px; font-weight: 500; color: var(--espresso); }
+  .theme-tag { font-size: 10px; background: rgba(201,168,76,0.12); color: var(--gold-dark); padding: 2px 8px; border-radius: 100px; border: 0.5px solid rgba(201,168,76,0.25); }
+
+  .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0; max-width: 900px; margin: 0 auto; }
+  .step { text-align: center; padding: 1.5rem; }
+  .step-num { width: 44px; height: 44px; border-radius: 50%; background: rgba(201,168,76,0.1); border: 0.5px solid rgba(201,168,76,0.3); display: flex; align-items: center; justify-content: center; font-family: 'Cormorant Garamond', serif; font-size: 20px; color: var(--gold-dark); margin: 0 auto 1rem; font-weight: 600; }
+  .step-title { font-size: 15px; font-weight: 500; color: var(--espresso); margin-bottom: 6px; }
+  .step-desc { font-size: 13px; color: var(--espresso-mid); line-height: 1.6; font-weight: 300; }
+
+  .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; max-width: 900px; margin: 0 auto; }
+  .price-card { background: white; border: 0.5px solid rgba(201,168,76,0.2); border-radius: 20px; padding: 2rem; }
+  .price-card.featured { border: 2px solid var(--gold); }
+  .price-badge { display: inline-block; background: var(--gold); color: white; font-size: 11px; padding: 3px 10px; border-radius: 100px; font-weight: 500; margin-bottom: 0.75rem; }
+  .price-name { font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 500; color: var(--espresso); margin-bottom: 4px; }
+  .price-amount { font-size: 36px; font-weight: 500; color: var(--espresso); margin: 0.75rem 0 0.25rem; }
+  .price-amount span { font-size: 16px; font-weight: 400; color: var(--espresso-mid); }
+  .price-desc { font-size: 13px; color: var(--espresso-mid); margin-bottom: 1.5rem; line-height: 1.5; font-weight: 300; }
+  .price-features { list-style: none; margin-bottom: 1.5rem; }
+  .price-features li { font-size: 13px; color: var(--espresso-mid); padding: 5px 0; display: flex; align-items: center; gap: 8px; border-bottom: 0.5px solid rgba(201,168,76,0.1); }
+  .price-features li:last-child { border: none; }
+  .check { width: 16px; height: 16px; border-radius: 50%; background: rgba(201,168,76,0.15); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 9px; color: var(--gold-dark); }
+  .btn-plan { display: block; text-align: center; padding: 12px; border-radius: 100px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; text-decoration: none; border: none; width: 100%; font-family: 'DM Sans', sans-serif; }
+  .btn-plan-primary { background: var(--espresso); color: var(--ivory); }
+  .btn-plan-primary:hover { background: var(--gold-dark); }
+  .btn-plan-outline { background: transparent; color: var(--espresso); border: 0.5px solid rgba(44,26,14,0.25) !important; }
+  .btn-plan-outline:hover { border-color: var(--gold) !important; color: var(--gold-dark); }
+
+  .testimonials-section { background: var(--espresso); padding: 5rem 2rem; }
+  .testi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; max-width: 900px; margin: 0 auto; }
+  .testi-card { background: rgba(255,253,247,0.06); border: 0.5px solid rgba(201,168,76,0.2); border-radius: 16px; padding: 1.5rem; }
+  .testi-quote { font-family: 'Cormorant Garamond', serif; font-size: 17px; color: var(--ivory); line-height: 1.5; margin-bottom: 1rem; font-style: italic; }
+  .testi-author { display: flex; align-items: center; gap: 10px; }
+  .testi-avatar { width: 36px; height: 36px; border-radius: 50%; background: rgba(201,168,76,0.2); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 500; color: var(--gold); }
+  .testi-name { font-size: 13px; font-weight: 500; color: var(--ivory); }
+  .testi-detail { font-size: 11px; color: rgba(255,253,247,0.45); }
+  .testi-stars { color: var(--gold); font-size: 11px; margin-bottom: 0.75rem; }
+
+  .cta-section { padding: 5rem 2rem; }
+  .cta-banner { background: linear-gradient(135deg, var(--espresso) 0%, #5C3D22 100%); border-radius: 24px; padding: 4rem 2rem; text-align: center; max-width: 900px; margin: 0 auto; }
+  .cta-banner h2 { font-family: 'Cormorant Garamond', serif; font-size: clamp(28px, 5vw, 48px); color: var(--ivory); font-weight: 500; margin-bottom: 0.75rem; }
+  .cta-banner h2 em { color: var(--gold); font-style: italic; }
+  .cta-banner p { color: rgba(255,253,247,0.6); font-size: 16px; margin-bottom: 2rem; font-weight: 300; }
+  .cta-banner .btn-primary { background: var(--gold); color: var(--espresso); }
+  .cta-banner .btn-primary:hover { background: var(--gold-dark); color: var(--ivory); }
+
+  footer { background: var(--espresso); border-top: 0.5px solid rgba(201,168,76,0.15); padding: 2.5rem 2rem; text-align: center; }
+  .footer-logo { font-family: 'Cormorant Garamond', serif; font-size: 24px; color: var(--ivory); margin-bottom: 0.5rem; }
+  .footer-logo span { color: var(--gold); }
+  .footer-tagline { font-size: 12px; color: rgba(255,253,247,0.35); margin-bottom: 1.5rem; letter-spacing: 0.06em; }
+  .footer-links { display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; margin-bottom: 1.5rem; }
+  .footer-links a { font-size: 13px; color: rgba(255,253,247,0.45); text-decoration: none; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--gold); }
+  .footer-copy { font-size: 12px; color: rgba(255,253,247,0.2); }
+  .rsvp-section{padding:5rem 2rem;background:var(--ivory);}
+  .rsvp-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1.2fr 0.8fr;gap:4rem;align-items:center;}
+  .rsvp-mockup{display:flex;justify-content:center;align-items:center;}
+  @media(max-width:768px){.rsvp-inner{grid-template-columns:1fr;gap:3rem;}}
+  .rsvp-points{display:flex;flex-direction:column;gap:1.25rem;margin-bottom:1.5rem;}
+  .rsvp-point{display:flex;gap:1rem;align-items:flex-start;}
+  .rsvp-point-icon{width:24px;height:24px;border-radius:50%;background:rgba(201,168,76,0.15);border:0.5px solid rgba(201,168,76,0.4);display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--gold-dark);flex-shrink:0;margin-top:2px;}
+  .rsvp-point-title{font-size:15px;font-weight:500;color:var(--espresso);margin-bottom:3px;}
+  .rsvp-point-desc{font-size:13px;color:var(--espresso-mid);line-height:1.6;font-weight:300;}
+  .rsvp-addon-badge{display:flex;align-items:center;gap:8px;flex-wrap:wrap;background:rgba(201,168,76,0.08);border:0.5px solid rgba(201,168,76,0.25);border-radius:12px;padding:12px 16px;}
+  .rsvp-addon-tag{background:var(--gold);color:white;font-size:10px;padding:2px 8px;border-radius:100px;font-weight:500;letter-spacing:0.04em;}
+  .rsvp-addon-price{font-size:16px;font-weight:500;color:var(--espresso);}
+  .rsvp-addon-note{font-size:13px;color:var(--espresso-mid);font-weight:300;}
+  .rsvp-phone-wrap{position:relative;width:280px;margin:0 auto;}
+  .rsvp-phone-wrap::before{content:'';position:absolute;left:-12px;top:80px;width:4px;height:32px;background:#0e0804;border-radius:2px 0 0 2px;}
+  .rsvp-phone-wrap::after{content:'';position:absolute;right:-12px;top:100px;width:4px;height:48px;background:#0e0804;border-radius:0 2px 2px 0;}
+  .rsvp-phone{width:280px;margin:0 auto;background:#1a1008;border-radius:44px;overflow:hidden;box-shadow:0 40px 80px rgba(44,26,14,0.3);border:10px solid #0e0804;position:relative;}
+  .rsvp-phone-notch{height:28px;background:#0e0804;display:flex;align-items:center;justify-content:center;position:relative;}
+  .rsvp-phone-notch::after{content:'';width:80px;height:20px;background:#0e0804;border-radius:0 0 16px 16px;position:absolute;top:0;left:50%;transform:translateX(-50%);}
+  .rsvp-phone-notch-pill{width:72px;height:6px;background:rgba(255,255,255,0.06);border-radius:100px;position:relative;z-index:1;}
+  .rsvp-phone-header{background:linear-gradient(160deg,#2C1A0E,#5C3D22);padding:20px 16px 16px;text-align:center;border-bottom:0.5px solid rgba(201,168,76,0.15);}
+  .rsvp-phone-body{padding:16px;}
+  .rsvp-stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px;}
+  .rsvp-stat{background:rgba(201,168,76,0.06);border:0.5px solid rgba(201,168,76,0.12);border-radius:10px;padding:10px 6px;text-align:center;}
+  .rsvp-stat-num{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--gold);font-weight:600;line-height:1;}
+  .rsvp-stat-lbl{font-size:9px;color:rgba(255,253,247,0.4);letter-spacing:0.05em;margin-top:3px;}
+  .rsvp-event-row{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
+  .rsvp-event-name{font-size:10px;color:rgba(255,253,247,0.6);width:64px;flex-shrink:0;}
+  .rsvp-event-bar{flex:1;height:4px;background:rgba(255,253,247,0.08);border-radius:100px;overflow:hidden;}
+  .rsvp-event-fill{height:100%;background:var(--gold);border-radius:100px;}
+  .rsvp-event-count{font-size:10px;color:var(--gold);width:20px;text-align:right;flex-shrink:0;}
+  .rsvp-guest-row{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:0.5px solid rgba(255,253,247,0.06);}
+  .rsvp-guest-row:last-child{border:none;}
+  .rsvp-guest-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+  .rsvp-guest-dot.confirmed{background:#4CAF82;}
+  .rsvp-guest-dot.pending{background:rgba(201,168,76,0.6);}
+  .rsvp-guest-name{font-size:11px;color:rgba(255,253,247,0.7);flex:1;}
+  .rsvp-guest-events{font-size:10px;color:rgba(255,253,247,0.35);}
+
+  .fade-up { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .fade-up.visible { opacity: 1; transform: translateY(0); }
+  .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;}
+  .hamburger span{width:22px;height:1.5px;background:var(--espresso);border-radius:2px;transition:all 0.3s;display:block;}
+  .mobile-menu{display:none;position:fixed;top:54px;left:0;right:0;background:rgba(255,253,247,0.98);backdrop-filter:blur(12px);border-bottom:0.5px solid rgba(201,168,76,0.2);padding:1rem 2rem;flex-direction:column;gap:0;z-index:99;}
+  .mobile-menu.open{display:flex;}
+  .mobile-menu a{font-size:15px;color:var(--espresso-mid);text-decoration:none;padding:12px 0;border-bottom:0.5px solid rgba(201,168,76,0.1);transition:color 0.2s;}
+  .mobile-menu a:last-child{border-bottom:none;}
+  .mobile-menu a:hover{color:var(--gold-dark);}
+  .mob-cta{background:var(--espresso);color:var(--ivory)!important;padding:12px 20px;border-radius:100px;text-align:center;margin-top:8px;border-bottom:none!important;font-weight:500;}
+  @media(max-width:768px){.nav-links{display:none;}.hamburger{display:flex;}}
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-petals" id="petals"></div>
+  <div class="hero-content fade-up">
+    <div class="hero-badge"><div class="hero-badge-dot"></div> Now live — Hindu &amp; South Indian themes</div>
+    <h1>Wedding invites that make guests say <em>"Woah"</em></h1>
+    <p class="hero-sub">Beautiful, interactive digital invites with live countdowns, photo galleries and background music. Plus built-in RSVP — know exactly who's coming to every event. No boring PDFs, no Canva cards.</p>
+    <div class="hero-actions">
+      <a href="#themes" class="btn-primary">Browse themes</a>
+      <a href="#how" class="btn-secondary">See how it works</a>
+    </div>
+    <div class="hero-social-proof">
+      <div class="avatar-stack">
+        <div class="avatar" style="background:#F2C4CE;color:#993556">P</div>
+        <div class="avatar" style="background:#E1F5EE;color:#0F6E56">A</div>
+        <div class="avatar" style="background:#EEEDFE;color:#3C3489">R</div>
+        <div class="avatar" style="background:#FAEEDA;color:#633806">S</div>
+      </div>
+      <span>Loved by 200+ couples across India &amp; abroad</span>
+    </div>
+  </div>
+</section>
+
+<div class="preview-section fade-up">
+  <p class="preview-label">Live invite preview</p>
+  <div class="phone-frame">
+    <div class="phone-screen">
+      <div class="invite-header">
+        <p class="invite-bismillah">✦ WITH BLESSINGS OF THE ALMIGHTY ✦</p>
+        <div class="invite-names">Priya <span class="invite-and">&amp;</span> Arjun</div>
+        <p class="invite-tagline">REQUEST THE PLEASURE OF YOUR COMPANY</p>
+      </div>
+      <div class="invite-divider"></div>
+      <div class="invite-body">
+        <div class="invite-event">
+          <div class="invite-event-icon">🌿</div>
+          <div><div class="invite-event-name">Haldi Ceremony</div><div class="invite-event-detail">Fri, 14 Feb · 10:00 AM · Taj Garden</div></div>
+        </div>
+        <div class="invite-event">
+          <div class="invite-event-icon">🎶</div>
+          <div><div class="invite-event-name">Sangeet Night</div><div class="invite-event-detail">Fri, 14 Feb · 7:00 PM · Grand Ballroom</div></div>
+        </div>
+        <div class="invite-event">
+          <div class="invite-event-icon">💍</div>
+          <div><div class="invite-event-name">Wedding</div><div class="invite-event-detail">Sat, 15 Feb · 9:00 AM · Sri Kapali Temple</div></div>
+        </div>
+      </div>
+      <div class="invite-countdown">
+        <div class="invite-countdown-label">Counting down to forever</div>
+        <div class="countdown-boxes">
+          <div class="cbox"><div class="cbox-num" id="cd-days">42</div><div class="cbox-lbl">days</div></div>
+          <div class="cbox-sep">:</div>
+          <div class="cbox"><div class="cbox-num" id="cd-hrs">08</div><div class="cbox-lbl">hrs</div></div>
+          <div class="cbox-sep">:</div>
+          <div class="cbox"><div class="cbox-num" id="cd-min">35</div><div class="cbox-lbl">min</div></div>
+          <div class="cbox-sep">:</div>
+          <div class="cbox"><div class="cbox-num" id="cd-sec">00</div><div class="cbox-lbl">sec</div></div>
+        </div>
+      </div>
+      <button class="invite-rsvp" style="background:var(--gold);color:var(--espresso);margin-top:0;">RSVP Now ✦</button>
+    </div>
+  </div>
+</div>
+
+<section class="section" id="features">
+  <p class="section-eyebrow fade-up">Why Vowite</p>
+  <h2 class="section-title fade-up">Everything your invite <em>deserves</em></h2>
+  <p class="section-sub fade-up">Built for Indian weddings. Designed for the world.</p>
+  <div class="features-grid">
+    <div class="feat-card fade-up"><div class="feat-icon">✨</div><div class="feat-title">Animated reveal</div><div class="feat-desc">Guests get a stunning opening animation the moment they tap your link.</div></div>
+    <div class="feat-card fade-up"><div class="feat-icon">⏳</div><div class="feat-title">Live countdown</div><div class="feat-desc">A real-time countdown to your wedding day, ticking for every guest.</div></div>
+    <div class="feat-card fade-up"><div class="feat-icon">📸</div><div class="feat-title">Photo gallery</div><div class="feat-desc">Showcase your pre-wedding shoot with a beautiful lightbox gallery.</div></div>
+    <div class="feat-card fade-up"><div class="feat-icon">🎵</div><div class="feat-title">Background music</div><div class="feat-desc">Set the mood with your favourite song playing softly in the background.</div></div>
+    <div class="feat-card fade-up"><div class="feat-icon">📍</div><div class="feat-title">Venue maps</div><div class="feat-desc">Google Maps embedded for every event — guests get directions instantly.</div></div>
+    <div class="feat-card fade-up"><div class="feat-icon">🎬</div><div class="feat-title">Pre-wedding video</div><div class="feat-desc">Embed your pre-wedding film right inside the invite.</div></div>
+  </div>
+</section>
+
+<section class="rsvp-section" id="rsvp">
+  <div class="rsvp-inner">
+    <div class="rsvp-text fade-up">
+      <p class="section-eyebrow" style="text-align:left;">The Vowite difference</p>
+      <h2 class="section-title" style="text-align:left;">No more <em>"Are you coming?"</em> on WhatsApp</h2>
+      <p style="font-size:16px;color:var(--espresso-mid);line-height:1.7;font-weight:300;margin-bottom:2rem;">Every couple knows the chaos — 200 messages, last-minute headcount confusion, venue coordinators calling at midnight. Vowite's RSVP feature fixes all of that.</p>
+      <div class="rsvp-points">
+        <div class="rsvp-point fade-up">
+          <div class="rsvp-point-icon">✓</div>
+          <div>
+            <div class="rsvp-point-title">Guests RSVP directly from the invite</div>
+            <div class="rsvp-point-desc">One tap, done. No forms, no WhatsApp back and forth.</div>
+          </div>
+        </div>
+        <div class="rsvp-point fade-up">
+          <div class="rsvp-point-icon">✓</div>
+          <div>
+            <div class="rsvp-point-title">Live headcount per event</div>
+            <div class="rsvp-point-desc">See exactly how many people are coming to Haldi, Sangeet, Wedding — separately.</div>
+          </div>
+        </div>
+        <div class="rsvp-point fade-up">
+          <div class="rsvp-point-icon">✓</div>
+          <div>
+            <div class="rsvp-point-title">Your own dashboard</div>
+            <div class="rsvp-point-desc">Track every response, export the guest list, send broadcast updates.</div>
+          </div>
+        </div>
+      </div>
+      <div class="rsvp-addon-badge fade-up">
+        <span class="rsvp-addon-tag">Add-on</span>
+        <span class="rsvp-addon-price">₹999 extra</span>
+        <span class="rsvp-addon-note">— added at checkout, works with any theme</span>
+      </div>
+      <a href="#themes" class="btn-primary" style="margin-top:2rem;display:inline-block;">See themes & pricing</a>
+    </div>
+    <div class="rsvp-mockup fade-up">
+      <div class="rsvp-phone-wrap"><div class="rsvp-phone"><div class="rsvp-phone-notch"><div class="rsvp-phone-notch-pill"></div></div>
+        <div class="rsvp-phone-header">
+          <div style="font-size:11px;color:rgba(255,253,247,0.5);letter-spacing:0.1em;margin-bottom:6px;">RSVP DASHBOARD</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--gold);">Priya & Arjun</div>
+          <div style="font-size:10px;color:rgba(255,253,247,0.4);margin-top:2px;">15 Feb 2026 · Chennai</div>
+        </div>
+        <div class="rsvp-phone-body">
+          <div class="rsvp-stats-row">
+            <div class="rsvp-stat"><div class="rsvp-stat-num">48</div><div class="rsvp-stat-lbl">Confirmed</div></div>
+            <div class="rsvp-stat"><div class="rsvp-stat-num">12</div><div class="rsvp-stat-lbl">Pending</div></div>
+            <div class="rsvp-stat"><div class="rsvp-stat-num">3</div><div class="rsvp-stat-lbl">Declined</div></div>
+          </div>
+          <div class="rsvp-event-row">
+            <div class="rsvp-event-name">💛 Haldi</div>
+            <div class="rsvp-event-bar"><div class="rsvp-event-fill" style="width:72%"></div></div>
+            <div class="rsvp-event-count">36</div>
+          </div>
+          <div class="rsvp-event-row">
+            <div class="rsvp-event-name">🎶 Sangeet</div>
+            <div class="rsvp-event-bar"><div class="rsvp-event-fill" style="width:88%"></div></div>
+            <div class="rsvp-event-count">44</div>
+          </div>
+          <div class="rsvp-event-row">
+            <div class="rsvp-event-name">💍 Wedding</div>
+            <div class="rsvp-event-bar"><div class="rsvp-event-fill" style="width:96%"></div></div>
+            <div class="rsvp-event-count">48</div>
+          </div>
+          <div class="rsvp-guest-row"><div class="rsvp-guest-dot confirmed"></div><div class="rsvp-guest-name">Meera Sharma</div><div class="rsvp-guest-events">3 events</div></div>
+          <div class="rsvp-guest-row"><div class="rsvp-guest-dot confirmed"></div><div class="rsvp-guest-name">Rajesh & Family</div><div class="rsvp-guest-events">2 events</div></div>
+          <div class="rsvp-guest-row"><div class="rsvp-guest-dot pending"></div><div class="rsvp-guest-name">Ananya Iyer</div><div class="rsvp-guest-events">Pending</div></div>
+       </div>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+<section class="themes-section" id="themes">
+  <div style="max-width:1100px;margin:0 auto;">
+    <p class="section-eyebrow fade-up">Choose your style</p>
+    <h2 class="section-title fade-up">Themes for every <em>tradition</em></h2>
+    <p class="section-sub fade-up">Crafted with love for Hindu and South Indian weddings.</p>
+    <div class="themes-grid">
+      <div class="theme-card fade-up" onclick="window.location='sindoor.html'" style="cursor:pointer;">
+        <div class="theme-thumb" style="background:linear-gradient(135deg,#8B1A1A,#C9422A,#E8A020);">
+          <div class="theme-name-overlay"><div class="theme-name">Sindoor</div><div class="theme-sub">North Indian Hindu</div></div>
+        </div>
+        <div class="theme-footer"><span class="theme-price">From ₹1,999</span><span class="theme-tag">Popular</span></div>
+      </div>
+      <div class="theme-card fade-up" onclick="window.location='maangalyam.html'" style="cursor:pointer;">
+        <div class="theme-thumb" style="background:linear-gradient(135deg,#1A3A2A,#2D6A4F,#C9A84C);">
+          <div class="theme-name-overlay"><div class="theme-name">Maangalyam</div><div class="theme-sub">South Indian</div></div>
+        </div>
+        <div class="theme-footer"><span class="theme-price">From ₹1,999</span><span class="theme-tag">New</span></div>
+      </div>
+      <div class="theme-card fade-up" onclick="window.location='midnight.html'" style="cursor:pointer;">
+        <div class="theme-thumb" style="background:linear-gradient(135deg,#1A1A2E,#16213E,#C9A84C);">
+          <div class="theme-name-overlay"><div class="theme-name">Midnight Gold</div><div class="theme-sub">Modern Luxury</div></div>
+        </div>
+        <div class="theme-footer"><span class="theme-price">From ₹2,499</span><span class="theme-tag">Premium</span></div>
+      </div>
+      <div class="theme-card fade-up" onclick="window.location='gulabi.html'" style="cursor:pointer;">
+        <div class="theme-thumb" style="background:linear-gradient(135deg,#3D0C11,#8B1A4A,#F2C4CE);">
+          <div class="theme-name-overlay"><div class="theme-name">Gulabi</div><div class="theme-sub">Floral Romance</div></div>
+        </div>
+        <div class="theme-footer"><span class="theme-price">From ₹2,499</span><span class="theme-tag">Premium</span></div>
+      </div>
+      <div class="theme-card fade-up" onclick="window.location='keerthana.html'" style="cursor:pointer;">
+        <div class="theme-thumb" style="background-image:url('images/temple1.jpg');background-size:cover;background-position:center;">
+          <div class="theme-name-overlay"><div class="theme-name">Keerthana</div><div class="theme-sub">Traditional South Indian</div></div>
+        </div>
+        <div class="theme-footer"><span class="theme-price">From ₹2,499</span><span class="theme-tag">New</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="how">
+  <p class="section-eyebrow fade-up">Simple process</p>
+  <h2 class="section-title fade-up">Ready in <em>minutes</em></h2>
+  <p class="section-sub fade-up">No design skills needed. No apps to download.</p>
+  <div class="steps fade-up">
+    <div class="step"><div class="step-num">1</div><div class="step-title">Pick a theme</div><div class="step-desc">Browse our collection and choose the one that feels like you.</div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-title">Edit live</div><div class="step-desc">Type your details, upload photos, add music — see it update instantly.</div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-title">Pay &amp; publish</div><div class="step-desc">One-time payment. Your invite goes live on a beautiful unique link.</div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-title">Share on WhatsApp</div><div class="step-desc">Send the link to everyone. They open it, they say "Woah."</div></div>
+  </div>
+</section>
+
+<section class="section" id="pricing">
+  <p class="section-eyebrow fade-up">Pricing</p>
+  <h2 class="section-title fade-up">One-time. No <em>subscriptions.</em></h2>
+  <p class="section-sub fade-up">Pay once, your invite stays live for a full year.</p>
+  <div class="pricing-grid">
+    <div class="price-card fade-up">
+      <div class="price-name">Self-serve</div>
+      <div class="price-amount">₹1,999 <span>one-time</span></div>
+      <div class="price-desc">You edit it yourself using our live editor.</div>
+      <ul class="price-features">
+        <li><div class="check">✓</div> All invite features</li>
+        <li><div class="check">✓</div> Live editor access</li>
+        <li><div class="check">✓</div> Hosted for 1 year</li>
+        <li><div class="check">✓</div> Shareable WhatsApp link</li>
+        <li><div class="check">✓</div> Photo gallery + music</li>
+      </ul>
+      <button class="btn-plan btn-plan-outline">Get started</button>
+    </div>
+    <div class="price-card featured fade-up">
+      <div class="price-badge">Most popular</div>
+      <div class="price-name">Self-serve + RSVP</div>
+      <div class="price-amount">₹2,499 <span>one-time</span></div>
+      <div class="price-desc">Everything in Self-serve plus guest RSVP tracking.</div>
+      <ul class="price-features">
+        <li><div class="check">✓</div> Everything in Self-serve</li>
+        <li><div class="check">✓</div> Guest RSVP form</li>
+        <li><div class="check">✓</div> Couple dashboard</li>
+        <li><div class="check">✓</div> Headcount per event</li>
+        <li><div class="check">✓</div> Pre-wedding video embed</li>
+      </ul>
+      <button class="btn-plan btn-plan-primary">Get started</button>
+    </div>
+    <div class="price-card fade-up">
+      <div class="price-name">Done for you</div>
+      <div class="price-amount">₹4,999 <span>one-time</span></div>
+      <div class="price-desc">We build your invite for you. You just review and share.</div>
+      <ul class="price-features">
+        <li><div class="check">✓</div> Everything included</li>
+        <li><div class="check">✓</div> We design it for you</li>
+        <li><div class="check">✓</div> 2 revision rounds</li>
+        <li><div class="check">✓</div> Priority support</li>
+        <li><div class="check">✓</div> RSVP dashboard included</li>
+      </ul>
+      <a href="contact.html" class="btn-plan btn-plan-outline" style="text-align:center;display:block;">Contact us</a>
+    </div>
+  </div>
+</section>
+
+<section class="testimonials-section">
+  <div style="max-width:1100px;margin:0 auto;">
+    <p class="section-eyebrow fade-up" style="color:var(--gold);">Love stories</p>
+    <h2 class="section-title fade-up" style="color:var(--ivory);">What couples are <em>saying</em></h2>
+    <p class="section-sub fade-up" style="color:rgba(255,253,247,0.5);margin-bottom:3rem;">Real reactions from real weddings.</p>
+    <div class="testi-grid">
+      <div class="testi-card fade-up"><div class="testi-stars">★★★★★</div><div class="testi-quote">"Our guests couldn't stop talking about the invite. Everyone asked how we made it!"</div><div class="testi-author"><div class="testi-avatar">PA</div><div><div class="testi-name">Priya &amp; Arjun</div><div class="testi-detail">Chennai · Hindu wedding</div></div></div></div>
+      <div class="testi-card fade-up"><div class="testi-stars">★★★★★</div><div class="testi-quote">"Set it up in 20 minutes. The countdown timer alone made my mother cry happy tears."</div><div class="testi-author"><div class="testi-avatar">SR</div><div><div class="testi-name">Sindhu &amp; Rajan</div><div class="testi-detail">Bengaluru · South Indian</div></div></div></div>
+      <div class="testi-card fade-up"><div class="testi-stars">★★★★★</div><div class="testi-quote">"So much better than a Canva card on WhatsApp. Worth every rupee and more."</div><div class="testi-author"><div class="testi-avatar">NK</div><div><div class="testi-name">Neha &amp; Karthik</div><div class="testi-detail">Dubai · Tamil Brahmin</div></div></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="cta-banner fade-up">
+    <h2>Your love story deserves a <em>Woah</em></h2>
+    <p>Join hundreds of couples who chose to make their invite unforgettable.</p>
+    <a href="#themes" class="btn-primary">Create your Vowite</a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo"><img src="images/logo-white.png" alt="Vowite" style="height:40px;width:auto;opacity:0.9;"></div>
+  <div class="footer-tagline">MAKE IT MEMORABLE</div>
+  <div class="footer-links">
+    <a href="#">Themes</a><a href="pricing.html">Pricing</a><a href="contact.html">Done for you</a><a href="#">Contact</a><a href="about.html">About</a><a href="privacy.html">Privacy</a>
+<a href="terms.html">Terms</a>
+  </div>
+  <div class="footer-copy">© 2025 Vowite. Made with love in India.</div>
+</footer>
+
+<script>
+  const petalContainer = document.getElementById('petals');
+  const petalColors = ['#F2C4CE','#E8D5B0','#C9A84C','#F5EDD8'];
+  for(let i = 0; i < 18; i++) {
+    const p = document.createElement('div');
+    p.className = 'petal';
+    const size = Math.random() * 8 + 4;
+    p.style.cssText = `width:${size}px;height:${size}px;background:${petalColors[Math.floor(Math.random()*petalColors.length)]};border-radius:50% 0 50% 0;left:${Math.random()*100}%;top:-20px;animation-duration:${Math.random()*8+6}s;animation-delay:${Math.random()*8}s;`;
+    petalContainer.appendChild(p);
+  }
+  const target = new Date(Date.now() + 42*24*60*60*1000);
+  function updateCountdown() {
+    const diff = target - Date.now();
+    if(diff <= 0) return;
+    document.getElementById('cd-days').textContent = String(Math.floor(diff/86400000)).padStart(2,'0');
+    document.getElementById('cd-hrs').textContent = String(Math.floor((diff%86400000)/3600000)).padStart(2,'0');
+    document.getElementById('cd-min').textContent = String(Math.floor((diff%3600000)/60000)).padStart(2,'0');
+    document.getElementById('cd-sec').textContent = String(Math.floor((diff%60000)/1000)).padStart(2,'0');
+  }
+  updateCountdown(); setInterval(updateCountdown, 1000);
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => { if(e.isIntersecting) setTimeout(() => e.target.classList.add('visible'), i * 80); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+function toggleMenu(){
+  const m=document.getElementById('mobileMenu');
+  const h=document.getElementById('hamburger');
+  m.classList.toggle('open');
+  const spans=h.querySelectorAll('span');
+  if(m.classList.contains('open')){
+    spans[0].style.transform='rotate(45deg) translate(5px,5px)';
+    spans[1].style.opacity='0';
+    spans[2].style.transform='rotate(-45deg) translate(5px,-5px)';
+  } else {
+    spans[0].style.transform='';
+    spans[1].style.opacity='1';
+    spans[2].style.transform='';
+  }
+}
+function toggleMenu(){
+  const m=document.getElementById('mobileMenu');
+  const h=document.getElementById('hamburger');
+  m.classList.toggle('open');
+  const s=h.querySelectorAll('span');
+  if(m.classList.contains('open')){s[0].style.transform='rotate(45deg) translate(5px,5px)';s[1].style.opacity='0';s[2].style.transform='rotate(-45deg) translate(5px,-5px)';}
+  else{s[0].style.transform='';s[1].style.opacity='1';s[2].style.transform='';}
+}
+
+// Load dynamic prices from Supabase
+async function loadDynamicPrices(){
+  try {
+    await loadThemes();
+    const t=window.vowiteThemes;
+    if(!t)return;
+    // Update theme cards
+    document.querySelectorAll('.theme-card').forEach(card=>{
+      const onclick=card.getAttribute('onclick')||'';
+      const match=onclick.match(/(\w+)\.html/);
+      if(!match)return;
+      const id=match[1];
+      if(t[id]){
+        const priceEl=card.querySelector('.theme-price');
+        const tagEl=card.querySelector('.theme-tag');
+        if(priceEl)priceEl.textContent='From ₹'+t[id].price.toLocaleString('en-IN');
+        if(tagEl)tagEl.textContent=t[id].tag;
+      }
+    });
+    // Update pricing cards
+    const selfServe=t['sindoor'];
+    const selfServeRSVP=t['sindoor'];
+    if(selfServe){
+      const cards=document.querySelectorAll('.price-amount');
+      if(cards[0])cards[0].innerHTML='₹'+selfServe.price.toLocaleString('en-IN')+' <span>one-time</span>';
+      if(cards[1])cards[1].innerHTML='₹'+(selfServe.price+999).toLocaleString('en-IN')+' <span>one-time</span>';
+    }
+  } catch(e){ console.log('Theme price load failed',e); }
+}
+async function loadDynamicPrices(){
+  try{
+    const SUPABASE_URL='https://kopmbvpvgclrnchrdpty.supabase.co';
+    const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtvcG1idnB2Z2Nscm5jaHJkcHR5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc1Njg5MDMsImV4cCI6MjA5MzE0NDkwM30.xFt_YA109wDqI6KOIXHWC4Xy2WdNO5Tnacd2_jO4MP4';
+    const res=await fetch(`${SUPABASE_URL}/rest/v1/themes?select=*&is_active=eq.true&order=sort_order`,{
+      headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}
+    });
+    const themes=await res.json();
+    if(!themes||!themes.length)return;
+    const t={};themes.forEach(th=>t[th.id]=th);
+    // Update theme cards
+    document.querySelectorAll('.theme-card').forEach(card=>{
+      const onclick=card.getAttribute('onclick')||'';
+      const match=onclick.match(/(\w+)\.html/);
+      if(!match)return;
+      const id=match[1];
+      if(t[id]){
+        const priceEl=card.querySelector('.theme-price');
+        const tagEl=card.querySelector('.theme-tag');
+        if(priceEl)priceEl.textContent='From ₹'+t[id].price.toLocaleString('en-IN');
+        if(tagEl)tagEl.textContent=t[id].tag;
+      }
+    });
+    // Update pricing section
+    const base=t['sindoor']?t['sindoor'].price:1999;
+    const cards=document.querySelectorAll('.price-amount');
+    if(cards[0])cards[0].innerHTML='₹'+base.toLocaleString('en-IN')+' <span>one-time</span>';
+    if(cards[1])cards[1].innerHTML='₹'+(base+999).toLocaleString('en-IN')+' <span>one-time</span>';
+  }catch(e){console.log('Price load failed',e);}
+}
+loadDynamicPrices();
+
+</script>
+<script src="nav.js"></script>
+</body>
+</html>

@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Edit Your Invite — Vowite</title>
+<link rel="icon" type="image/png" href="favicon.png">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,600&family=DM+Sans:wght@300;400;500&family=Great+Vibes&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL='https://kopmbvpvgclrnchrdpty.supabase.co';
+const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtvcG1idnB2Z2Nscm5jaHJkcHR5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc1Njg5MDMsImV4cCI6MjA5MzE0NDkwM30.xFt_YA109wDqI6KOIXHWC4Xy2WdNO5Tnacd2_jO4MP4';
+window.sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+</script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --gold:#C9A84C;--gold-light:#E8D5B0;--gold-dark:#9C7A2E;
+  --ivory:#FFFDF7;--ivory-dark:#F5EDD8;--espresso:#2C1A0E;
+  --espresso-mid:#5C3D22;--border:rgba(201,168,76,0.2);--bg:#FAF7F0;
+}
+html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--espresso);overflow:hidden;}
+ 
+/* TOPBAR */
+.topbar{height:54px;background:white;border-bottom:0.5px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 1rem;position:fixed;top:0;left:0;right:0;z-index:100;}
+.topbar-logo img{height:36px;width:auto;display:block;}
+.topbar-steps{display:flex;align-items:center;gap:3px;}
+.step-dot{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;border:0.5px solid var(--border);color:var(--espresso-mid);cursor:pointer;transition:all 0.2s;}
+.step-dot.active{background:var(--espresso);color:var(--ivory);border-color:var(--espresso);}
+.step-dot.done{background:var(--gold);color:var(--espresso);border-color:var(--gold);}
+.step-line{width:14px;height:0.5px;background:var(--border);}
+.topbar-actions{display:flex;gap:6px;align-items:center;}
+.btn-back{background:transparent;border:0.5px solid var(--border);border-radius:100px;padding:5px 12px;font-size:11px;color:var(--espresso-mid);cursor:pointer;font-family:'DM Sans',sans-serif;text-decoration:none;display:flex;align-items:center;}
+.btn-preview{background:transparent;border:0.5px solid rgba(201,168,76,0.4);border-radius:100px;padding:5px 12px;font-size:11px;color:var(--gold-dark);cursor:pointer;font-family:'DM Sans',sans-serif;}
+.btn-preview:hover{background:rgba(201,168,76,0.08);}
+.btn-publish{background:var(--espresso);color:var(--ivory);border:none;border-radius:100px;padding:6px 14px;font-size:11px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;}
+.btn-publish:hover{background:var(--gold-dark);}
+ 
+/* DESKTOP LAYOUT */
+.layout{display:grid;grid-template-columns:300px 1fr;height:calc(100vh - 54px);margin-top:54px;overflow:hidden;}
+.sidebar{background:white;border-right:0.5px solid var(--border);display:flex;flex-direction:column;overflow:hidden;}
+.sidebar-tabs{display:flex;border-bottom:0.5px solid var(--border);flex-shrink:0;}
+.stab{flex:1;padding:10px 4px;text-align:center;font-size:11px;font-weight:500;color:var(--espresso-mid);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;}
+.stab.active{color:var(--gold-dark);border-bottom-color:var(--gold);}
+.sidebar-body{padding:1rem;flex:1;overflow-y:auto;display:none;}
+.sidebar-body.active{display:block;}
+.field-group{margin-bottom:1rem;}
+.field-label{font-size:11px;font-weight:500;color:var(--espresso-mid);letter-spacing:0.04em;margin-bottom:4px;display:block;text-transform:uppercase;}
+.field-input{width:100%;border:0.5px solid var(--border);border-radius:8px;padding:8px 12px;font-size:13px;color:var(--espresso);font-family:'DM Sans',sans-serif;outline:none;transition:all 0.2s;background:var(--ivory);resize:none;}
+.field-input:focus{border-color:rgba(201,168,76,0.5);background:white;}
+.field-input::placeholder{color:rgba(92,61,34,0.3);}
+.char-hint{font-size:10px;color:rgba(92,61,34,0.35);text-align:right;margin-top:2px;}
+.section-heading{font-size:11px;font-weight:600;color:var(--espresso);margin:1.25rem 0 0.75rem;padding-bottom:5px;border-bottom:0.5px solid var(--border);text-transform:uppercase;letter-spacing:0.04em;}
+.event-block{background:var(--ivory);border:0.5px solid var(--border);border-radius:10px;padding:10px;margin-bottom:8px;transition:opacity 0.2s;}
+.event-block.disabled{opacity:0.4;}
+.event-block-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.event-block-name{font-size:12px;font-weight:500;color:var(--espresso);}
+.toggle{width:32px;height:18px;border-radius:9px;background:var(--gold);border:none;cursor:pointer;position:relative;transition:background 0.2s;flex-shrink:0;}
+.toggle::after{content:'';position:absolute;width:14px;height:14px;border-radius:50%;background:white;top:2px;right:2px;transition:right 0.2s;}
+.toggle.off{background:rgba(92,61,34,0.15);}
+.toggle.off::after{right:16px;}
+.icon-trigger{display:flex;align-items:center;gap:6px;background:var(--ivory);border:0.5px solid var(--border);border-radius:8px;padding:6px 10px;cursor:pointer;font-size:12px;color:var(--espresso-mid);margin-bottom:8px;position:relative;}
+.icon-dropdown{position:absolute;top:100%;left:0;right:0;background:white;border:0.5px solid var(--border);border-radius:10px;padding:8px;z-index:50;display:none;flex-wrap:wrap;gap:4px;box-shadow:0 8px 24px rgba(44,26,14,0.12);max-height:160px;overflow-y:auto;}
+.icon-dropdown.open{display:flex;}
+.icon-opt{width:28px;height:28px;border-radius:6px;border:0.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:15px;cursor:pointer;background:var(--ivory);}
+.icon-opt.selected{border-color:var(--gold);background:rgba(201,168,76,0.12);}
+.upload-box{border:0.5px dashed rgba(201,168,76,0.35);border-radius:10px;padding:14px;text-align:center;cursor:pointer;transition:all 0.2s;background:var(--ivory);margin-bottom:8px;position:relative;overflow:hidden;}
+.upload-box input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.photo-limit-hint{font-size:11px;color:rgba(92,61,34,0.4);text-align:center;margin-bottom:8px;}
+ 
+/* MOSAIC - same in editor and preview */
+.photo-mosaic{display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:80px;gap:5px;margin-bottom:1rem;}
+.photo-mosaic .pm-item{border-radius:7px;overflow:hidden;position:relative;}
+.photo-mosaic .pm-item.big{grid-column:span 2;grid-row:span 2;}
+.photo-mosaic .pm-item img{width:100%;height:100%;object-fit:cover;}
+.pm-remove{position:absolute;top:3px;right:3px;width:18px;height:18px;border-radius:50%;background:rgba(44,26,14,0.7);color:white;border:none;cursor:pointer;font-size:10px;display:flex;align-items:center;justify-content:center;}
+.pm-add{border-radius:7px;border:0.5px dashed rgba(201,168,76,0.3);display:flex;align-items:center;justify-content:center;font-size:18px;color:rgba(201,168,76,0.5);cursor:pointer;min-height:80px;}
+ 
+.font-options{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:1rem;}
+.font-opt{border:0.5px solid var(--border);border-radius:8px;padding:8px;cursor:pointer;text-align:center;transition:all 0.2s;}
+.font-opt.selected{border-color:var(--gold);background:rgba(201,168,76,0.06);}
+.theme-mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:1rem;}
+.theme-mini{border-radius:10px;overflow:hidden;cursor:pointer;border:2px solid transparent;transition:all 0.2s;}
+.theme-mini.selected{border-color:var(--gold);}
+.theme-mini-thumb{height:52px;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:11px;color:rgba(255,255,255,0.85);font-style:italic;}
+.theme-mini-label{font-size:10px;padding:3px 6px;text-align:center;color:var(--espresso-mid);background:white;}
+.add-event-btn{width:100%;background:transparent;border:0.5px dashed rgba(201,168,76,0.3);border-radius:10px;padding:9px;font-size:12px;color:var(--gold-dark);cursor:pointer;font-family:'DM Sans',sans-serif;margin-top:6px;}
+.rsvp-toggle-row{display:flex;align-items:center;justify-content:space-between;background:var(--ivory);border:0.5px solid var(--border);border-radius:10px;padding:10px 12px;margin-bottom:6px;}
+ 
+/* DESKTOP PREVIEW */
+.preview-panel{display:flex;flex-direction:column;overflow:hidden;}
+.preview-toolbar{display:flex;align-items:center;justify-content:space-between;padding:0 1.25rem;height:44px;background:white;border-bottom:0.5px solid var(--border);flex-shrink:0;}
+.preview-label{font-size:11px;color:var(--espresso-mid);font-weight:500;letter-spacing:0.04em;text-transform:uppercase;}
+.view-toggles{display:flex;gap:4px;}
+.view-btn{padding:4px 12px;border-radius:100px;font-size:11px;border:0.5px solid var(--border);cursor:pointer;font-family:'DM Sans',sans-serif;color:var(--espresso-mid);background:transparent;transition:all 0.2s;}
+.view-btn.active{background:var(--espresso);color:var(--ivory);border-color:var(--espresso);}
+.preview-canvas{flex:1;overflow-y:auto;display:flex;align-items:flex-start;justify-content:center;padding:2rem;background:var(--bg);}
+.phone-wrap{width:300px;flex-shrink:0;transition:all 0.3s;}
+.phone-wrap.desktop{width:100%;max-width:680px;}
+.phone-shell{background:#1a1a1a;border-radius:38px;padding:12px;box-shadow:0 32px 64px rgba(44,26,14,0.18);}
+.phone-shell.desktop-shell{border-radius:12px;padding:0;}
+.phone-notch{height:20px;background:#1a1a1a;display:flex;align-items:center;justify-content:center;}
+.phone-notch-dot{width:60px;height:4px;background:#333;border-radius:2px;}
+.phone-screen{border-radius:28px;overflow-y:auto;overflow-x:hidden;max-height:580px;scrollbar-width:none;}
+.phone-screen::-webkit-scrollbar{display:none;}
+.phone-shell.desktop-shell .phone-screen{border-radius:10px;max-height:none;}
+.publish-bar{background:white;border-top:0.5px solid var(--border);padding:10px 1rem;display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.progress-label{font-size:11px;color:var(--espresso-mid);white-space:nowrap;}
+.progress-track{flex:1;height:4px;background:var(--ivory-dark);border-radius:2px;overflow:hidden;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-dark));border-radius:2px;transition:width 0.4s ease;}
+.progress-pct{font-size:11px;font-weight:500;color:var(--gold-dark);white-space:nowrap;}
+ 
+/* MOBILE */
+@media(max-width:768px){
+  body{overflow:hidden;}
+  .topbar{padding:0 0.75rem;}
+  .topbar-logo img{height:30px;}
+  .topbar-steps{display:none;}
+  .btn-back{display:none;}
+  .btn-preview{font-size:10px;padding:4px 10px;}
+  .layout{display:block;height:calc(100vh - 54px);margin-top:54px;overflow:hidden;}
+  .sidebar{display:none !important;}
+  .preview-panel{display:block !important;height:100%;overflow:hidden;}
+  .preview-toolbar{display:none;}
+  .publish-bar{display:none;}
+  .preview-canvas{padding:0;background:#1a1a1a;height:100%;overflow-y:auto;display:block;}
+  .phone-wrap{width:100% !important;}
+  .phone-shell{border-radius:0 !important;padding:0 !important;box-shadow:none !important;background:transparent !important;}
+  .phone-notch{display:none;}
+  .phone-screen{border-radius:0 !important;max-height:calc(100vh - 110px) !important;overflow-y:auto !important;}
+}
+.mob-action-bar{display:none;}
+@media(max-width:768px){
+  .mob-action-bar{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(26,26,26,0.95);backdrop-filter:blur(10px);border-top:0.5px solid rgba(201,168,76,0.2);padding:8px 12px;gap:8px;align-items:center;}
+  .mob-publish-btn{background:var(--gold);color:var(--espresso);border:none;border-radius:100px;padding:10px 0;font-size:13px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;flex:1;}
+  .mob-theme-btn{background:rgba(255,253,247,0.1);color:rgba(255,253,247,0.7);border:0.5px solid rgba(255,253,247,0.15);border-radius:100px;padding:10px 12px;font-size:11px;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;}
+  .mob-preview-btn{background:rgba(201,168,76,0.15);color:#C9A84C;border:0.5px solid rgba(201,168,76,0.3);border-radius:100px;padding:10px 12px;font-size:11px;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;}
+}
+ 
+/* BOTTOM SHEET */
+.sheet-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:300;opacity:0;pointer-events:none;transition:opacity 0.3s;}
+.sheet-overlay.open{opacity:1;pointer-events:all;}
+.bottom-sheet{position:fixed;bottom:0;left:0;right:0;z-index:301;background:white;border-radius:20px 20px 0 0;transform:translateY(100%);transition:transform 0.35s cubic-bezier(0.32,0.72,0,1);max-height:90vh;display:flex;flex-direction:column;}
+.bottom-sheet.open{transform:translateY(0);}
+.sheet-handle{width:36px;height:4px;background:rgba(44,26,14,0.15);border-radius:2px;margin:12px auto 0;}
+.sheet-header{display:flex;align-items:center;justify-content:space-between;padding:14px 20px 10px;}
+.sheet-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:500;color:var(--espresso);}
+.sheet-close{width:28px;height:28px;border-radius:50%;background:var(--ivory-dark);border:none;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;color:var(--espresso-mid);}
+.sheet-body{padding:0 20px 20px;overflow-y:auto;flex:1;}
+.sheet-field{margin-bottom:14px;}
+.sheet-label{font-size:11px;font-weight:500;color:var(--espresso-mid);letter-spacing:0.05em;text-transform:uppercase;margin-bottom:6px;display:block;}
+.sheet-input{width:100%;border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;font-size:15px;color:var(--espresso);font-family:'DM Sans',sans-serif;outline:none;background:var(--ivory);-webkit-appearance:none;resize:none;}
+.sheet-input:focus{border-color:rgba(201,168,76,0.5);background:white;}
+.sheet-char-hint{font-size:11px;color:rgba(92,61,34,0.35);text-align:right;margin-top:3px;}
+.sheet-done{width:100%;background:var(--espresso);color:var(--ivory);border:none;border-radius:100px;padding:14px;font-size:15px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;margin-top:8px;}
+.sheet-toggle-row{display:flex;align-items:center;justify-content:space-between;background:var(--ivory);border:0.5px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:12px;}
+.sheet-divider{height:0.5px;background:var(--border);margin:14px 0;}
+.sheet-theme-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
+.sheet-theme{border-radius:12px;overflow:hidden;cursor:pointer;border:2px solid transparent;transition:all 0.2s;}
+.sheet-theme.selected{border-color:var(--gold);}
+.sheet-theme-thumb{height:70px;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:13px;color:rgba(255,255,255,0.9);font-style:italic;}
+.sheet-theme-label{font-size:11px;padding:5px 8px;text-align:center;color:var(--espresso-mid);background:white;}
+.sheet-font-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
+.sheet-font-opt{border:0.5px solid var(--border);border-radius:10px;padding:12px;cursor:pointer;text-align:center;transition:all 0.2s;}
+.sheet-font-opt.selected{border-color:var(--gold);background:rgba(201,168,76,0.06);}
+.sheet-upload-btn{width:100%;border:0.5px dashed rgba(201,168,76,0.35);border-radius:12px;padding:16px;text-align:center;cursor:pointer;background:var(--ivory);margin-bottom:12px;position:relative;overflow:hidden;}
+.sheet-upload-btn input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+ 
+/* SHEET PHOTO MOSAIC */
+.sheet-photo-mosaic{display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:80px;gap:8px;margin-bottom:16px;}
+.spm-item{border-radius:10px;overflow:hidden;position:relative;}
+.spm-item.big{grid-column:span 2;grid-row:span 2;}
+.spm-item img{width:100%;height:100%;object-fit:cover;}
+.spm-remove{position:absolute;top:4px;right:4px;width:20px;height:20px;border-radius:50%;background:rgba(44,26,14,0.7);color:white;border:none;cursor:pointer;font-size:11px;display:flex;align-items:center;justify-content:center;}
+.spm-add{border-radius:10px;border:0.5px dashed rgba(201,168,76,0.3);display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:24px;color:rgba(201,168,76,0.5);cursor:pointer;gap:4px;min-height:80px;}
+.spm-add span{font-size:11px;color:var(--espresso-mid);}
+ 
+/* GUEST PREVIEW OVERLAY */
+.guest-preview{position:fixed;inset:0;z-index:500;background:#1a1a1a;display:flex;flex-direction:column;transform:translateY(100%);transition:transform 0.4s cubic-bezier(0.32,0.72,0,1);}
+.guest-preview.open{transform:translateY(0);}
+.guest-preview-bar{height:54px;background:rgba(26,26,26,0.95);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:space-between;padding:0 1.25rem;flex-shrink:0;border-bottom:0.5px solid rgba(201,168,76,0.15);}
+.guest-preview-label{font-size:12px;color:rgba(255,253,247,0.5);letter-spacing:0.06em;text-transform:uppercase;}
+.guest-preview-close{background:rgba(255,253,247,0.1);color:rgba(255,253,247,0.7);border:0.5px solid rgba(255,253,247,0.15);border-radius:100px;padding:6px 16px;font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;}
+.guest-preview-music{display:flex;align-items:center;gap:8px;}
+.guest-music-toggle{background:rgba(201,168,76,0.15);border:0.5px solid rgba(201,168,76,0.3);border-radius:100px;padding:5px 12px;font-size:11px;color:#C9A84C;cursor:pointer;font-family:'DM Sans',sans-serif;display:flex;align-items:center;gap:5px;}
+.guest-preview-content{flex:1;overflow-y:auto;display:flex;justify-content:center;padding:1.5rem;}
+.guest-preview-phone{width:100%;max-width:420px;}
+.guest-preview-screen{background:var(--espresso);border-radius:20px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.5);}
+ 
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(44,26,14,0.5);z-index:400;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.2s;}
+.modal-overlay.show{opacity:1;pointer-events:all;}
+.modal{background:white;border-radius:20px;padding:2rem;width:400px;max-width:90vw;text-align:center;}
+.modal-title{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:500;color:var(--espresso);margin-bottom:0.5rem;}
+.modal-sub{font-size:14px;color:var(--espresso-mid);margin-bottom:1.5rem;line-height:1.6;font-weight:300;}
+.modal-link{background:var(--ivory);border:0.5px solid var(--border);border-radius:10px;padding:12px;font-size:12px;color:var(--espresso-mid);margin-bottom:1.5rem;word-break:break-all;}
+.modal-link span{color:var(--gold-dark);font-weight:500;}
+.modal-actions{display:flex;flex-direction:column;gap:8px;}
+.btn-mp{background:var(--espresso);color:var(--ivory);border:none;border-radius:100px;padding:12px;font-size:14px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;}
+.btn-mp:hover{background:var(--gold-dark);}
+.btn-ms{background:transparent;color:var(--espresso-mid);border:0.5px solid var(--border);border-radius:100px;padding:12px;font-size:13px;cursor:pointer;font-family:'DM Sans',sans-serif;}
+ 
+/* INVITE RENDER STYLES */
+.ri{font-family:'DM Sans',sans-serif;color:white;}
+.ri-tappable{position:relative;cursor:pointer;}
+.ri-edit-badge{position:absolute;top:8px;right:8px;background:rgba(201,168,76,0.9);color:#2C1A0E;font-size:9px;font-weight:600;padding:3px 8px;border-radius:100px;opacity:0;transition:opacity 0.2s;pointer-events:none;z-index:10;}
+.ri-tappable:hover .ri-edit-badge,.ri-tappable:active .ri-edit-badge{opacity:1;}
+.ri-hero{position:relative;padding:36px 20px 28px;text-align:center;overflow:hidden;min-height:300px;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.ri-hero-bg{position:absolute;inset:0;}
+.ri-hero-pattern{position:absolute;inset:0;opacity:0.05;background-image:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23C9A84C' fill-rule='evenodd'%3E%3Cpath d='M30 0L32 28 60 30 32 32 30 60 28 32 0 30 28 28Z'/%3E%3C/g%3E%3C/svg%3E");}
+.ri-circles{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;}
+.ri-circles svg{width:100%;opacity:0.1;}
+.ri-content{position:relative;z-index:1;width:100%;}
+.ri-blessing{font-size:10px;letter-spacing:0.16em;color:rgba(201,168,76,0.6);margin-bottom:12px;text-transform:uppercase;}
+.ri-with-blessings{font-size:11px;color:rgba(255,253,247,0.35);letter-spacing:0.06em;margin-bottom:14px;}
+.ri-divider-line{display:flex;align-items:center;gap:10px;justify-content:center;margin-bottom:12px;}
+.ri-divider-line span{height:0.5px;width:48px;}
+.ri-divider-line i{font-size:9px;font-style:normal;}
+.ri-together{font-size:9px;letter-spacing:0.12em;color:rgba(201,168,76,0.45);text-transform:uppercase;margin-bottom:6px;}
+.ri-names{line-height:1.1;transition:all 0.3s;}
+.ri-and{font-family:'Cormorant Garamond',serif;font-size:12px;display:block;font-style:italic;margin:4px 0;opacity:0.5;}
+.ri-wedding-type{font-size:9px;letter-spacing:0.1em;color:rgba(255,253,247,0.3);text-transform:uppercase;margin-top:8px;}
+.ri-date-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(201,168,76,0.1);border:0.5px solid rgba(201,168,76,0.25);border-radius:100px;padding:6px 14px;margin-top:12px;font-size:11px;color:#E8D5B0;}
+.ri-story{font-family:'Cormorant Garamond',serif;font-size:12px;font-style:italic;color:rgba(255,253,247,0.4);margin-top:10px;line-height:1.6;padding:0 10px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;}
+.ri-parents{font-size:10px;color:rgba(255,253,247,0.3);margin-top:8px;line-height:1.7;}
+.ri-gold-divider{height:0.5px;background:linear-gradient(90deg,transparent,#C9A84C,transparent);}
+.ri-music{display:flex;align-items:center;gap:10px;padding:10px 16px;border-top:0.5px solid rgba(201,168,76,0.12);border-bottom:0.5px solid rgba(201,168,76,0.12);cursor:pointer;transition:background 0.2s;}
+.ri-music:active{background:rgba(201,168,76,0.05);}
+.ri-music-icon{width:28px;height:28px;border-radius:50%;background:rgba(201,168,76,0.12);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;border:0.5px solid rgba(201,168,76,0.18);transition:all 0.2s;}
+.ri-music-info{flex:1;}
+.ri-music-name{font-size:11px;font-weight:500;color:#E8D5B0;}
+.ri-music-sub{font-size:9px;color:rgba(255,253,247,0.3);}
+.ri-music-wave{display:flex;align-items:center;gap:2px;height:16px;}
+.ri-wave-bar{width:2px;border-radius:2px;background:#C9A84C;opacity:0.5;animation:wave 1s ease-in-out infinite;}
+.ri-wave-bar:nth-child(1){height:4px;animation-delay:0s;}
+.ri-wave-bar:nth-child(2){height:10px;animation-delay:0.1s;}
+.ri-wave-bar:nth-child(3){height:7px;animation-delay:0.2s;}
+.ri-wave-bar:nth-child(4){height:14px;animation-delay:0.3s;}
+.ri-wave-bar:nth-child(5){height:6px;animation-delay:0.4s;}
+.ri-wave-paused .ri-wave-bar{animation-play-state:paused;}
+@keyframes wave{0%,100%{transform:scaleY(1);}50%{transform:scaleY(0.3);}}
+.ri-countdown{padding:16px;text-align:center;}
+.ri-cd-label{font-size:9px;letter-spacing:0.12em;color:rgba(255,253,247,0.4);text-transform:uppercase;margin-bottom:8px;}
+.ri-cd-row{display:flex;justify-content:center;align-items:center;gap:5px;}
+.ri-cbox{border-radius:8px;padding:7px 8px;text-align:center;min-width:42px;background:rgba(0,0,0,0.18);}
+.ri-cnum{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:600;line-height:1;color:#C9A84C;}
+.ri-clbl{font-size:8px;color:rgba(255,253,247,0.35);text-transform:uppercase;margin-top:2px;}
+.ri-csep{font-size:20px;color:rgba(201,168,76,0.3);margin-bottom:10px;}
+.ri-events-section{padding:20px 16px 8px;}
+.ri-sec-eyebrow{font-size:9px;letter-spacing:0.14em;color:#C9A84C;text-transform:uppercase;text-align:center;margin-bottom:4px;}
+.ri-sec-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:500;text-align:center;margin-bottom:4px;}
+.ri-sec-title em{font-style:italic;color:#C9A84C;}
+.ri-sec-divider{display:flex;align-items:center;gap:8px;justify-content:center;margin:8px 0 14px;}
+.ri-sec-divider span{height:0.5px;flex:1;max-width:60px;background:linear-gradient(90deg,transparent,rgba(201,168,76,0.35));}
+.ri-sec-divider span:last-child{background:linear-gradient(90deg,rgba(201,168,76,0.35),transparent);}
+.ri-sec-divider i{font-size:9px;color:rgba(201,168,76,0.5);font-style:normal;}
+.ri-event{display:flex;gap:10px;border-radius:10px;padding:10px;margin-bottom:8px;border:0.5px solid rgba(255,255,255,0.07);background:rgba(255,255,255,0.04);}
+.ri-eicon{width:34px;height:34px;border-radius:8px;background:rgba(201,168,76,0.1);border:0.5px solid rgba(201,168,76,0.18);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
+.ri-ename{font-family:'Cormorant Garamond',serif;font-size:16px;color:#E8D5B0;margin-bottom:2px;}
+.ri-emeta{font-size:10px;color:rgba(255,255,255,0.38);line-height:1.5;}
+.ri-map-btn{display:inline-flex;align-items:center;gap:4px;margin-top:5px;font-size:9px;color:#C9A84C;border:0.5px solid rgba(201,168,76,0.25);border-radius:100px;padding:3px 9px;text-decoration:none;background:rgba(201,168,76,0.06);}
+ 
+/* GALLERY - identical in editor and preview */
+.ri-gallery-section{padding:20px 16px 8px;}
+.ri-gallery{display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:90px;gap:5px;padding:0 0 14px;}
+.ri-gitem{border-radius:7px;overflow:hidden;}
+.ri-gitem.big{grid-column:span 2;grid-row:span 2;}
+.ri-gitem img{width:100%;height:100%;object-fit:cover;}
+.ri-gitem-ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:18px;}
+ 
+.ri-video-section{padding:0 14px 14px;}
+.ri-video-wrap{border-radius:10px;overflow:hidden;aspect-ratio:16/9;background:rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:center;}
+.ri-video-wrap iframe{width:100%;height:100%;border:none;}
+.ri-rsvp-section{padding:0 14px 16px;}
+.ri-rsvp-btn{width:100%;border:none;border-radius:100px;padding:11px;font-size:12px;font-weight:500;letter-spacing:0.05em;font-family:'DM Sans',sans-serif;cursor:pointer;}
+.ri-invite-footer{padding:20px 16px;text-align:center;border-top:0.5px solid rgba(201,168,76,0.1);}
+.ri-footer-names{font-family:'Great Vibes',cursive;font-size:32px;color:#C9A84C;margin-bottom:4px;}
+.ri-footer-date{font-size:9px;letter-spacing:0.1em;color:rgba(255,253,247,0.2);text-transform:uppercase;}
+.ri-vowite-tag{font-size:9px;color:rgba(255,253,247,0.15);margin-top:8px;}
+.ri-vowite-tag span{color:rgba(201,168,76,0.4);}
+</style>
+</head>
+<body>
+ 
+<div class="topbar">
+  <a href="index.html"><img src="images/logo.png" alt="Vowite" id="topbarLogo" style="height:34px;width:auto;display:block;"></a>
+  <div class="topbar-steps">
+    <div class="step-dot done" onclick="setTab('details')">1</div><div class="step-line"></div>
+    <div class="step-dot active" onclick="setTab('events')">2</div><div class="step-line"></div>
+    <div class="step-dot" onclick="setTab('media')">3</div><div class="step-line"></div>
+    <div class="step-dot" onclick="setTab('design')">4</div>
+  </div>
+  <div class="topbar-actions">
+    <a href="index.html" class="btn-back">← Back</a>
+    <button class="btn-preview" onclick="openGuestPreview()">👁 Preview</button>
+    <button class="btn-publish" onclick="showPublishModal()">Publish ✦</button>
+  </div>
+</div>
+ 
+<div class="layout">
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-tabs">
+      <div class="stab active" onclick="setTab('details')" id="tab-details">Details</div>
+      <div class="stab" onclick="setTab('events')" id="tab-events">Events</div>
+      <div class="stab" onclick="setTab('media')" id="tab-media">Media</div>
+      <div class="stab" onclick="setTab('design')" id="tab-design">Design</div>
+    </div>
+ 
+    <!-- DETAILS -->
+    <div class="sidebar-body active" id="body-details">
+      <div class="section-heading">Couple</div>
+      <div class="field-group"><label class="field-label">Partner 1 name</label><input class="field-input" id="name1" value="Priya" oninput="rp()"></div>
+      <div class="field-group"><label class="field-label">Partner 2 name</label><input class="field-input" id="name2" value="Arjun" oninput="rp()"></div>
+      <div class="field-group">
+        <label class="field-label">Wedding date (for countdown)</label>
+        <input class="field-input" id="wdate" type="date" value="2026-02-15" oninput="S.wdate=this.value;rp()">
+      </div>
+      <div class="field-group">
+        <label class="field-label">Date display text</label>
+        <input class="field-input" id="wdateDisplay" value="Saturday, 15th February 2026" placeholder="e.g. 26th &amp; 27th Sep 2026" oninput="rp()">
+      </div>
+      <div class="field-group"><label class="field-label">City</label><input class="field-input" id="wcity" value="Chennai" oninput="rp()"></div>
+      <div class="field-group"><label class="field-label">Wedding type</label><input class="field-input" id="wtype" value="Hindu Wedding" oninput="rp()"></div>
+      <div class="section-heading">Header text</div>
+      <div class="field-group"><label class="field-label">Blessing / top text</label><input class="field-input" id="blessing" value="शुभ विवाह" oninput="rp()"></div>
+      <div class="field-group"><label class="field-label">Sub text</label><input class="field-input" id="withBlessings" value="With the blessings of God and our families" oninput="rp()"></div>
+      <div class="field-group"><label class="field-label">Above names</label><input class="field-input" id="togetherText" value="Together with their families" oninput="rp()"></div>
+      <div class="section-heading">Family</div>
+      <div class="field-group"><label class="field-label">Partner 1's parents</label><input class="field-input" id="parents1" value="Mr & Mrs Sharma" oninput="rp()"></div>
+      <div class="field-group"><label class="field-label">Partner 2's parents</label><input class="field-input" id="parents2" value="Mr & Mrs Iyer" oninput="rp()"></div>
+      <div class="section-heading">Story & quote</div>
+      <div class="field-group">
+        <label class="field-label">Love story <span style="font-weight:300;text-transform:none;">(max 200 chars)</span></label>
+        <textarea class="field-input" id="lovestory" rows="3" maxlength="200" oninput="autoResize(this);S.lovestory=this.value;rp()">Met at a rainy bus stop in Chennai. He offered his umbrella. She never gave it back.</textarea>
+        <div class="char-hint"><span id="lovestoryCount">84</span>/200</div>
+      </div>
+      <div class="field-group"><label class="field-label">Footer quote</label><input class="field-input" id="footerQuote" value="Thank you for being part of our forever." oninput="rp()"></div>
+    </div>
+ 
+    <!-- EVENTS -->
+    <div class="sidebar-body" id="body-events">
+      <div class="section-heading">Events</div>
+      <div id="eventBlocks">
+        <div class="event-block" data-id="0">
+          <div class="event-block-header"><div class="event-block-name">🌿 Haldi</div><button class="toggle" onclick="toggleEv(this,0)"></button></div>
+          <div class="icon-trigger" onclick="toggleIconDrop(0)"><span id="iev-0">🌿</span><span style="font-size:12px;color:var(--espresso-mid);">Change icon</span><div class="icon-dropdown" id="idrop-0"></div></div>
+          <input class="field-input" style="margin-bottom:5px;" value="Fri, 14 Feb · 10:00 AM" oninput="updateEv(0,0,this.value)">
+          <input class="field-input" style="margin-bottom:5px;" value="Taj Garden, Anna Salai, Chennai" oninput="updateEv(0,1,this.value)">
+          <input class="field-input" placeholder="Google Maps link (optional)" oninput="updateEv(0,2,this.value)">
+        </div>
+        <div class="event-block" data-id="1">
+          <div class="event-block-header"><div class="event-block-name">🎶 Sangeet</div><button class="toggle" onclick="toggleEv(this,1)"></button></div>
+          <div class="icon-trigger" onclick="toggleIconDrop(1)"><span id="iev-1">🎶</span><span style="font-size:12px;color:var(--espresso-mid);">Change icon</span><div class="icon-dropdown" id="idrop-1"></div></div>
+          <input class="field-input" style="margin-bottom:5px;" value="Fri, 14 Feb · 7:00 PM" oninput="updateEv(1,0,this.value)">
+          <input class="field-input" style="margin-bottom:5px;" value="Grand Ballroom, Leela Palace" oninput="updateEv(1,1,this.value)">
+          <input class="field-input" placeholder="Google Maps link (optional)" oninput="updateEv(1,2,this.value)">
+        </div>
+        <div class="event-block" data-id="2">
+          <div class="event-block-header"><div class="event-block-name">🔥 Wedding</div><button class="toggle" onclick="toggleEv(this,2)"></button></div>
+          <div class="icon-trigger" onclick="toggleIconDrop(2)"><span id="iev-2">🔥</span><span style="font-size:12px;color:var(--espresso-mid);">Change icon</span><div class="icon-dropdown" id="idrop-2"></div></div>
+          <input class="field-input" style="margin-bottom:5px;" value="Sat, 15 Feb · 9:00 AM" oninput="updateEv(2,0,this.value)">
+          <input class="field-input" style="margin-bottom:5px;" value="Sri Kapali Temple, Mylapore" oninput="updateEv(2,1,this.value)">
+          <input class="field-input" placeholder="Google Maps link (optional)" oninput="updateEv(2,2,this.value)">
+        </div>
+        <div class="event-block" data-id="3">
+          <div class="event-block-header"><div class="event-block-name">🌸 Reception</div><button class="toggle" onclick="toggleEv(this,3)"></button></div>
+          <div class="icon-trigger" onclick="toggleIconDrop(3)"><span id="iev-3">🌸</span><span style="font-size:12px;color:var(--espresso-mid);">Change icon</span><div class="icon-dropdown" id="idrop-3"></div></div>
+          <input class="field-input" style="margin-bottom:5px;" value="Sat, 15 Feb · 7:00 PM" oninput="updateEv(3,0,this.value)">
+          <input class="field-input" style="margin-bottom:5px;" value="ITC Grand Chola, Mount Road" oninput="updateEv(3,1,this.value)">
+          <input class="field-input" placeholder="Google Maps link (optional)" oninput="updateEv(3,2,this.value)">
+        </div>
+      </div>
+      <button class="add-event-btn" onclick="addEv()">+ Add custom event</button>
+    </div>
+ 
+    <!-- MEDIA -->
+    <div class="sidebar-body" id="body-media">
+      <div class="section-heading">Photos</div>
+      <div class="upload-box" id="photoUploadBox">
+        <input type="file" accept="image/*" multiple onchange="handlePhotos(event)">
+        <div style="font-size:18px;margin-bottom:4px;">📸</div>
+        <div style="font-size:11px;color:var(--espresso-mid);">Click to upload photos</div>
+      </div>
+      <div class="photo-limit-hint" id="photoLimitHint">0/6 photos added</div>
+      <div class="photo-mosaic" id="photoMosaic"><div class="pm-add" onclick="document.querySelector('#body-media .upload-box input').click()">+</div></div>
+      <div class="section-heading">Music</div>
+      <div class="upload-box"><input type="file" accept="audio/*" onchange="handleMusic(event)"><div style="font-size:18px;margin-bottom:4px;">🎵</div><div style="font-size:11px;color:var(--espresso-mid);" id="musicLabel">Click to upload your song</div></div>
+      <div class="section-heading">Video</div>
+      <div class="field-group"><label class="field-label">YouTube link</label><input class="field-input" id="videoUrl" placeholder="https://youtube.com/watch?v=..." oninput="handleVideo()"></div>
+    </div>
+ 
+    <!-- DESIGN -->
+    <div class="sidebar-body" id="body-design">
+      <div class="section-heading">Theme</div>
+      <div class="theme-mini-grid">
+        <div class="theme-mini" data-theme="sindoor" onclick="selectTheme(this)"><div class="theme-mini-thumb" style="background:linear-gradient(135deg,#8B1A1A,#C9422A,#E8A020);">Sindoor</div><div class="theme-mini-label">North Indian</div></div>
+        <div class="theme-mini" data-theme="maangalyam" onclick="selectTheme(this)"><div class="theme-mini-thumb" style="background:linear-gradient(135deg,#1A3A2A,#2D6A4F,#C9A84C);">Maangalyam</div><div class="theme-mini-label">South Indian</div></div>
+        <div class="theme-mini" data-theme="midnight" onclick="selectTheme(this)"><div class="theme-mini-thumb" style="background:linear-gradient(135deg,#1A1A2E,#16213E,#C9A84C);">Midnight</div><div class="theme-mini-label">Modern Luxury</div></div>
+        <div class="theme-mini" data-theme="gulabi" onclick="selectTheme(this)"><div class="theme-mini-thumb" style="background:linear-gradient(135deg,#3D0C11,#8B1A4A,#F2C4CE);">Gulabi</div><div class="theme-mini-label">Floral Romance</div></div>
+        <div class="theme-mini" data-theme="keerthana" onclick="selectTheme(this)"><div class="theme-mini-thumb" style="background-image:url('images/temple1.jpg');background-size:cover;">Keerthana</div><div class="theme-mini-label">Traditional</div></div>
+      </div>
+      <div class="section-heading">Names font</div>
+      <div class="font-options">
+        <div class="font-opt selected" onclick="selectFont(this,'Great Vibes')"><div style="font-family:'Great Vibes',cursive;font-size:20px;color:var(--espresso);">Script</div><div style="font-size:10px;color:var(--espresso-mid);">Great Vibes</div></div>
+        <div class="font-opt" onclick="selectFont(this,'Cormorant Garamond')"><div style="font-family:'Cormorant Garamond',serif;font-size:17px;font-style:italic;color:var(--espresso);">Serif</div><div style="font-size:10px;color:var(--espresso-mid);">Cormorant</div></div>
+      </div>
+      <div class="section-heading">RSVP</div>
+      <div class="rsvp-toggle-row"><div><div style="font-size:12px;font-weight:500;">Enable RSVP</div><div style="font-size:10px;color:var(--espresso-mid);margin-top:1px;">Guests confirm attendance</div></div><button class="toggle" id="rsvpToggle" onclick="toggleRSVP(this)"></button></div>
+      <div style="font-size:11px;color:rgba(92,61,34,0.4);margin-top:6px;">RSVP tracking is a ₹499 add-on.</div>
+    </div>
+  </div>
+ 
+  <!-- PREVIEW PANEL -->
+  <div class="preview-panel" id="previewPanel">
+    <div class="preview-toolbar">
+      <div class="preview-label">Live preview</div>
+      <div class="view-toggles">
+        <button class="view-btn active" onclick="setView('mobile',this)">Mobile</button>
+        <button class="view-btn" onclick="setView('desktop',this)">Desktop</button>
+      </div>
+      <button class="btn-preview" onclick="openGuestPreview()" style="font-size:11px;">👁 Guest view</button>
+    </div>
+    <div class="preview-canvas">
+      <div class="phone-wrap" id="phoneWrap">
+        <div class="phone-shell" id="phoneShell">
+          <div class="phone-notch"><div class="phone-notch-dot"></div></div>
+          <div class="phone-screen" id="phoneScreen"></div>
+        </div>
+      </div>
+    </div>
+    <div class="publish-bar">
+      <span class="progress-label">Completion</span>
+      <div class="progress-track"><div class="progress-fill" id="progFill" style="width:50%"></div></div>
+      <span class="progress-pct" id="progPct">50%</span>
+    </div>
+  </div>
+</div>
+ 
+<!-- MOBILE ACTION BAR -->
+<div class="mob-action-bar" id="mobActionBar">
+  <button class="mob-theme-btn" onclick="openSheet('theme')">🎨</button>
+  <button class="mob-preview-btn" onclick="openGuestPreview()">👁 Preview</button>
+  <button class="mob-publish-btn" onclick="showPublishModal()">Publish ✦</button>
+</div>
+ 
+<!-- BOTTOM SHEET -->
+<div class="sheet-overlay" id="sheetOverlay" onclick="closeSheet()"></div>
+<div class="bottom-sheet" id="bottomSheet">
+  <div class="sheet-handle"></div>
+  <div class="sheet-header">
+    <div class="sheet-title" id="sheetTitle">Edit</div>
+    <button class="sheet-close" onclick="closeSheet()">✕</button>
+  </div>
+  <div class="sheet-body" id="sheetBody"></div>
+</div>
+ 
+<!-- GUEST PREVIEW OVERLAY -->
+<div class="guest-preview" id="guestPreview">
+  <div class="guest-preview-bar">
+    <div class="guest-preview-label">👁 Guest view</div>
+    <div class="guest-preview-music">
+      <button class="guest-music-toggle" id="guestMusicBtn" onclick="toggleGuestMusic()">🎵 Play music</button>
+    </div>
+    <button class="guest-preview-close" onclick="closeGuestPreview()">✕ Close</button>
+  </div>
+  <div class="guest-preview-content">
+    <div class="guest-preview-phone">
+      <div class="guest-preview-screen" id="guestScreen"></div>
+    </div>
+  </div>
+</div>
+<audio id="bgAudio" loop></audio>
+ 
+<!-- PUBLISH MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this)hideModal()">
+  <div class="modal">
+    <div style="font-size:40px;margin-bottom:1rem;">🎉</div>
+    <div class="modal-title">Your invite is ready!</div>
+    <div class="modal-sub">Complete payment to publish and get your shareable link.</div>
+    <div class="modal-link">vowite.com/invite/<span id="modalSlug">priya-weds-arjun</span></div>
+    <div class="modal-actions">
+      <button class="btn-mp" onclick="publishInvite()">Pay & Publish — <span id="modalPrice">₹1,999</span> ✦</button>
+      <button class="btn-ms" onclick="hideModal()">Continue editing</button>
+    </div>
+  </div>
+</div>
+ 
+<script>
+const THEMES={
+  sindoor:{heroBg:'linear-gradient(180deg,#1a0a04,#2C1A0E,#3d1f0a)',countdownBg:'#8B1A1A',sectionBg:'#2C1A0E',footerBg:'#1a0a04',accentColor:'#C9A84C',musicBg:'rgba(201,168,76,0.07)',dark:true},
+  maangalyam:{heroBg:'linear-gradient(180deg,#0d2118,#1A3A2A,#2D6A4F)',countdownBg:'#2D6A4F',sectionBg:'#1A3A2A',footerBg:'#0d2118',accentColor:'#C9A84C',musicBg:'rgba(201,168,76,0.07)',dark:true},
+  midnight:{heroBg:'linear-gradient(180deg,#050508,#0D0D1A,#16213E)',countdownBg:'rgba(201,168,76,0.07)',sectionBg:'#0D0D1A',footerBg:'#050508',accentColor:'#C9A84C',musicBg:'rgba(201,168,76,0.05)',dark:true},
+  gulabi:{heroBg:'linear-gradient(180deg,#1a0508,#3D0C11,#8B1A4A)',countdownBg:'#8B1A4A',sectionBg:'#3D0C11',footerBg:'#1a0508',accentColor:'#C9A84C',musicBg:'rgba(242,196,206,0.07)',dark:true},
+  keerthana:{heroBg:'linear-gradient(180deg,#FDF6EC,#F5ECD7)',countdownBg:'#1A3A1A',sectionBg:'#FDF6EC',footerBg:'#1A3A1A',accentColor:'#C9A84C',musicBg:'rgba(201,168,76,0.08)',dark:false},
+};
+ 
+// STATE — single source of truth
+const S={
+  theme:'sindoor',font:'Great Vibes',rsvp:true,
+  photos:[],videoId:'',musicName:'',musicSrc:'',
+  isMuted:false,
+  wdate:'2026-02-15', // FIX 1 — stored in state
+  events:[
+    {icon:'🌿',name:'Haldi Ceremony',time:'Fri, 14 Feb · 10:00 AM',venue:'Taj Garden, Anna Salai, Chennai',map:'',on:true},
+    {icon:'🎶',name:'Sangeet Night',time:'Fri, 14 Feb · 7:00 PM',venue:'Grand Ballroom, Leela Palace',map:'',on:true},
+    {icon:'🔥',name:'Wedding Ceremony',time:'Sat, 15 Feb · 9:00 AM',venue:'Sri Kapali Temple, Mylapore',map:'',on:true},
+    {icon:'🌸',name:'Reception',time:'Sat, 15 Feb · 7:00 PM',venue:'ITC Grand Chola, Mount Road',map:'',on:true},
+  ],
+};
+ 
+const urlTheme=new URLSearchParams(window.location.search).get('theme');
+if(urlTheme&&THEMES[urlTheme])S.theme=urlTheme;
+const ALL_ICONS=['🌿','🎶','🔥','🌸','💍','🪔','💛','🌺','🎊','🥂','💐','🌹','✨','💫','🎵','🎉','🙏','❤️','🌙','⭐','🛕','⛪','🎭','🌴','🦚','🦋','🎸','🎤','🕌','🪷'];
+const isMob=()=>window.innerWidth<=768;
+const MAX_PHOTOS=6;
+ 
+// FIX 6 — Auto resize
+function autoResize(el){el.style.height='auto';el.style.height=el.scrollHeight+'px';}
+ 
+// FIX 7 — Icon dropdown
+function toggleIconDrop(idx){
+  const drop=document.getElementById('idrop-'+idx);
+  const isOpen=drop.classList.contains('open');
+  document.querySelectorAll('.icon-dropdown').forEach(d=>d.classList.remove('open'));
+  if(!isOpen){
+    drop.innerHTML=ALL_ICONS.map(ic=>`<div class="icon-opt${S.events[idx].icon===ic?' selected':''}" onclick="event.stopPropagation();pickIcon(${idx},'${ic}')">${ic}</div>`).join('');
+    drop.classList.add('open');
+  }
+}
+function pickIcon(idx,icon){
+  S.events[idx].icon=icon;
+  const el=document.getElementById('iev-'+idx);if(el)el.textContent=icon;
+  document.querySelectorAll('.icon-dropdown').forEach(d=>d.classList.remove('open'));
+  rp();
+}
+document.addEventListener('click',e=>{if(!e.target.closest('.icon-trigger'))document.querySelectorAll('.icon-dropdown').forEach(d=>d.classList.remove('open'));});
+ 
+// BUILD INVITE HTML (shared between editor preview and guest preview)
+function buildInviteHTML(forGuest=false){
+  const t=THEMES[S.theme];
+  const n1=gv('name1')||'Partner 1',n2=gv('name2')||'Partner 2';
+  const city=gv('wcity')||'City',wtype=gv('wtype')||'Hindu Wedding';
+  const blessing=gv('blessing')||'शुभ विवाह';
+  const withBlessings=gv('withBlessings')||'With the blessings of God and our families';
+  const together=gv('togetherText')||'Together with their families';
+  const p1=gv('parents1')||'',p2=gv('parents2')||'';
+  const story=gv('lovestory')||'';
+  const footerQuote=gv('footerQuote')||'';
+  const dateDisplay=gv('wdateDisplay')||'Select your date';
+ 
+  // FIX 3 — Gallery with section heading + mosaic
+  const galleryBgColors=['linear-gradient(135deg,#8B1A1A,#C9422A)','linear-gradient(135deg,#5C3D22,#9C7A2E)','linear-gradient(135deg,#3D0C11,#8B1A4A)','linear-gradient(135deg,#1A3A2A,#2D6A4F)','linear-gradient(135deg,#1A1A2E,#C9A84C)','linear-gradient(135deg,#8B1A4A,#C9A84C)'];
+  const galleryPh=['💑','🌸','✨','🌿','💍','🌺'];
+  let galleryHtml='';
+  const hasPhotos=S.photos.length>0;
+  if(hasPhotos||!forGuest){
+    const items=hasPhotos
+      ?S.photos.slice(0,6).map((src,i)=>`<div class="ri-gitem${i===0?' big':''}"><img src="${src}"></div>`).join('')
+      :galleryPh.map((ph,i)=>`<div class="ri-gitem${i===0?' big':''}"><div class="ri-gitem-ph" style="background:${galleryBgColors[i]};">${ph}</div></div>`).join('');
+    const tappable=!forGuest&&isMob();
+    galleryHtml=`
+      <div class="ri-gallery-section ri-tappable" style="background:${t.sectionBg};" ${tappable?`onclick="openSheet('photos')"`:''}">
+        <div class="ri-sec-eyebrow">Our Story</div>
+        <div class="ri-sec-title">A glimpse of <em>us</em></div>
+        <div class="ri-sec-divider"><span></span><i>✦</i><span></span></div>
+        <div class="ri-gallery">${items}</div>
+        ${tappable?'<div class="ri-edit-badge">✎ edit photos</div>':''}
+      </div>`;
+  }
+ 
+  const eventsHtml=S.events.filter(e=>e.on).map(e=>`
+    <div class="ri-event">
+      <div class="ri-eicon">${e.icon}</div>
+      <div style="flex:1;">
+        <div class="ri-ename">${e.name}</div>
+        <div class="ri-emeta">${e.time}<br>${e.venue}</div>
+        ${e.map?`<a class="ri-map-btn" href="${e.map}" target="_blank">📍 Get directions</a>`:''}
+      </div>
+    </div>`).join('');
+ 
+  const videoHtml=S.videoId?`<div class="ri-video-section" style="background:${t.sectionBg};"><div class="ri-video-wrap"><iframe src="https://www.youtube.com/embed/${S.videoId}" allowfullscreen></iframe></div></div>`:'';
+  const rsvpHtml=S.rsvp?`<div class="ri-rsvp-section" style="background:${t.sectionBg};"><button class="ri-rsvp-btn" style="background:${t.accentColor};color:#2C1A0E;">RSVP Now ✦</button></div>`:'';
+  const parentsHtml=(p1||p2)?`<div class="ri-parents">${p1?`<div>${p1}</div>`:''}${p2?`<div>${p2}</div>`:''}</div>`:'';
+ 
+  // Music display
+  const musicName=S.musicName||'Add your song';
+  const musicSub=forGuest?'Tap to mute':(isMob()?'Tap to mute · Long press to change':'playing softly for guests');
+  const musicIcon=S.isMuted?'🔇':'♪';
+  const waveClass=S.isMuted?'ri-music-wave ri-wave-paused':'ri-music-wave';
+  const waveHtml=`<div class="${waveClass}"><div class="ri-wave-bar"></div><div class="ri-wave-bar"></div><div class="ri-wave-bar"></div><div class="ri-wave-bar"></div><div class="ri-wave-bar"></div></div>`;
+ 
+  const tappableHero=!forGuest&&isMob();
+  const tappableEvents=!forGuest&&isMob();
+ 
+  return `<div class="ri">
+    <div class="ri-hero${tappableHero?' ri-tappable':''}" ${tappableHero?`onclick="openSheet('details')"`:''}">
+      <div class="ri-hero-bg" style="background:${t.heroBg};"></div>
+      <div class="ri-hero-pattern"></div>
+      <div class="ri-circles"><svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="200" cy="200" r="195" fill="none" stroke="${t.accentColor}" stroke-width="0.5"/>
+        <circle cx="200" cy="200" r="155" fill="none" stroke="${t.accentColor}" stroke-width="0.5"/>
+        <circle cx="200" cy="200" r="110" fill="none" stroke="${t.accentColor}" stroke-width="0.5"/>
+        <line x1="5" y1="200" x2="395" y2="200" stroke="${t.accentColor}" stroke-width="0.5"/>
+        <line x1="200" y1="5" x2="200" y2="395" stroke="${t.accentColor}" stroke-width="0.5"/>
+        <line x1="60" y1="60" x2="340" y2="340" stroke="${t.accentColor}" stroke-width="0.5"/>
+        <line x1="340" y1="60" x2="60" y2="340" stroke="${t.accentColor}" stroke-width="0.5"/>
+      </svg></div>
+      <div class="ri-content">
+        <div class="ri-blessing">✦ ${blessing} ✦</div>
+        <div class="ri-with-blessings">${withBlessings}</div>
+        <div class="ri-divider-line"><span style="background:linear-gradient(90deg,transparent,${t.accentColor});"></span><i style="color:${t.accentColor};">✦</i><span style="background:linear-gradient(90deg,${t.accentColor},transparent);"></span></div>
+        <div class="ri-together">${together}</div>
+        <div class="ri-names" style="font-family:'${S.font}',cursive,serif;font-size:52px;color:${t.accentColor};">${n1}<span class="ri-and">weds</span>${n2}</div>
+        <div class="ri-wedding-type">${wtype} · ${city}</div>
+        <div class="ri-date-badge"><span style="color:${t.accentColor};">✦</span> ${dateDisplay}</div>
+        ${parentsHtml}
+        ${story?`<div class="ri-story">${story}</div>`:''}
+      </div>
+      ${tappableHero?'<div class="ri-edit-badge">✎ edit details</div>':''}
+    </div>
+    <div class="ri-music" style="background:${t.musicBg};" onclick="${forGuest?'toggleGuestMusicFromInvite()':isMob()?'toggleMute()':''}">
+      <div class="ri-music-icon">${musicIcon}</div>
+      <div class="ri-music-info"><div class="ri-music-name">${musicName}</div><div class="ri-music-sub">${musicSub}</div></div>
+      ${waveHtml}
+    </div>
+    <div class="ri-gold-divider"></div>
+    <div class="ri-countdown" style="background:${t.countdownBg};" id="${forGuest?'gcd':'pcd'}-wrap">
+      <div class="ri-cd-label">Counting down to forever</div>
+      <div class="ri-cd-row">
+        <div class="ri-cbox"><div class="ri-cnum" id="${forGuest?'g':'p'}-d" style="color:${t.accentColor};">00</div><div class="ri-clbl">Days</div></div>
+        <div class="ri-csep">:</div>
+        <div class="ri-cbox"><div class="ri-cnum" id="${forGuest?'g':'p'}-h" style="color:${t.accentColor};">00</div><div class="ri-clbl">Hrs</div></div>
+        <div class="ri-csep">:</div>
+        <div class="ri-cbox"><div class="ri-cnum" id="${forGuest?'g':'p'}-m" style="color:${t.accentColor};">00</div><div class="ri-clbl">Min</div></div>
+        <div class="ri-csep">:</div>
+        <div class="ri-cbox"><div class="ri-cnum" id="${forGuest?'g':'p'}-s" style="color:${t.accentColor};">00</div><div class="ri-clbl">Sec</div></div>
+      </div>
+    </div>
+    <div class="ri-events-section${tappableEvents?' ri-tappable':''}" style="background:${t.sectionBg};" ${tappableEvents?`onclick="openSheet('events')"`:''}">
+      <div class="ri-sec-eyebrow">Celebrations</div>
+      <div class="ri-sec-title">Join us for <em>every moment</em></div>
+      <div class="ri-sec-divider"><span></span><i>✦</i><span></span></div>
+      ${eventsHtml}
+      ${tappableEvents?'<div class="ri-edit-badge">✎ edit events</div>':''}
+    </div>
+    ${galleryHtml}
+    ${videoHtml}
+    ${rsvpHtml}
+    <div class="ri-invite-footer${!forGuest&&isMob()?' ri-tappable':''}" style="background:${t.footerBg};" ${!forGuest&&isMob()?`onclick="openSheet('footer')"`:''}">
+      <div class="ri-footer-names" style="font-family:'${S.font}',cursive,serif;">${n1} & ${n2}</div>
+      <div class="ri-footer-date">${dateDisplay} · ${city}</div>
+      ${footerQuote?`<div style="font-family:'Cormorant Garamond',serif;font-size:12px;font-style:italic;color:rgba(255,253,247,0.3);margin-top:8px;">"${footerQuote}"</div>`:''}
+      <div class="ri-vowite-tag">Made with love on <span>Vowite</span></div>
+      ${!forGuest&&isMob()?'<div class="ri-edit-badge">✎ edit</div>':''}
+    </div>
+  </div>`;
+}
+ 
+// RENDER EDITOR PREVIEW
+let rpSaveTimer=null;
+function rp(){
+  document.getElementById('phoneScreen').innerHTML=buildInviteHTML(false);
+  if(currentInviteId){clearTimeout(rpSaveTimer);rpSaveTimer=setTimeout(autoSave,3000);}
+  setTimeout(()=>startCountdown('p'),10);
+  updateSlug(gv('name1')||'Priya',gv('name2')||'Arjun');
+  updateProgress();
+  updateTopbarTheme();
+  const ls=document.getElementById('lovestory');
+  const lc=document.getElementById('lovestoryCount');
+  if(ls&&lc)lc.textContent=ls.value.length;
+}
+
+// FIX 1 — Countdown
+let cdTimers={};
+function startCountdown(prefix){
+  if(cdTimers[prefix])clearInterval(cdTimers[prefix]);
+  function tick(){
+    const target=S.wdate?new Date(S.wdate+'T09:00:00'):new Date(Date.now()+42*86400000);
+    const diff=target-Date.now();
+    const set=(id,val)=>{const el=document.getElementById(id);if(el)el.textContent=String(Math.max(0,val)).padStart(2,'0');};
+    if(diff<=0){[`${prefix}-d`,`${prefix}-h`,`${prefix}-m`,`${prefix}-s`].forEach(id=>set(id,0));return;}
+    set(`${prefix}-d`,Math.floor(diff/86400000));
+    set(`${prefix}-h`,Math.floor((diff%86400000)/3600000));
+    set(`${prefix}-m`,Math.floor((diff%3600000)/60000));
+    set(`${prefix}-s`,Math.floor((diff%60000)/1000));
+  }
+  tick();cdTimers[prefix]=setInterval(tick,1000);
+}
+
+function updateTopbarTheme(){
+  const t=THEMES[S.theme];
+  if(isMob()&&t&&t.dark){
+    document.querySelector('.topbar').style.background='rgba(26,10,4,0.95)';
+    document.getElementById('topbarLogo').src='images/logo-white.png';
+  } else {
+    document.querySelector('.topbar').style.background='rgba(255,253,247,0.95)';
+    document.getElementById('topbarLogo').src='images/logo.png';
+  }
+}
+
+function toggleMute(){
+  S.isMuted=!S.isMuted;
+  const icon=document.querySelector('#phoneScreen .ri-music-icon');
+  const wave=document.querySelector('#phoneScreen .ri-music-wave');
+  const sub=document.querySelector('#phoneScreen .ri-music-sub');
+  if(icon)icon.textContent=S.isMuted?'🔇':'♪';
+  if(wave)wave.classList.toggle('ri-wave-paused',S.isMuted);
+  if(sub)sub.textContent=S.isMuted?'Tap to unmute':(isMob()?'Tap to mute · Long press to change':'playing softly for guests');
+}
+
+function openGuestPreview(){
+  document.getElementById('guestScreen').innerHTML=buildInviteHTML(true);
+  document.getElementById('guestPreview').classList.add('open');
+  setTimeout(()=>startCountdown('g'),10);
+  const audio=document.getElementById('bgAudio');
+  if(S.musicSrc){
+    audio.src=S.musicSrc;audio.volume=0.6;
+    document.getElementById('guestMusicBtn').style.display='flex';
+    document.getElementById('guestMusicBtn').textContent='🎵 Play music';
+  } else {
+    document.getElementById('guestMusicBtn').style.display='none';
+  }
+  guestMusicPlaying=false;
+}
+function closeGuestPreview(){
+  document.getElementById('guestPreview').classList.remove('open');
+  const audio=document.getElementById('bgAudio');
+  audio.pause();audio.currentTime=0;
+  guestMusicPlaying=false;
+  document.getElementById('guestMusicBtn').textContent='🎵 Play music';
+  if(cdTimers['g']){clearInterval(cdTimers['g']);delete cdTimers['g'];}
+}
+let guestMusicPlaying=false;
+function toggleGuestMusic(){
+  const audio=document.getElementById('bgAudio');
+  const btn=document.getElementById('guestMusicBtn');
+  if(!S.musicSrc)return;
+  if(guestMusicPlaying){
+    audio.pause();btn.textContent='🎵 Play music';guestMusicPlaying=false;
+    const micon=document.querySelector('#guestScreen .ri-music-icon');if(micon)micon.textContent='♪';
+    const wave=document.querySelector('#guestScreen .ri-music-wave');if(wave)wave.classList.add('ri-wave-paused');
+  } else {
+    audio.play().catch(()=>{});btn.textContent='🔇 Mute';guestMusicPlaying=true;
+    const micon=document.querySelector('#guestScreen .ri-music-icon');if(micon)micon.textContent='🔇';
+    const wave=document.querySelector('#guestScreen .ri-music-wave');if(wave)wave.classList.remove('ri-wave-paused');
+  }
+}
+function toggleGuestMusicFromInvite(){toggleGuestMusic();}
+
+// BOTTOM SHEETS (mobile)
+function openSheet(type){
+  const title=document.getElementById('sheetTitle');
+  const body=document.getElementById('sheetBody');
+  if(type==='details'){
+    title.textContent='Edit Details';
+    body.innerHTML=`
+      <div class="sheet-field"><label class="sheet-label">Partner 1 name</label><input class="sheet-input" value="${gv('name1')}" oninput="sv('name1',this.value);rp()"></div>
+      <div class="sheet-field"><label class="sheet-label">Partner 2 name</label><input class="sheet-input" value="${gv('name2')}" oninput="sv('name2',this.value);rp()"></div>
+      <div class="sheet-field"><label class="sheet-label">Blessing / top text</label><input class="sheet-input" value="${gv('blessing')}" oninput="sv('blessing',this.value);rp()"></div>
+      <div class="sheet-field"><label class="sheet-label">Sub text</label><input class="sheet-input" value="${gv('subtext')}" oninput="sv('subtext',this.value);rp()"></div>
+      <div class="sheet-field"><label class="sheet-label">Date (for countdown)</label><input class="sheet-input" type="date" value="${S.wdate}" oninput="S.wdate=this.value;sv('wdate',this.value);rp()"></div>
+      <div class="sheet-field"><label class="sheet-label">Date display text</label><input class="sheet-input" placeholder="e.g. 26th & 27th Sep 2026" value="${gv('dateDisplay')}" oninput="sv('dateDisplay',this.value);rp()"></div>
+      <div class="sheet-field"><label class="sheet-label">City</label><input class="sheet-input" value="${gv('wcity')}" oninput="sv('wcity',this.value);rp()"></div>
+      <div class="sheet-field"><label class="sheet-label">Love story</label><textarea class="sheet-input" rows="3" oninput="sv('lovestory',this.value);rp()">${gv('lovestory')}</textarea></div>
+      <button class="sheet-done" onclick="closeSheet()">Done ✓</button>`;
+  } else if(type==='events'){
+    title.textContent='Edit Events';
+    body.innerHTML=S.events.map((ev,i)=>`
+      <div class="sheet-event-block">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+          <input class="sheet-input" style="flex:1;margin-right:8px;" value="${ev.name}" oninput="S.events[${i}].name=this.value;rp()">
+          <button class="toggle${ev.on?'':' off'}" onclick="S.events[${i}].on=!S.events[${i}].on;this.classList.toggle('off');rp()"></button>
+        </div>
+        <input class="sheet-input" style="margin-bottom:6px;" placeholder="Date & time" value="${ev.time||''}" oninput="S.events[${i}].time=this.value;rp()">
+        <input class="sheet-input" placeholder="Venue" value="${ev.venue||''}" oninput="S.events[${i}].venue=this.value;rp()">
+      </div>`).join('')+`<button class="sheet-done" onclick="closeSheet()">Done ✓</button>`;
+  } else if(type==='photos'){
+    const atLimit=S.photos.length>=MAX_PHOTOS;
+    title.textContent='Photos & Media';
+    body.innerHTML=`
+      <div class="photo-mosaic" id="sheetMosaic">
+        ${S.photos.map((src,i)=>`<div class="pm-item${i===0?' big':''}"><img src="${src}"><button class="pm-remove" onclick="S.photos.splice(${i},1);rp();openSheet('photos')">✕</button></div>`).join('')}
+        ${!atLimit?`<div class="pm-add" onclick="document.getElementById('spu').click()">+</div>`:''}
+      </div>
+      <div style="font-size:11px;color:rgba(92,61,34,0.4);text-align:center;margin-bottom:12px;">${S.photos.length}/${MAX_PHOTOS} photos</div>
+      <input type="file" id="spu" accept="image/*" multiple style="display:none" onchange="handlePhotosSheet(event)">
+      <div style="font-size:13px;font-weight:500;margin-bottom:8px;">Background music</div>
+      <div class="upload-box" style="margin-bottom:12px;">
+        <input type="file" accept="audio/*" onchange="handleMusicSheet(event)">
+        <div style="font-size:13px;color:var(--espresso-mid);">${S.musicName||'Tap to upload music'}</div>
+      </div>
+      <div style="font-size:13px;font-weight:500;margin-bottom:8px;">Pre-wedding video</div>
+      <input class="sheet-input" placeholder="YouTube link" value="${gv('videoUrl')||''}" oninput="sv('videoUrl',this.value);handleVideo()">
+      <button class="sheet-done" onclick="closeSheet()">Done ✓</button>`;
+  } else if(type==='footer'){
+    title.textContent='Footer';
+    body.innerHTML=`
+      <div class="sheet-field"><label class="sheet-label">Footer quote</label><textarea class="sheet-input" rows="2" oninput="sv('footerQuote',this.value);rp()">${gv('footerQuote')}</textarea></div>
+      <button class="sheet-done" onclick="closeSheet()">Done ✓</button>`;
+  } else if(type==='rsvp'){
+    title.textContent='RSVP';
+    body.innerHTML=`
+      <div class="rsvp-toggle-row">
+        <span style="font-size:13px;">Enable RSVP for guests</span>
+        <button class="toggle${S.rsvp?'':' off'}" onclick="S.rsvp=!S.rsvp;this.classList.toggle('off');rp()"></button>
+      </div>
+      <div style="font-size:12px;color:var(--espresso-mid);margin-top:8px;font-weight:300;">RSVP add-on is ₹999 extra at checkout.</div>
+      <button class="sheet-done" onclick="closeSheet()">Done ✓</button>`;
+  } else if(type==='theme'){
+    title.textContent='Theme & Font';
+    body.innerHTML=`
+      <div class="sheet-theme-grid">
+        <div class="sheet-theme${S.theme==='sindoor'?' selected':''}" onclick="S.theme='sindoor';rp();openSheet('theme')"><div class="sheet-theme-thumb" style="background:linear-gradient(135deg,#8B1A1A,#C9422A,#E8A020);">Sindoor</div><div class="sheet-theme-label">North Indian</div></div>
+        <div class="sheet-theme${S.theme==='maangalyam'?' selected':''}" onclick="S.theme='maangalyam';rp();openSheet('theme')"><div class="sheet-theme-thumb" style="background:linear-gradient(135deg,#1A3A2A,#2D6A4F,#C9A84C);">Maangalyam</div><div class="sheet-theme-label">South Indian</div></div>
+        <div class="sheet-theme${S.theme==='midnight'?' selected':''}" onclick="S.theme='midnight';rp();openSheet('theme')"><div class="sheet-theme-thumb" style="background:linear-gradient(135deg,#1A1A2E,#16213E,#C9A84C);">Midnight</div><div class="sheet-theme-label">Modern Luxury</div></div>
+        <div class="sheet-theme${S.theme==='gulabi'?' selected':''}" onclick="S.theme='gulabi';rp();openSheet('theme')"><div class="sheet-theme-thumb" style="background:linear-gradient(135deg,#3D0C11,#8B1A4A,#F2C4CE);">Gulabi</div><div class="sheet-theme-label">Floral Romance</div></div>
+        <div class="sheet-theme${S.theme==='keerthana'?' selected':''}" onclick="S.theme='keerthana';rp();openSheet('theme')"><div class="sheet-theme-thumb" style="background-image:url('images/temple1.jpg');background-size:cover;">Keerthana</div><div class="sheet-theme-label">Traditional</div></div>
+      </div>
+      <div class="sheet-divider"></div>
+      <div style="font-size:13px;font-weight:500;margin-bottom:10px;">Names font</div>
+      <div class="sheet-font-row">
+        <div class="sheet-font-opt${S.font==='Great Vibes'?' selected':''}" onclick="S.font='Great Vibes';rp();openSheet('theme')"><div style="font-family:'Great Vibes',cursive;font-size:22px;">Script</div><div style="font-size:11px;">Great Vibes</div></div>
+        <div class="sheet-font-opt${S.font==='Cormorant Garamond'?' selected':''}" onclick="S.font='Cormorant Garamond';rp();openSheet('theme')"><div style="font-family:'Cormorant Garamond',serif;font-size:19px;font-style:italic;">Serif</div><div style="font-size:11px;">Cormorant</div></div>
+      </div>
+      <button class="sheet-done" onclick="closeSheet()">Done ✓</button>`;
+  }
+  document.getElementById('sheetOverlay').classList.add('open');
+  document.getElementById('bottomSheet').classList.add('open');
+}
+
+function closeSheet(){
+  document.getElementById('sheetOverlay').classList.remove('open');
+  document.getElementById('bottomSheet').classList.remove('open');
+}
+
+function handlePhotosSheet(e){
+  const remaining=MAX_PHOTOS-S.photos.length;
+  const files=Array.from(e.target.files).slice(0,remaining);
+  files.forEach(f=>{const r=new FileReader();r.onload=ev=>{S.photos.push(ev.target.result);rp();openSheet('photos');};r.readAsDataURL(f);});
+}
+function handleMusicSheet(e){
+  const f=e.target.files[0];
+  if(f){S.musicName=f.name;const r=new FileReader();r.onload=ev=>{S.musicSrc=ev.target.result;rp();};r.readAsDataURL(f);openSheet('photos');}
+}
+
+let lpTimer=null;
+document.addEventListener('touchstart',e=>{if(e.target.closest('.ri-music')){lpTimer=setTimeout(()=>{if(isMob())openSheet('photos');},600);}},{passive:true});
+document.addEventListener('touchend',()=>{if(lpTimer)clearTimeout(lpTimer);},{passive:true});
+
+// DESKTOP FUNCTIONS
+function setTab(tab){
+  ['details','events','media','design'].forEach(t=>{document.getElementById('tab-'+t).classList.toggle('active',t===tab);document.getElementById('body-'+t).classList.toggle('active',t===tab);});
+  const m={details:0,events:1,media:2,design:3};
+  document.querySelectorAll('.step-dot').forEach((d,i)=>{d.classList.remove('active','done');if(i<m[tab])d.classList.add('done');else if(i===m[tab])d.classList.add('active');});
+}
+function setView(v2,btn){
+  document.querySelectorAll('.view-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');
+  const wrap=document.getElementById('phoneWrap'),shell=document.getElementById('phoneShell'),scr=document.getElementById('phoneScreen');
+  if(v2==='desktop'){wrap.classList.add('desktop');shell.classList.add('desktop-shell');scr.style.maxHeight='none';}
+  else{wrap.classList.remove('desktop');shell.classList.remove('desktop-shell');scr.style.maxHeight='580px';}
+}
+function updateEv(idx,field,val){if(field===0)S.events[idx].time=val;else if(field===1)S.events[idx].venue=val;else S.events[idx].map=val;rp();}
+function toggleEv(btn,idx){btn.classList.toggle('off');S.events[idx].on=!btn.classList.contains('off');btn.closest('.event-block').classList.toggle('disabled',!S.events[idx].on);rp();}
+function addEv(){
+  const idx=S.events.length;S.events.push({icon:'💫',name:'Custom Event',time:'Date & time',venue:'Venue',map:'',on:true});
+  const b=document.createElement('div');b.className='event-block';b.dataset.id=idx;
+  b.innerHTML=`<div class="event-block-header"><input class="field-input" style="font-size:12px;padding:4px 8px;flex:1;margin-right:8px;" value="Custom Event" oninput="S.events[${idx}].name=this.value;rp()"><button class="toggle" onclick="toggleEv(this,${idx})"></button></div><div class="icon-trigger" onclick="toggleIconDrop(${idx})"><span id="iev-${idx}">💫</span><span style="font-size:12px;color:var(--espresso-mid);">Change icon</span><div class="icon-dropdown" id="idrop-${idx}"></div></div><input class="field-input" style="margin-bottom:5px;" placeholder="Date & time" oninput="updateEv(${idx},0,this.value)"><input class="field-input" style="margin-bottom:5px;" placeholder="Venue" oninput="updateEv(${idx},1,this.value)"><input class="field-input" placeholder="Maps link" oninput="updateEv(${idx},2,this.value)">`;
+  document.getElementById('eventBlocks').appendChild(b);rp();
+}
+function handlePhotos(e){
+  const remaining=MAX_PHOTOS-S.photos.length;
+  const files=Array.from(e.target.files).slice(0,remaining);
+  files.forEach(f=>{const r=new FileReader();r.onload=ev=>{S.photos.push(ev.target.result);renderPhotoMosaic();rp();};r.readAsDataURL(f);});
+  document.getElementById('photoLimitHint').textContent=`${Math.min(S.photos.length+files.length,MAX_PHOTOS)}/${MAX_PHOTOS} photos`;
+  if(S.photos.length>=MAX_PHOTOS)document.getElementById('photoUploadBox').style.opacity='0.5';
+}
+function renderPhotoMosaic(){
+  document.getElementById('photoMosaic').innerHTML=
+    S.photos.map((src,i)=>`<div class="pm-item${i===0?' big':''}"><img src="${src}"><button class="pm-remove" onclick="S.photos.splice(${i},1);renderPhotoMosaic();rp()">✕</button></div>`).join('')+
+    (S.photos.length<MAX_PHOTOS?`<div class="pm-add" onclick="document.querySelector('#body-media .upload-box input').click()">+</div>`:'');
+  document.getElementById('photoLimitHint').textContent=`${S.photos.length}/${MAX_PHOTOS} photos added`;
+}
+function handleMusic(e){
+  const f=e.target.files[0];
+  if(f){S.musicName=f.name;document.getElementById('musicLabel').textContent='♪ '+f.name;const r=new FileReader();r.onload=ev=>{S.musicSrc=ev.target.result;};r.readAsDataURL(f);rp();}
+}
+function handleVideo(){const url=gv('videoUrl');const m=url.match(/(?:v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);S.videoId=m?m[1]:'';rp();}
+function selectTheme(el){document.querySelectorAll('.theme-mini').forEach(t=>t.classList.remove('selected'));el.classList.add('selected');S.theme=el.dataset.theme;rp();}
+function selectFont(el,font){document.querySelectorAll('.font-opt').forEach(f=>f.classList.remove('selected'));el.classList.add('selected');S.font=font;rp();}
+function toggleRSVP(btn){btn.classList.toggle('off');S.rsvp=!btn.classList.contains('off');rp();}
+function gv(id){const el=document.getElementById(id);return el?el.value:'';}
+function sv(id,val){const el=document.getElementById(id);if(el)el.value=val;}
+function updateSlug(n1,n2){const el=document.getElementById('modalSlug');if(el)el.textContent=`${n1.toLowerCase().replace(/\s+/g,'-')}-weds-${n2.toLowerCase().replace(/\s+/g,'-')}`;}
+function updateProgress(){
+  const fields=[gv('name1'),gv('name2'),S.wdate,gv('wcity'),gv('lovestory')];
+  let p=20;fields.forEach(f=>{if(f)p+=12;});
+  if(S.events.filter(e=>e.on).length>0)p+=10;if(S.photos.length>0)p+=10;p=Math.min(p,100);
+  document.getElementById('progFill').style.width=p+'%';document.getElementById('progPct').textContent=p+'%';
+}
+async function showPublishModal(){
+  if(!currentInviteId){showSaveStatus('Setting up your invite, please wait...');return;}
+  try{
+    const SUPABASE_URL='https://kopmbvpvgclrnchrdpty.supabase.co';
+    const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtvcG1idnB2Z2Nscm5jaHJkcHR5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc1Njg5MDMsImV4cCI6MjA5MzE0NDkwM30.xFt_YA109wDqI6KOIXHWC4Xy2WdNO5Tnacd2_jO4MP4';
+    const res=await fetch(`${SUPABASE_URL}/rest/v1/themes?select=id,price&id=eq.${S.theme}`,{
+      headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}
+    });
+    const data=await res.json();
+    const base=data&&data[0]?data[0].price:1999;
+    const price=base+(S.rsvp?999:0);
+    document.getElementById('modalPrice').textContent='₹'+price.toLocaleString('en-IN');
+  } catch(e){
+    const basePrices={sindoor:1999,maangalyam:1999,midnight:2499,gulabi:2499,keerthana:2499};
+    const price=(basePrices[S.theme]||1999)+(S.rsvp?999:0);
+    document.getElementById('modalPrice').textContent='₹'+price.toLocaleString('en-IN');
+  }
+  document.getElementById('modalOverlay').classList.add('show');
+}
+function hideModal(){document.getElementById('modalOverlay').classList.remove('show');}
+
+// SUPABASE
+let currentUser=null;
+let currentInviteId=null;
+let autoSaveTimer=null;
+
+async function initSupabase(){
+  console.log('1. initSupabase started');
+  console.log('2. window.sb =', window.sb);
+  const {data:{session}, error:sessionError}=await window.sb.auth.getSession();
+  console.log('3. session =', session);
+  console.log('4. sessionError =', sessionError);
+  if(!session){
+    console.log('5. No session — redirecting to auth');
+    localStorage.setItem('vowite_pending_theme',S.theme);
+    window.location.href='auth.html';
+    return;
+  }
+  currentUser=session.user;
+  console.log('6. currentUser =', currentUser.id);
+  const urlParams=new URLSearchParams(window.location.search);
+  const inviteId=urlParams.get('id');
+  if(inviteId){
+    const {data:invite, error:fetchError}=await window.sb.from('invites').select('*').eq('id',inviteId).eq('couple_id',currentUser.id).single();
+    console.log('7. fetch by id =', invite, fetchError);
+    if(invite){currentInviteId=invite.id;loadInviteData(invite);}
+  } else {
+    const {data:existing, error:existError}=await window.sb.from('invites').select('*').eq('couple_id',currentUser.id).single();
+    console.log('8. existing invite =', existing, existError);
+    if(existing){
+      currentInviteId=existing.id;loadInviteData(existing);
+    } else {
+      const slug=generateSlug(gv('name1')||'partner1',gv('name2')||'partner2');
+      console.log('9. creating new invite with slug =', slug, 'couple_id =', currentUser.id);
+      const {data:newInvite, error:insertError}=await window.sb.from('invites').insert({couple_id:currentUser.id,theme:S.theme,slug,data:getInviteData(),is_published:false,rsvp_enabled:S.rsvp}).select().single();
+      console.log('10. newInvite =', newInvite, 'insertError =', insertError);
+      if(newInvite){currentInviteId=newInvite.id;showSaveStatus('Invite created ✓');}
+    }
+  }
+  autoSaveTimer=setInterval(autoSave,10000);
+}
+
+function loadInviteData(invite){
+  const d=invite.data||{};
+  S.theme=invite.theme||S.theme;
+  S.rsvp=invite.rsvp_enabled||false;
+  if(d.name1)sv('name1',d.name1);
+  if(d.name2)sv('name2',d.name2);
+  if(d.wdate){sv('wdate',d.wdate);S.wdate=d.wdate;}
+  if(d.wcity)sv('wcity',d.wcity);
+  if(d.blessing)sv('blessing',d.blessing);
+  if(d.subtext)sv('subtext',d.subtext);
+  if(d.lovestory)sv('lovestory',d.lovestory);
+  if(d.dateDisplay)sv('dateDisplay',d.dateDisplay);
+  if(d.footerQuote)sv('footerQuote',d.footerQuote);
+  if(d.events)S.events=d.events;
+  if(d.photos)S.photos=d.photos;
+  if(d.font)S.font=d.font;
+  if(d.videoId)S.videoId=d.videoId;
+  document.querySelectorAll('.theme-mini').forEach(el=>{el.classList.toggle('selected',el.dataset.theme===S.theme);});
+  renderPhotoMosaic();
+  rp();
+  showSaveStatus('Invite loaded ✓');
+}
+
+function getInviteData(){
+  return {
+    name1:gv('name1'),name2:gv('name2'),
+    wdate:S.wdate,wcity:gv('wcity'),
+    blessing:gv('blessing'),subtext:gv('subtext'),
+    lovestory:gv('lovestory'),dateDisplay:gv('dateDisplay'),
+    footerQuote:gv('footerQuote'),
+    events:S.events,photos:S.photos,
+    font:S.font,videoId:S.videoId,
+  };
+}
+
+async function autoSave(){
+  if(!currentInviteId||!currentUser)return;
+  showSaveStatus('Saving...');
+  const slug=generateSlug(gv('name1')||'partner1',gv('name2')||'partner2');
+  const {error}=await window.sb.from('invites').update({
+    theme:S.theme,slug,data:getInviteData(),
+    rsvp_enabled:S.rsvp,updated_at:new Date().toISOString()
+  }).eq('id',currentInviteId);
+  if(!error)showSaveStatus('Saved ✓');
+}
+
+function showSaveStatus(msg){
+  let el=document.getElementById('saveStatus');
+  if(!el){
+    el=document.createElement('div');
+    el.id='saveStatus';
+    el.style.cssText='font-size:11px;color:var(--espresso-mid);padding:0 8px;transition:opacity 0.3s;flex-shrink:0;';
+    const actions=document.querySelector('.topbar-actions');
+    if(actions)actions.insertBefore(el,actions.firstChild);
+  }
+  el.textContent=msg;el.style.opacity='1';
+  if(msg==='Saved ✓')setTimeout(()=>el.style.opacity='0.4',2000);
+}
+
+async function publishInvite(){
+  if(!currentInviteId){showSaveStatus('Please wait...');return;}
+  const btn=document.getElementById('publishBtn');
+  if(btn){btn.textContent='Publishing...';btn.disabled=true;}
+  const slug=generateSlug(gv('name1')||'partner1',gv('name2')||'partner2');
+  const {error}=await window.sb.from('invites').update({
+    theme:S.theme,slug,data:getInviteData(),
+    rsvp_enabled:S.rsvp,is_published:true,
+    updated_at:new Date().toISOString()
+  }).eq('id',currentInviteId);
+  if(error){alert('Something went wrong. Please try again.');if(btn){btn.textContent='Publish now ✦';btn.disabled=false;}return;}
+  window.location.href='dashboard.html';
+}
+
+function generateSlug(n1,n2){
+  return (n1+'-weds-'+n2).toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+}
+function waitForSB(){
+  return new Promise(resolve=>{if(window.sb)return resolve();window.onSupabaseReady=resolve;});
+}
+
+// INIT
+const blessingDefaults={sindoor:'शुभ विवाह',maangalyam:'శుభ వివాహం',midnight:'A Night to Remember',gulabi:'With Love & Flowers',keerthana:'शुभ विवाह'};
+document.getElementById('blessing').value=blessingDefaults[S.theme]||'शुभ विवाह';
+document.querySelectorAll('.theme-mini').forEach(el=>{if(el.dataset.theme===S.theme)el.classList.add('selected');});
+const wdateEl=document.getElementById('wdate');
+if(wdateEl&&!wdateEl.value)wdateEl.value=S.wdate;
+if(isMob())document.getElementById('mobActionBar').style.display='flex';
+rp();
+initSupabase();
+</script>
+</body>
+</html>

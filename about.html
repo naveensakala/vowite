@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="favicon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About — Vowite</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,600&family=DM+Sans:wght@300;400;500&family=Great+Vibes&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --gold:#C9A84C;--gold-light:#E8D5B0;--gold-dark:#9C7A2E;
+  --blush:#F2C4CE;--ivory:#FFFDF7;--ivory-dark:#F5EDD8;
+  --espresso:#2C1A0E;--espresso-mid:#5C3D22;--border:rgba(201,168,76,0.2);
+}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:var(--ivory);color:var(--espresso);overflow-x:hidden;}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center;background:rgba(255,253,247,0.92);backdrop-filter:blur(8px);border-bottom:0.5px solid var(--border);}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:600;color:var(--espresso);}
+.nav-logo span{color:var(--gold);}
+.nav-links{display:flex;gap:1.5rem;align-items:center;}
+.nav-links a{font-size:13px;color:var(--espresso-mid);text-decoration:none;transition:color 0.2s;}
+.nav-links a:hover{color:var(--gold);}
+.nav-cta{background:var(--espresso);color:var(--ivory)!important;padding:7px 18px;border-radius:100px;font-size:13px;font-weight:500;}
+.nav-cta:hover{background:var(--gold-dark)!important;}
+
+/* HERO */
+.hero{min-height:70vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:8rem 2rem 4rem;position:relative;overflow:hidden;}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(242,196,206,0.25) 0%,transparent 70%),radial-gradient(ellipse 50% 40% at 80% 80%,rgba(201,168,76,0.12) 0%,transparent 60%);}
+.hero-petals{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
+.petal{position:absolute;opacity:0;animation:fall linear infinite;border-radius:50% 0 50% 0;}
+@keyframes fall{0%{transform:translateY(-20px) rotate(0deg);opacity:0.6;}100%{transform:translateY(110vh) rotate(360deg);opacity:0;}}
+.hero-content{position:relative;max-width:680px;}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(201,168,76,0.1);border:0.5px solid rgba(201,168,76,0.3);border-radius:100px;padding:5px 14px;font-size:12px;color:var(--gold-dark);font-weight:500;margin-bottom:1.5rem;letter-spacing:0.04em;}
+.hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(40px,7vw,76px);font-weight:500;line-height:1.05;color:var(--espresso);margin-bottom:1.2rem;}
+.hero h1 em{font-style:italic;color:var(--gold);}
+.hero-sub{font-size:17px;color:var(--espresso-mid);line-height:1.8;max-width:520px;margin:0 auto;font-weight:300;}
+
+/* STORY SECTION */
+.story-section{padding:5rem 2rem;max-width:800px;margin:0 auto;}
+.story-eyebrow{font-size:11px;letter-spacing:0.12em;color:var(--gold-dark);font-weight:500;text-transform:uppercase;margin-bottom:0.75rem;}
+.story-title{font-family:'Cormorant Garamond',serif;font-size:clamp(32px,5vw,52px);font-weight:500;color:var(--espresso);line-height:1.15;margin-bottom:2rem;}
+.story-title em{font-style:italic;color:var(--gold);}
+.story-body p{font-size:16px;color:var(--espresso-mid);line-height:1.9;font-weight:300;margin-bottom:1.5rem;}
+.story-body p strong{color:var(--espresso);font-weight:500;}
+.story-quote{border-left:2px solid var(--gold);padding:1rem 1.5rem;margin:2.5rem 0;background:rgba(201,168,76,0.05);border-radius:0 12px 12px 0;}
+.story-quote p{font-family:'Cormorant Garamond',serif;font-size:22px;font-style:italic;color:var(--espresso);line-height:1.6;margin:0;}
+
+/* MISSION */
+.mission-section{background:var(--espresso);padding:5rem 2rem;text-align:center;}
+.mission-inner{max-width:700px;margin:0 auto;}
+.mission-eyebrow{font-size:11px;letter-spacing:0.12em;color:var(--gold);font-weight:500;text-transform:uppercase;margin-bottom:0.75rem;}
+.mission-title{font-family:'Cormorant Garamond',serif;font-size:clamp(32px,5vw,56px);font-weight:500;color:var(--ivory);line-height:1.15;margin-bottom:1.5rem;}
+.mission-title em{font-style:italic;color:var(--gold);}
+.mission-body{font-size:16px;color:rgba(255,253,247,0.55);line-height:1.9;font-weight:300;}
+
+/* VALUES */
+.values-section{padding:5rem 2rem;max-width:1000px;margin:0 auto;}
+.sec-eyebrow{font-size:11px;letter-spacing:0.12em;color:var(--gold-dark);font-weight:500;text-transform:uppercase;text-align:center;margin-bottom:0.5rem;}
+.sec-title{font-family:'Cormorant Garamond',serif;font-size:clamp(28px,4vw,44px);font-weight:500;text-align:center;color:var(--espresso);margin-bottom:0.5rem;}
+.sec-title em{font-style:italic;color:var(--gold);}
+.sec-divider{display:flex;align-items:center;gap:10px;justify-content:center;margin:12px 0 3rem;}
+.sec-divider span{height:0.5px;width:60px;background:linear-gradient(90deg,transparent,rgba(201,168,76,0.4));}
+.sec-divider span:last-child{background:linear-gradient(90deg,rgba(201,168,76,0.4),transparent);}
+.sec-divider i{font-style:normal;font-size:12px;color:var(--gold);}
+.values-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;}
+.value-card{background:white;border:0.5px solid var(--border);border-radius:16px;padding:1.75rem;transition:all 0.2s;}
+.value-card:hover{border-color:rgba(201,168,76,0.4);transform:translateY(-2px);box-shadow:0 8px 24px rgba(201,168,76,0.08);}
+.value-icon{font-size:28px;margin-bottom:1rem;}
+.value-title{font-size:16px;font-weight:500;color:var(--espresso);margin-bottom:8px;}
+.value-desc{font-size:13px;color:var(--espresso-mid);line-height:1.7;font-weight:300;}
+
+/* NUMBERS */
+.numbers-section{background:var(--ivory-dark);padding:4rem 2rem;}
+.numbers-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:24px;max-width:800px;margin:0 auto;text-align:center;}
+.num-value{font-family:'Cormorant Garamond',serif;font-size:52px;font-weight:500;color:var(--gold-dark);line-height:1;}
+.num-label{font-size:13px;color:var(--espresso-mid);margin-top:6px;line-height:1.4;font-weight:300;}
+
+/* TEAM */
+.team-section{padding:5rem 2rem;max-width:900px;margin:0 auto;}
+.team-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;}
+.team-card{text-align:center;}
+.team-avatar{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,rgba(201,168,76,0.2),rgba(242,196,206,0.3));border:0.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:'Great Vibes',cursive;font-size:28px;color:var(--gold-dark);margin:0 auto 1rem;}
+.team-name{font-size:16px;font-weight:500;color:var(--espresso);margin-bottom:4px;}
+.team-role{font-size:13px;color:var(--gold-dark);margin-bottom:8px;font-weight:400;}
+.team-bio{font-size:12px;color:var(--espresso-mid);line-height:1.6;font-weight:300;}
+
+/* PROMISE */
+.promise-section{background:var(--espresso);padding:5rem 2rem;}
+.promise-inner{max-width:900px;margin:0 auto;}
+.promise-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:3rem;}
+.promise-card{background:rgba(255,253,247,0.05);border:0.5px solid rgba(201,168,76,0.15);border-radius:16px;padding:1.5rem;}
+.promise-icon{font-size:24px;margin-bottom:0.75rem;}
+.promise-title{font-size:14px;font-weight:500;color:var(--ivory);margin-bottom:6px;}
+.promise-desc{font-size:12px;color:rgba(255,253,247,0.4);line-height:1.6;font-weight:300;}
+
+/* CTA */
+.cta-section{padding:5rem 2rem;}
+.cta-banner{background:linear-gradient(135deg,var(--espresso),#5C3D22);border-radius:24px;padding:4rem 2rem;text-align:center;max-width:900px;margin:0 auto;position:relative;overflow:hidden;}
+.cta-banner h2{font-family:'Cormorant Garamond',serif;font-size:clamp(28px,5vw,52px);color:var(--ivory);font-weight:500;margin-bottom:0.75rem;position:relative;}
+.cta-banner h2 em{color:var(--gold);font-style:italic;}
+.cta-banner p{color:rgba(255,253,247,0.5);font-size:16px;margin-bottom:2rem;font-weight:300;position:relative;}
+.cta-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;position:relative;}
+.btn-gold{background:var(--gold);color:var(--espresso);padding:13px 32px;border-radius:100px;font-size:14px;font-weight:500;text-decoration:none;transition:all 0.2s;display:inline-block;}
+.btn-gold:hover{background:var(--gold-dark);color:var(--ivory);}
+.btn-ghost{background:transparent;color:rgba(255,253,247,0.6);padding:13px 32px;border-radius:100px;font-size:14px;text-decoration:none;border:0.5px solid rgba(255,253,247,0.2);transition:all 0.2s;display:inline-block;}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold);}
+
+footer{background:var(--espresso);border-top:0.5px solid rgba(201,168,76,0.15);padding:2rem;text-align:center;}
+.footer-logo{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--ivory);margin-bottom:0.5rem;}
+.footer-logo span{color:var(--gold);}
+.footer-links{display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap;margin:0.75rem 0;}
+.footer-links a{font-size:13px;color:rgba(255,253,247,0.4);text-decoration:none;transition:color 0.2s;}
+.footer-links a:hover{color:var(--gold);}
+.footer-copy{font-size:12px;color:rgba(255,253,247,0.2);}
+
+.fade-up{opacity:0;transform:translateY(24px);transition:opacity 0.6s ease,transform 0.6s ease;}
+.fade-up.visible{opacity:1;transform:translateY(0);}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-petals" id="petals"></div>
+  <div class="hero-content fade-up">
+    <div class="hero-badge">✦ Our story</div>
+    <h1>We believe your invite is the <em>first memory</em> of your wedding.</h1>
+    <p class="hero-sub">Vowite was born from a simple frustration — why do Indian weddings, the most beautiful celebrations in the world, get announced with a boring PDF on WhatsApp?</p>
+  </div>
+</section>
+
+<!-- STORY -->
+<section class="story-section">
+  <p class="story-eyebrow fade-up">How it started</p>
+  <h2 class="story-title fade-up">A wedding invite that made us say <em>"Woah"</em></h2>
+  <div class="story-body fade-up">
+    <p>It started at a friend's wedding in Bangalore. The invite arrived as a <strong>blurry PDF forwarded on WhatsApp</strong> — the same template everyone uses. The wedding itself was extraordinary. The invite was forgettable.</p>
+    <p>We thought — what if the invite could feel as special as the wedding itself? What if guests could open a link and be transported into the couple's world before they even arrived at the venue?</p>
+
+    <div class="story-quote">
+      <p>"The invite is the first moment a guest experiences your wedding. It should make them say Woah."</p>
+    </div>
+
+    <p>So we built Vowite. <strong>A platform that lets Indian couples create stunning, interactive digital invites</strong> — with animated reveals, live countdowns, photo galleries, music, and venue maps — all shareable via a single WhatsApp link.</p>
+    <p>No design skills needed. No apps to download. Just a beautiful invite that does justice to one of life's most sacred moments.</p>
+  </div>
+</section>
+
+<!-- MISSION -->
+<section class="mission-section">
+  <div class="mission-inner fade-up">
+    <p class="mission-eyebrow">Our mission</p>
+    <h2 class="mission-title">Make every Indian wedding invite as <em>beautiful</em> as the wedding itself.</h2>
+    <p class="mission-body">We're building the platform where every couple — regardless of budget or technical knowledge — can share their love story in a way that's worthy of the moment. Rooted in Indian tradition. Designed for the world.</p>
+  </div>
+</section>
+
+<!-- VALUES -->
+<section class="values-section">
+  <p class="sec-eyebrow fade-up">What we stand for</p>
+  <h2 class="sec-title fade-up">Our <em>values</em></h2>
+  <div class="sec-divider fade-up"><span></span><i>✦</i><span></span></div>
+  <div class="values-grid">
+    <div class="value-card fade-up">
+      <div class="value-icon">🇮🇳</div>
+      <div class="value-title">Rooted in tradition</div>
+      <div class="value-desc">Every theme is crafted with deep respect for Indian culture — from Sindoor to Maangalyam, we celebrate what makes our weddings unique.</div>
+    </div>
+    <div class="value-card fade-up">
+      <div class="value-icon">✨</div>
+      <div class="value-title">Beauty in every detail</div>
+      <div class="value-desc">We obsess over typography, animation, colour and layout. Every pixel matters because your wedding moment deserves nothing less.</div>
+    </div>
+    <div class="value-card fade-up">
+      <div class="value-icon">🤝</div>
+      <div class="value-title">Simple for everyone</div>
+      <div class="value-desc">Your parents should love it too. We build for the couple who has no design skills, not just the tech-savvy one.</div>
+    </div>
+    <div class="value-card fade-up">
+      <div class="value-icon">💛</div>
+      <div class="value-title">Made with love</div>
+      <div class="value-desc">Every invite we help create carries a real love story. We take that responsibility seriously — and joyfully.</div>
+    </div>
+  </div>
+</section>
+
+<!-- NUMBERS -->
+<section class="numbers-section">
+  <div class="numbers-grid">
+    <div class="num-item fade-up">
+      <div class="num-value">200+</div>
+      <div class="num-label">Couples who chose Vowite</div>
+    </div>
+    <div class="num-item fade-up">
+      <div class="num-value">5</div>
+      <div class="num-label">Stunning themes crafted</div>
+    </div>
+    <div class="num-item fade-up">
+      <div class="num-value">10k+</div>
+      <div class="num-label">Guests who said "Woah"</div>
+    </div>
+    <div class="num-item fade-up">
+      <div class="num-value">4.9★</div>
+      <div class="num-label">Average couple rating</div>
+    </div>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section class="team-section">
+  <p class="sec-eyebrow fade-up" style="text-align:center;">The people behind Vowite</p>
+  <h2 class="sec-title fade-up">Built by people who <em>love</em> weddings</h2>
+  <div class="sec-divider fade-up"><span></span><i>✦</i><span></span></div>
+  <div class="team-grid">
+    <div class="team-card fade-up">
+      <div class="team-avatar">N</div>
+      <div class="team-name">Naveen</div>
+      <div class="team-role">Founder & Designer</div>
+      <div class="team-bio">Obsessed with beautiful design and Indian weddings. Started Vowite after one too many blurry PDF invites on WhatsApp.</div>
+    </div>
+    <div class="team-card fade-up">
+      <div class="team-avatar">V</div>
+      <div class="team-name">The Vowite Team</div>
+      <div class="team-role">Design & Delivery</div>
+      <div class="team-bio">A small, passionate team that builds and delivers every done-for-you invite with care and attention to detail.</div>
+    </div>
+    <div class="team-card fade-up">
+      <div class="team-avatar">❤</div>
+      <div class="team-name">Our couples</div>
+      <div class="team-role">The heart of Vowite</div>
+      <div class="team-bio">Every feature we build is inspired by real couples and their feedback. You shape what Vowite becomes.</div>
+    </div>
+  </div>
+</section>
+
+<!-- PROMISE -->
+<section class="promise-section">
+  <div class="promise-inner">
+    <p class="sec-eyebrow fade-up" style="color:var(--gold);text-align:center;">Our promise to you</p>
+    <h2 class="sec-title fade-up" style="color:var(--ivory);margin-bottom:0;">Everything we do is for <em>your moment</em></h2>
+    <div class="promise-grid">
+      <div class="promise-card fade-up">
+        <div class="promise-icon">🔒</div>
+        <div class="promise-title">Your data is safe</div>
+        <div class="promise-desc">We never sell or share your personal information. Your invite details stay private and secure.</div>
+      </div>
+      <div class="promise-card fade-up">
+        <div class="promise-icon">⚡</div>
+        <div class="promise-title">Fast & reliable</div>
+        <div class="promise-desc">Your invite loads in under 2 seconds anywhere in the world. We use global infrastructure so guests never wait.</div>
+      </div>
+      <div class="promise-card fade-up">
+        <div class="promise-icon">💬</div>
+        <div class="promise-title">Real support</div>
+        <div class="promise-desc">You get a real person — not a bot. Reach us on WhatsApp and we'll respond within 2 hours.</div>
+      </div>
+      <div class="promise-card fade-up">
+        <div class="promise-icon">🌍</div>
+        <div class="promise-title">Works everywhere</div>
+        <div class="promise-desc">Your guests in Mumbai, Dubai, New York or Singapore all get the same beautiful experience.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-banner fade-up">
+    <h2>Ready to make your invite <em>unforgettable?</em></h2>
+    <p>Join hundreds of couples who chose to honour their wedding with a Vowite.</p>
+    <div class="cta-actions">
+      <a href="index.html#themes" class="btn-gold">Browse themes ✦</a>
+      <a href="contact.html" class="btn-ghost">Done for you →</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo"><img src="images/logo-white.png" alt="Vowite" style="height:40px;width:auto;opacity:0.9;"></div>
+  <div class="footer-links">
+    <a href="index.html">Home</a>
+    <a href="index.html#themes">Themes</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Done for you</a>
+  </div>
+  <div class="footer-copy">© 2025 Vowite. Made with love in India.</div>
+</footer>
+
+<script>
+const petals=document.getElementById('petals');
+['#F2C4CE','#E8D5B0','#C9A84C','#F5EDD8'].forEach((c,ci)=>{
+  for(let i=0;i<5;i++){
+    const p=document.createElement('div');
+    p.className='petal';
+    const s=Math.random()*8+4;
+    p.style.cssText=`width:${s}px;height:${s}px;background:${c};left:${Math.random()*100}%;top:-20px;animation-duration:${Math.random()*8+6}s;animation-delay:${Math.random()*8}s;`;
+    petals.appendChild(p);
+  }
+});
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});
+},{threshold:0.1});
+document.querySelectorAll('.fade-up').forEach(el=>obs.observe(el));
+</script>
+<script src="nav.js"></script>
+</body>
+</html>

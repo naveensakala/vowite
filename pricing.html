@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="favicon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pricing — Vowite</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --gold:#C9A84C;--gold-light:#E8D5B0;--gold-dark:#9C7A2E;
+  --ivory:#FFFDF7;--ivory-dark:#F5EDD8;--espresso:#2C1A0E;
+  --espresso-mid:#5C3D22;--border:rgba(201,168,76,0.2);
+}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:var(--ivory);color:var(--espresso);overflow-x:hidden;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center;background:rgba(255,253,247,0.92);backdrop-filter:blur(8px);border-bottom:0.5px solid var(--border);}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:600;color:var(--espresso);}
+.nav-logo span{color:var(--gold);}
+.nav-links{display:flex;gap:1.5rem;align-items:center;}
+.nav-links a{font-size:13px;color:var(--espresso-mid);text-decoration:none;transition:color 0.2s;}
+.nav-links a:hover{color:var(--gold);}
+.nav-cta{background:var(--espresso);color:var(--ivory)!important;padding:7px 18px;border-radius:100px;font-size:13px;font-weight:500;}
+.nav-cta:hover{background:var(--gold-dark)!important;}
+
+/* HERO */
+.hero{min-height:50vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:8rem 2rem 3rem;position:relative;overflow:hidden;}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(242,196,206,0.2) 0%,transparent 70%);}
+.hero-content{position:relative;max-width:640px;}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(201,168,76,0.1);border:0.5px solid rgba(201,168,76,0.3);border-radius:100px;padding:5px 14px;font-size:12px;color:var(--gold-dark);font-weight:500;margin-bottom:1.5rem;letter-spacing:0.04em;}
+.hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(38px,6vw,68px);font-weight:500;line-height:1.05;color:var(--espresso);margin-bottom:1rem;}
+.hero h1 em{font-style:italic;color:var(--gold);}
+.hero-sub{font-size:16px;color:var(--espresso-mid);line-height:1.7;max-width:460px;margin:0 auto;font-weight:300;}
+
+/* TOGGLE */
+.toggle-section{display:flex;justify-content:center;padding:2rem 2rem 0;}
+.toggle-wrap{display:flex;background:white;border:0.5px solid var(--border);border-radius:100px;padding:4px;gap:4px;}
+.toggle-btn{padding:8px 24px;border-radius:100px;font-size:13px;font-weight:500;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;transition:all 0.2s;color:var(--espresso-mid);background:transparent;}
+.toggle-btn.active{background:var(--espresso);color:var(--ivory);}
+
+/* PRICING GRID */
+.pricing-section{padding:2.5rem 2rem 4rem;max-width:1000px;margin:0 auto;}
+.pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;}
+.price-card{background:white;border:0.5px solid var(--border);border-radius:20px;padding:2rem;position:relative;transition:all 0.2s;}
+.price-card:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(201,168,76,0.1);}
+.price-card.featured{border:2px solid var(--gold);}
+.popular-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--gold);color:white;font-size:11px;padding:3px 14px;border-radius:100px;font-weight:500;white-space:nowrap;}
+.plan-name{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:500;color:var(--espresso);margin-bottom:4px;}
+.plan-desc{font-size:13px;color:var(--espresso-mid);line-height:1.5;font-weight:300;margin-bottom:1.25rem;}
+.plan-price{margin:1rem 0;}
+.plan-price .amount{font-size:42px;font-weight:500;color:var(--espresso);line-height:1;}
+.plan-price .period{font-size:14px;color:var(--espresso-mid);font-weight:400;}
+.plan-price .original{font-size:14px;color:rgba(92,61,34,0.4);text-decoration:line-through;margin-left:6px;}
+.divider{height:0.5px;background:var(--border);margin:1.25rem 0;}
+.feature-list{list-style:none;margin-bottom:1.5rem;}
+.feature-list li{font-size:13px;color:var(--espresso-mid);padding:6px 0;display:flex;align-items:flex-start;gap:10px;line-height:1.4;}
+.feat-check{width:17px;height:17px;border-radius:50%;background:rgba(201,168,76,0.12);display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--gold-dark);flex-shrink:0;margin-top:1px;}
+.feat-x{width:17px;height:17px;border-radius:50%;background:rgba(92,61,34,0.06);display:flex;align-items:center;justify-content:center;font-size:9px;color:rgba(92,61,34,0.3);flex-shrink:0;margin-top:1px;}
+.plan-btn{display:block;text-align:center;padding:12px;border-radius:100px;font-size:14px;font-weight:500;cursor:pointer;transition:all 0.2s;text-decoration:none;border:none;width:100%;font-family:'DM Sans',sans-serif;}
+.btn-dark{background:var(--espresso);color:var(--ivory);}
+.btn-dark:hover{background:var(--gold-dark);}
+.btn-gold{background:var(--gold);color:var(--espresso);}
+.btn-gold:hover{background:var(--gold-dark);color:var(--ivory);}
+.btn-outline{background:transparent;color:var(--espresso);border:0.5px solid rgba(44,26,14,0.2)!important;}
+.btn-outline:hover{border-color:var(--gold)!important;color:var(--gold-dark);}
+
+/* COMPARISON TABLE */
+.compare-section{padding:4rem 2rem;background:var(--ivory-dark);}
+.compare-wrap{max-width:900px;margin:0 auto;overflow-x:auto;}
+.compare-table{width:100%;border-collapse:collapse;background:white;border-radius:16px;overflow:hidden;border:0.5px solid var(--border);}
+.compare-table th{padding:1rem;text-align:center;font-size:13px;font-weight:500;color:var(--espresso);background:white;border-bottom:0.5px solid var(--border);}
+.compare-table th:first-child{text-align:left;padding-left:1.5rem;}
+.compare-table th.highlighted{background:rgba(201,168,76,0.06);}
+.compare-table td{padding:0.85rem 1rem;text-align:center;font-size:13px;color:var(--espresso-mid);border-bottom:0.5px solid rgba(201,168,76,0.08);}
+.compare-table td:first-child{text-align:left;padding-left:1.5rem;font-weight:400;color:var(--espresso);}
+.compare-table td.highlighted{background:rgba(201,168,76,0.04);}
+.compare-table tr:last-child td{border-bottom:none;}
+.compare-table tr:hover td{background:rgba(201,168,76,0.03);}
+.compare-table tr:hover td.highlighted{background:rgba(201,168,76,0.07);}
+.tick{color:var(--gold-dark);font-weight:500;}
+.cross{color:rgba(92,61,34,0.25);}
+.sec-eyebrow{font-size:11px;letter-spacing:0.12em;color:var(--gold-dark);font-weight:500;text-transform:uppercase;text-align:center;margin-bottom:0.5rem;}
+.sec-title{font-family:'Cormorant Garamond',serif;font-size:clamp(28px,4vw,44px);font-weight:500;text-align:center;color:var(--espresso);margin-bottom:0.5rem;}
+.sec-title em{font-style:italic;color:var(--gold);}
+.sec-divider{display:flex;align-items:center;gap:10px;justify-content:center;margin:12px 0 2.5rem;}
+.sec-divider span{height:0.5px;width:60px;background:linear-gradient(90deg,transparent,rgba(201,168,76,0.4));}
+.sec-divider span:last-child{background:linear-gradient(90deg,rgba(201,168,76,0.4),transparent);}
+.sec-divider i{font-style:normal;font-size:12px;color:var(--gold);}
+
+/* FAQ */
+.faq-section{padding:4rem 2rem;}
+.faq-wrap{max-width:680px;margin:0 auto;}
+.faq-item{background:white;border:0.5px solid var(--border);border-radius:14px;margin-bottom:10px;overflow:hidden;}
+.faq-q{padding:1rem 1.25rem;font-size:14px;font-weight:500;color:var(--espresso);cursor:pointer;display:flex;justify-content:space-between;align-items:center;}
+.faq-q:hover{color:var(--gold-dark);}
+.faq-icon{font-size:16px;color:var(--gold);transition:transform 0.2s;}
+.faq-a{max-height:0;overflow:hidden;transition:max-height 0.3s ease,padding 0.3s ease;}
+.faq-a.open{max-height:200px;padding:0 1.25rem 1rem;}
+.faq-a p{font-size:13px;color:var(--espresso-mid);line-height:1.7;font-weight:300;}
+
+/* TRUST BADGES */
+.trust-section{background:var(--espresso);padding:3rem 2rem;}
+.trust-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:20px;max-width:800px;margin:0 auto;}
+.trust-item{text-align:center;}
+.trust-num{font-family:'Cormorant Garamond',serif;font-size:42px;font-weight:500;color:var(--gold);line-height:1;}
+.trust-label{font-size:12px;color:rgba(255,253,247,0.45);margin-top:4px;line-height:1.4;}
+
+/* CTA */
+.cta-section{padding:4rem 2rem;}
+.cta-banner{background:linear-gradient(135deg,var(--espresso),#5C3D22);border-radius:24px;padding:3.5rem 2rem;text-align:center;max-width:900px;margin:0 auto;}
+.cta-banner h2{font-family:'Cormorant Garamond',serif;font-size:clamp(26px,4vw,44px);color:var(--ivory);font-weight:500;margin-bottom:0.75rem;}
+.cta-banner h2 em{color:var(--gold);font-style:italic;}
+.cta-banner p{color:rgba(255,253,247,0.5);font-size:15px;margin-bottom:2rem;font-weight:300;}
+.cta-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+.btn-gold-lg{background:var(--gold);color:var(--espresso);padding:13px 32px;border-radius:100px;font-size:14px;font-weight:500;text-decoration:none;transition:all 0.2s;}
+.btn-gold-lg:hover{background:var(--gold-dark);color:var(--ivory);}
+.btn-ghost{background:transparent;color:rgba(255,253,247,0.6);padding:13px 32px;border-radius:100px;font-size:14px;text-decoration:none;border:0.5px solid rgba(255,253,247,0.2);transition:all 0.2s;}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold);}
+
+footer{background:var(--espresso);border-top:0.5px solid rgba(201,168,76,0.15);padding:2rem;text-align:center;}
+.footer-logo{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--ivory);margin-bottom:0.5rem;}
+.footer-logo span{color:var(--gold);}
+.footer-links{display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap;margin:0.75rem 0;}
+.footer-links a{font-size:13px;color:rgba(255,253,247,0.4);text-decoration:none;transition:color 0.2s;}
+.footer-links a:hover{color:var(--gold);}
+.footer-copy{font-size:12px;color:rgba(255,253,247,0.2);}
+
+.fade-up{opacity:0;transform:translateY(24px);transition:opacity 0.6s ease,transform 0.6s ease;}
+.fade-up.visible{opacity:1;transform:translateY(0);}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content fade-up">
+    <div class="hero-badge">✦ Simple, transparent pricing</div>
+    <h1>One invite. One payment. <em>Forever memorable.</em></h1>
+    <p class="hero-sub">No subscriptions. No hidden fees. Pay once and your invite stays live for a full year.</p>
+  </div>
+</section>
+
+<!-- PRICING CARDS -->
+<section class="pricing-section">
+  <div class="pricing-grid">
+
+    <!-- SELF SERVE -->
+    <div class="price-card fade-up">
+      <div class="plan-name">Self-serve</div>
+      <div class="plan-desc">You edit it yourself using our live editor. Fast, easy, beautiful.</div>
+      <div class="plan-price">
+        <span class="amount">₹1,999</span>
+        <span class="period">one-time</span>
+      </div>
+      <div class="divider"></div>
+      <ul class="feature-list">
+        <li><div class="feat-check">✓</div> Live invite editor</li>
+        <li><div class="feat-check">✓</div> All 5 themes available</li>
+        <li><div class="feat-check">✓</div> Animated reveal</li>
+        <li><div class="feat-check">✓</div> Live countdown timer</li>
+        <li><div class="feat-check">✓</div> Events schedule</li>
+        <li><div class="feat-check">✓</div> Venue maps</li>
+        <li><div class="feat-check">✓</div> Photo gallery</li>
+        <li><div class="feat-check">✓</div> Background music</li>
+        <li><div class="feat-check">✓</div> Shareable WhatsApp link</li>
+        <li><div class="feat-check">✓</div> Hosted for 1 year</li>
+        <li><div class="feat-x">✕</div> <span style="opacity:0.4;">RSVP tracking</span></li>
+        <li><div class="feat-x">✕</div> <span style="opacity:0.4;">Pre-wedding video</span></li>
+      </ul>
+      <a href="index.html#themes" class="plan-btn btn-outline">Browse themes</a>
+    </div>
+
+    <!-- SELF SERVE + RSVP -->
+    <div class="price-card featured fade-up">
+      <div class="popular-badge">Most popular</div>
+      <div class="plan-name">Self-serve + RSVP</div>
+      <div class="plan-desc">Everything in Self-serve plus guest RSVP tracking for every event.</div>
+      <div class="plan-price">
+        <span class="amount">₹2,499</span>
+        <span class="period">one-time</span>
+      </div>
+      <div class="divider"></div>
+      <ul class="feature-list">
+        <li><div class="feat-check">✓</div> Everything in Self-serve</li>
+        <li><div class="feat-check">✓</div> Guest RSVP form</li>
+        <li><div class="feat-check">✓</div> Couple dashboard</li>
+        <li><div class="feat-check">✓</div> Headcount per event</li>
+        <li><div class="feat-check">✓</div> Pre-wedding video embed</li>
+        <li><div class="feat-check">✓</div> Broadcast to guests</li>
+        <li><div class="feat-check">✓</div> Export guest list CSV</li>
+        <li><div class="feat-check">✓</div> All 5 themes available</li>
+        <li><div class="feat-check">✓</div> Shareable WhatsApp link</li>
+        <li><div class="feat-check">✓</div> Hosted for 1 year</li>
+        <li><div class="feat-check">✓</div> Animated reveal</li>
+        <li><div class="feat-check">✓</div> Live countdown timer</li>
+      </ul>
+      <a href="index.html#themes" class="plan-btn btn-gold">Get started ✦</a>
+    </div>
+
+    <!-- DONE FOR YOU -->
+    <div class="price-card fade-up">
+      <div class="plan-name">Done for you</div>
+      <div class="plan-desc">We build your entire invite. You just review, approve and share.</div>
+      <div class="plan-price">
+        <span class="amount">₹4,999</span>
+        <span class="period">one-time</span>
+      </div>
+      <div class="divider"></div>
+      <ul class="feature-list">
+        <li><div class="feat-check">✓</div> Everything in Self-serve + RSVP</li>
+        <li><div class="feat-check">✓</div> We design & build it for you</li>
+        <li><div class="feat-check">✓</div> 48 hour delivery</li>
+        <li><div class="feat-check">✓</div> 2 revision rounds</li>
+        <li><div class="feat-check">✓</div> Priority support</li>
+        <li><div class="feat-check">✓</div> WhatsApp coordination</li>
+        <li><div class="feat-check">✓</div> All 5 themes available</li>
+        <li><div class="feat-check">✓</div> Photos & music included</li>
+        <li><div class="feat-check">✓</div> RSVP dashboard included</li>
+        <li><div class="feat-check">✓</div> Pre-wedding video embed</li>
+        <li><div class="feat-check">✓</div> Hosted for 1 year</li>
+        <li><div class="feat-check">✓</div> No editing needed</li>
+      </ul>
+      <a href="contact.html" class="plan-btn btn-dark">Contact us ✦</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- COMPARISON TABLE -->
+<section class="compare-section">
+  <p class="sec-eyebrow fade-up">Compare plans</p>
+  <h2 class="sec-title fade-up">Everything side by <em>side</em></h2>
+  <div class="sec-divider fade-up"><span></span><i>✦</i><span></span></div>
+  <div class="compare-wrap fade-up">
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th style="width:40%;">Feature</th>
+          <th>Self-serve<br><span style="font-size:11px;font-weight:400;color:var(--espresso-mid);">₹1,999</span></th>
+          <th class="highlighted">Self-serve + RSVP<br><span style="font-size:11px;font-weight:400;color:var(--gold-dark);">₹2,499</span></th>
+          <th>Done for you<br><span style="font-size:11px;font-weight:400;color:var(--espresso-mid);">₹4,999</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Live editor</td><td><span class="tick">✓</span></td><td class="highlighted"><span class="tick">✓</span></td><td><span class="cross">—</span></td></tr>
+        <tr><td>Animated reveal</td><td><span class="tick">✓</span></td><td class="highlighted"><span class="tick">✓</span></td><td><span class="tick">✓</span></td></tr>
+        <tr><td>Live countdown</td><td><span class="tick">✓</span></td><td class="highlighted"><span class="tick">✓</span></td><td><span class="tick">✓</span></td></tr>
+        <tr><td>Events schedule</td><td><span class="tick">✓</span></td><td class="highlighted"><span class="tick">✓</span></td><td><span class="tick">✓</span></td></tr>
+        <tr><td>Photo gallery</td><td><span class="tick">✓</span></td><td class="highlighted"><span class="tick">✓</span></td><td><span class="tick">✓</span></td></tr>
+        <tr><td>Background music</td><td><span class="tick">✓</span></td><td class="highlighted"><span class="tick">✓</span></td><td><span class="tick">✓</span></td></tr>
+        <tr><td>Venue maps</td><td><span class="tick">✓</span></td><td class="highlighted"><span class="tick">✓</span></td><td><span class="tick">✓</span></td></tr>
+        <tr><td>Pre-wedding video</td><td><span class="cross">—</span></td><td class="highlighted"><span class="tick">✓</span></td><td><span class="tick">✓</span></td></tr>
+        <tr><td>RSVP form</td><td><span class="cross">—</span></td><td class="highlighted"><span class="tick">✓</span></td><td><span class="tick">✓</span></td></tr>
+        <tr><td>Couple dashboard</td><td><span class="cross">—</span></td><td class="highlighted"><span class="tick">✓</span></td><td><span class="tick">✓</span></td></tr>
+        <tr><td>Guest list export</td><td><span class="cross">—</span></td><td class="highlighted"><span class="tick">✓</span></td><td><span class="tick">✓</span></td></tr>
+        <tr><td>We build it for you</td><td><span class="cross">—</span></td><td class="highlighted"><span class="cross">—</span></td><td><span class="tick">✓</span></td></tr>
+        <tr><td>Revision rounds</td><td><span class="cross">—</span></td><td class="highlighted"><span class="cross">—</span></td><td><span class="tick">2 rounds</span></td></tr>
+        <tr><td>Delivery time</td><td>Instant</td><td class="highlighted">Instant</td><td>48 hrs</td></tr>
+        <tr><td>Hosted for</td><td>1 year</td><td class="highlighted">1 year</td><td>1 year</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- TRUST NUMBERS -->
+<section class="trust-section">
+  <div class="trust-grid">
+    <div class="trust-item fade-up">
+      <div class="trust-num">200+</div>
+      <div class="trust-label">Couples who chose Vowite</div>
+    </div>
+    <div class="trust-item fade-up">
+      <div class="trust-num">5</div>
+      <div class="trust-label">Stunning themes to choose from</div>
+    </div>
+    <div class="trust-item fade-up">
+      <div class="trust-num">48h</div>
+      <div class="trust-label">Done-for-you delivery time</div>
+    </div>
+    <div class="trust-item fade-up">
+      <div class="trust-num">1yr</div>
+      <div class="trust-label">Your invite stays live</div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-section">
+  <div class="faq-wrap">
+    <p class="sec-eyebrow fade-up" style="text-align:center;">FAQ</p>
+    <h2 class="sec-title fade-up">Common <em>questions</em></h2>
+    <div class="sec-divider fade-up"><span></span><i>✦</i><span></span></div>
+    <div class="faq-item fade-up">
+      <div class="faq-q" onclick="toggleFaq(this)">Is this a one-time payment or subscription? <span class="faq-icon">+</span></div>
+      <div class="faq-a"><p>Completely one-time. You pay once and your invite stays live for a full year. No monthly fees, no surprises.</p></div>
+    </div>
+    <div class="faq-item fade-up">
+      <div class="faq-q" onclick="toggleFaq(this)">Can I edit my invite after publishing? <span class="faq-icon">+</span></div>
+      <div class="faq-a"><p>Yes! For Self-serve plans, you can log in and edit your invite anytime within the year. Venue changed? Timing updated? No problem.</p></div>
+    </div>
+    <div class="faq-item fade-up">
+      <div class="faq-q" onclick="toggleFaq(this)">What payment methods are accepted? <span class="faq-icon">+</span></div>
+      <div class="faq-a"><p>We accept all major payment methods via Razorpay — UPI, credit/debit cards, net banking, and wallets like PhonePe and Google Pay.</p></div>
+    </div>
+    <div class="faq-item fade-up">
+      <div class="faq-q" onclick="toggleFaq(this)">Can I upgrade from Self-serve to Done-for-you? <span class="faq-icon">+</span></div>
+      <div class="faq-a"><p>Yes! If you start with Self-serve and want us to take over, just contact us and we'll top up the difference.</p></div>
+    </div>
+    <div class="faq-item fade-up">
+      <div class="faq-q" onclick="toggleFaq(this)">What happens after 1 year? <span class="faq-icon">+</span></div>
+      <div class="faq-a"><p>Your invite will go offline after 1 year. You can renew hosting for another year at a small fee. Most couples don't need it beyond 6 months!</p></div>
+    </div>
+    <div class="faq-item fade-up">
+      <div class="faq-q" onclick="toggleFaq(this)">Is there a refund policy? <span class="faq-icon">+</span></div>
+      <div class="faq-a"><p>For Self-serve plans, refunds are available within 24 hours of purchase if the invite hasn't been published. For Done-for-you, refunds are available before we start building.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-banner fade-up">
+    <h2>Your invite. Your story. <em>Unforgettable.</em></h2>
+    <p>Join hundreds of couples who made their wedding invite a moment guests remember.</p>
+    <div class="cta-actions">
+      <a href="index.html#themes" class="btn-gold-lg">Browse themes ✦</a>
+      <a href="contact.html" class="btn-ghost">Done for you →</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo"><img src="images/logo-white.png" alt="Vowite" style="height:40px;width:auto;opacity:0.9;"></div>
+  <div class="footer-links">
+    <a href="index.html">Home</a>
+    <a href="index.html#themes">Themes</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="contact.html">Done for you</a>
+  </div>
+  <div class="footer-copy">© 2025 Vowite. Made with love in India.</div>
+</footer>
+
+<script>
+function toggleFaq(el){
+  const ans=el.nextElementSibling;
+  const icon=el.querySelector('.faq-icon');
+  const isOpen=ans.classList.contains('open');
+  document.querySelectorAll('.faq-a').forEach(a=>a.classList.remove('open'));
+  document.querySelectorAll('.faq-icon').forEach(i=>i.textContent='+');
+  if(!isOpen){ans.classList.add('open');icon.textContent='−';}
+}
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});
+},{threshold:0.1});
+document.querySelectorAll('.fade-up').forEach(el=>obs.observe(el));
+
+// Load dynamic prices
+async function loadDynamicPrices(){
+  try{
+    const SUPABASE_URL='https://kopmbvpvgclrnchrdpty.supabase.co';
+    const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtvcG1idnB2Z2Nscm5jaHJkcHR5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc1Njg5MDMsImV4cCI6MjA5MzE0NDkwM30.xFt_YA109wDqI6KOIXHWC4Xy2WdNO5Tnacd2_jO4MP4';
+    const res=await fetch(`${SUPABASE_URL}/rest/v1/themes?select=*&is_active=eq.true`,{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}});
+    const themes=await res.json();
+    if(!themes||!themes.length)return;
+    const prices={};themes.forEach(t=>prices[t.id]=t.price);
+    const base=prices['sindoor']||1999;
+    const premium=prices['midnight']||2499;
+    const cards=document.querySelectorAll('.price-amount');
+    if(cards[0])cards[0].innerHTML='₹'+base.toLocaleString('en-IN')+' <span>one-time</span>';
+    if(cards[1])cards[1].innerHTML='₹'+(base+999).toLocaleString('en-IN')+' <span>one-time</span>';
+  } catch(e){}
+}
+loadDynamicPrices();
+
+</script>
+<script src="nav.js"></script>
+</body>
+</html>

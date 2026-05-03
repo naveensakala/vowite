@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>You're Invited — Vowite</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,600&family=DM+Sans:wght@300;400;500&family=Great+Vibes&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:#0a0a0a;color:#FFFDF7;min-height:100vh;display:flex;justify-content:center;}
+#inviteContainer{width:100%;max-width:480px;background:inherit;}
+.loading{width:100%;}
+.error-state{width:100%;}
+.loading{display:flex;align-items:center;justify-content:center;min-height:100vh;flex-direction:column;gap:1rem;}
+.spinner{width:40px;height:40px;border:2px solid rgba(201,168,76,0.2);border-top-color:#C9A84C;border-radius:50%;animation:spin 0.8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.loading-text{font-family:'Cormorant Garamond',serif;font-size:18px;color:rgba(201,168,76,0.6);font-style:italic;}
+.error-state{display:flex;align-items:center;justify-content:center;min-height:100vh;flex-direction:column;gap:1rem;padding:2rem;text-align:center;}
+.error-state h2{font-family:'Cormorant Garamond',serif;font-size:32px;color:#C9A84C;}
+.error-state p{font-size:14px;color:rgba(255,253,247,0.5);}
+.error-state a{color:#C9A84C;text-decoration:none;font-size:14px;margin-top:1rem;display:inline-block;}
+#inviteContainer{display:none;}
+
+/* RSVP FORM */
+.rsvp-section{padding:2rem;background:rgba(201,168,76,0.04);border-top:0.5px solid rgba(201,168,76,0.15);}
+.rsvp-title{font-family:'Cormorant Garamond',serif;font-size:28px;color:#C9A84C;text-align:center;margin-bottom:0.5rem;}
+.rsvp-sub{font-size:13px;color:rgba(255,253,247,0.5);text-align:center;margin-bottom:1.5rem;}
+.rsvp-field{margin-bottom:1rem;}
+.rsvp-field label{display:block;font-size:12px;color:rgba(255,253,247,0.5);margin-bottom:6px;letter-spacing:0.04em;text-transform:uppercase;}
+.rsvp-field input{width:100%;padding:12px 16px;background:rgba(255,253,247,0.06);border:0.5px solid rgba(201,168,76,0.2);border-radius:12px;font-size:14px;color:#FFFDF7;font-family:'DM Sans',sans-serif;outline:none;}
+.rsvp-field input:focus{border-color:rgba(201,168,76,0.5);}
+.rsvp-events{display:flex;flex-direction:column;gap:8px;margin-bottom:1.5rem;}
+.rsvp-event-check{display:flex;align-items:center;gap:10px;background:rgba(255,253,247,0.04);border:0.5px solid rgba(201,168,76,0.15);border-radius:10px;padding:12px;cursor:pointer;}
+.rsvp-event-check input[type=checkbox]{width:16px;height:16px;accent-color:#C9A84C;}
+.rsvp-event-name{font-size:14px;color:rgba(255,253,247,0.8);}
+.rsvp-event-detail{font-size:11px;color:rgba(255,253,247,0.4);margin-top:2px;}
+.btn-rsvp{width:100%;padding:14px;background:#C9A84C;color:#2C1A0E;border:none;border-radius:100px;font-size:15px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s;}
+.btn-rsvp:hover{background:#9C7A2E;}
+.btn-rsvp:disabled{opacity:0.6;cursor:not-allowed;}
+.rsvp-success{text-align:center;padding:2rem;}
+.rsvp-success-icon{font-size:48px;margin-bottom:1rem;}
+.rsvp-success-title{font-family:'Cormorant Garamond',serif;font-size:28px;color:#C9A84C;margin-bottom:0.5rem;}
+.rsvp-success-sub{font-size:14px;color:rgba(255,253,247,0.5);}
+.vowite-footer{text-align:center;padding:1.5rem;font-size:11px;color:rgba(255,253,247,0.2);}
+.vowite-footer a{color:rgba(201,168,76,0.4);text-decoration:none;}
+</style>
+</head>
+<body>
+
+<div class="loading" id="loadingState">
+  <div class="spinner"></div>
+  <div class="loading-text">Opening your invite...</div>
+</div>
+
+<div class="error-state" id="errorState" style="display:none;">
+  <h2>Invite not found</h2>
+  <p>This invite link may have expired or doesn't exist.</p>
+  <a href="/">← Back to Vowite</a>
+</div>
+
+<div id="inviteContainer"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL='https://kopmbvpvgclrnchrdpty.supabase.co';
+const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtvcG1idnB2Z2Nscm5jaHJkcHR5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc1Njg5MDMsImV4cCI6MjA5MzE0NDkwM30.xFt_YA109wDqI6KOIXHWC4Xy2WdNO5Tnacd2_jO4MP4';
+const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+
+// Get slug from URL — works for /invite/priya-weds-arjun
+const path=window.location.pathname;
+const slug=path.split('/').filter(Boolean).pop();
+
+async function loadInvite(){
+  if(!slug){showError();return;}
+  const {data:invite,error}=await sb.from('invites').select('*').eq('slug',slug).single();
+  if(error||!invite){showError();return;}
+  renderInvite(invite);
+}
+
+function showError(){
+  document.getElementById('loadingState').style.display='none';
+  document.getElementById('errorState').style.display='flex';
+}
+
+function renderInvite(invite){
+  const d=invite.data||{};
+  const theme=invite.theme||'sindoor';
+  const THEMES={
+    sindoor:{heroBg:'linear-gradient(160deg,#2C1A0E 0%,#8B1A1A 50%,#C9422A 100%)',accentColor:'#C9A84C',sectionBg:'#2C1A0E',countdownBg:'#8B1A1A',footerBg:'#1a0a04',musicBg:'rgba(201,168,76,0.08)',dark:true},
+    maangalyam:{heroBg:'linear-gradient(160deg,#1A3A2A 0%,#2D6A4F 100%)',accentColor:'#C9A84C',sectionBg:'#1A3A2A',countdownBg:'#0d2018',footerBg:'#0d2018',musicBg:'rgba(201,168,76,0.08)',dark:true},
+    midnight:{heroBg:'linear-gradient(160deg,#0a0a1a 0%,#1A1A2E 50%,#16213E 100%)',accentColor:'#C9A84C',sectionBg:'#0f0f1f',countdownBg:'#1A1A2E',footerBg:'#0a0a1a',musicBg:'rgba(201,168,76,0.08)',dark:true},
+    gulabi:{heroBg:'linear-gradient(160deg,#3D0C11 0%,#8B1A4A 100%)',accentColor:'#F2C4CE',sectionBg:'#3D0C11',countdownBg:'#2a0808',footerBg:'#2a0808',musicBg:'rgba(242,196,206,0.08)',dark:true},
+    keerthana:{heroBg:'linear-gradient(180deg,#FDF6EC,#F5ECD7)',accentColor:'#C9A84C',sectionBg:'#FDF6EC',countdownBg:'#1A3A1A',footerBg:'#1A3A1A',musicBg:'rgba(201,168,76,0.08)',dark:false},
+  };
+  const t=THEMES[theme]||THEMES.sindoor;
+  const n1=d.name1||'Partner 1';
+  const n2=d.name2||'Partner 2';
+  const font=d.font||'Great Vibes';
+  const events=(d.events||[]).filter(e=>e.on!==false);
+  const photos=d.photos||[];
+
+  // Build events HTML
+  const eventsHtml=events.map(ev=>`
+    <div style="display:flex;gap:12px;align-items:flex-start;padding:12px;background:rgba(201,168,76,0.06);border-radius:12px;margin-bottom:10px;border:0.5px solid rgba(201,168,76,0.12);">
+      <div style="width:36px;height:36px;border-radius:10px;background:rgba(201,168,76,0.12);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">${ev.icon||'🎉'}</div>
+      <div>
+        <div style="font-size:14px;font-weight:500;color:#FFFDF7;margin-bottom:2px;">${ev.name}</div>
+        <div style="font-size:12px;color:rgba(255,253,247,0.5);">${ev.time||''}</div>
+        <div style="font-size:12px;color:rgba(255,253,247,0.4);">${ev.venue||''}</div>
+        ${ev.map?`<a href="${ev.map}" target="_blank" style="font-size:11px;color:${t.accentColor};text-decoration:none;margin-top:4px;display:inline-block;">📍 Get directions</a>`:''}
+      </div>
+    </div>`).join('');
+
+  // Build gallery HTML
+  const galleryHtml=photos.length>0?`
+    <div style="padding:20px 16px 8px;background:${t.sectionBg};">
+      <div style="font-size:11px;letter-spacing:0.1em;color:rgba(255,253,247,0.4);text-align:center;margin-bottom:4px;">OUR STORY</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:22px;color:${t.accentColor};text-align:center;font-style:italic;margin-bottom:12px;">Moments we cherish</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:80px;gap:5px;">
+        ${photos.map((src,i)=>`<div style="grid-column:${i===0?'span 2':'span 1'};grid-row:${i===0?'span 2':'span 1'};border-radius:7px;overflow:hidden;"><img src="${src}" style="width:100%;height:100%;object-fit:cover;"></div>`).join('')}
+      </div>
+    </div>`:'';
+
+  // Build video HTML
+  const videoHtml=d.videoId?`
+    <div style="padding:16px;background:${t.sectionBg};">
+      <div style="font-family:'Cormorant Garamond',serif;font-size:20px;color:${t.accentColor};text-align:center;font-style:italic;margin-bottom:12px;">Our Story</div>
+      <div style="border-radius:12px;overflow:hidden;">
+        <iframe width="100%" height="200" src="https://www.youtube.com/embed/${d.videoId}" frameborder="0" allowfullscreen></iframe>
+      </div>
+    </div>`:'';
+
+  // Build RSVP HTML
+  const rsvpHtml=invite.rsvp_enabled?`
+    <div class="rsvp-section" id="rsvpSection">
+      <div class="rsvp-title">Will you join us?</div>
+      <div class="rsvp-sub">Let us know you're coming</div>
+      <div id="rsvpForm">
+        <div class="rsvp-field"><label>Your name</label><input type="text" id="rsvpName" placeholder="Enter your name"></div>
+        <div class="rsvp-field"><label>WhatsApp number</label><input type="tel" id="rsvpPhone" placeholder="+91 98765 43210"></div>
+        <div class="rsvp-field"><label>Which events will you attend?</label>
+          <div class="rsvp-events">
+            ${events.map(ev=>`
+              <label class="rsvp-event-check">
+                <input type="checkbox" value="${ev.name}" checked>
+                <div><div class="rsvp-event-name">${ev.icon||'🎉'} ${ev.name}</div><div class="rsvp-event-detail">${ev.time||''} · ${ev.venue||''}</div></div>
+              </label>`).join('')}
+          </div>
+        </div>
+        <button class="btn-rsvp" onclick="submitRSVP('${invite.id}')">Confirm attendance ✦</button>
+      </div>
+      <div id="rsvpSuccess" style="display:none;" class="rsvp-success">
+        <div class="rsvp-success-icon">🎉</div>
+        <div class="rsvp-success-title">See you there!</div>
+        <div class="rsvp-success-sub">Your RSVP has been confirmed. We can't wait to celebrate with you!</div>
+      </div>
+    </div>`:'';
+
+  const html=`
+    <div style="background:${t.heroBg};padding:40px 20px 32px;text-align:center;position:relative;">
+      <div style="font-size:11px;color:rgba(255,253,247,0.5);letter-spacing:0.15em;margin-bottom:12px;">${d.blessing||'✦ WITH BLESSINGS ✦'}</div>
+      <div style="font-size:13px;color:rgba(255,253,247,0.5);margin-bottom:8px;">${d.aboveNames||'Together with their families'}</div>
+      <div style="font-family:'${font}',cursive,serif;font-size:52px;color:${t.accentColor};line-height:1.1;">${n1}</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:14px;color:rgba(255,253,247,0.4);font-style:italic;margin:4px 0;">&</div>
+      <div style="font-family:'${font}',cursive,serif;font-size:52px;color:${t.accentColor};line-height:1.1;">${n2}</div>
+      <div style="font-size:12px;color:rgba(255,253,247,0.4);margin-top:12px;letter-spacing:0.08em;">${d.dateDisplay||''} · ${d.wcity||''}</div>
+      ${d.lovestory?`<div style="font-family:'Cormorant Garamond',serif;font-size:15px;font-style:italic;color:rgba(255,253,247,0.5);margin-top:16px;max-width:320px;margin-left:auto;margin-right:auto;line-height:1.6;">"${d.lovestory}"</div>`:''}
+    </div>
+    <div style="height:0.5px;background:linear-gradient(90deg,transparent,${t.accentColor},transparent);"></div>
+    ${d.musicName?`<div style="background:${t.musicBg};padding:12px 16px;display:flex;align-items:center;gap:10px;border-bottom:0.5px solid rgba(201,168,76,0.1);" id="musicBar">
+      <div style="font-size:18px;" id="musicIcon">♪</div>
+      <div style="flex:1;"><div style="font-size:12px;color:rgba(255,253,247,0.7);">${d.musicName}</div><div style="font-size:10px;color:rgba(255,253,247,0.3);" id="musicSub">Tap to play</div></div>
+      <div style="display:flex;gap:3px;" id="musicWave">${Array(5).fill(0).map((_,i)=>`<div style="width:3px;background:${t.accentColor};border-radius:2px;animation:wave 1s ease-in-out infinite;animation-delay:${i*0.1}s;height:${8+i*3}px;"></div>`).join('')}</div>
+    </div>`:''}
+    <div style="background:${t.countdownBg};padding:20px;text-align:center;">
+      <div style="font-size:10px;letter-spacing:0.1em;color:rgba(255,253,247,0.4);margin-bottom:10px;">COUNTING DOWN TO FOREVER</div>
+      <div style="display:flex;justify-content:center;gap:12px;align-items:center;">
+        <div style="text-align:center;"><div style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:600;color:${t.accentColor};line-height:1;" id="g-d">00</div><div style="font-size:9px;color:rgba(255,253,247,0.4);">DAYS</div></div>
+        <div style="font-size:20px;color:rgba(201,168,76,0.3);margin-bottom:10px;">:</div>
+        <div style="text-align:center;"><div style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:600;color:${t.accentColor};line-height:1;" id="g-h">00</div><div style="font-size:9px;color:rgba(255,253,247,0.4);">HRS</div></div>
+        <div style="font-size:20px;color:rgba(201,168,76,0.3);margin-bottom:10px;">:</div>
+        <div style="text-align:center;"><div style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:600;color:${t.accentColor};line-height:1;" id="g-m">00</div><div style="font-size:9px;color:rgba(255,253,247,0.4);">MIN</div></div>
+        <div style="font-size:20px;color:rgba(201,168,76,0.3);margin-bottom:10px;">:</div>
+        <div style="text-align:center;"><div style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:600;color:${t.accentColor};line-height:1;" id="g-s">00</div><div style="font-size:9px;color:rgba(255,253,247,0.4);">SEC</div></div>
+      </div>
+    </div>
+    <div style="background:${t.sectionBg};padding:20px 16px;">
+      <div style="font-size:11px;letter-spacing:0.1em;color:rgba(255,253,247,0.4);text-align:center;margin-bottom:4px;">CELEBRATIONS</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:22px;color:${t.accentColor};text-align:center;font-style:italic;margin-bottom:16px;">Join us for every moment</div>
+      ${eventsHtml}
+    </div>
+    ${galleryHtml}
+    ${videoHtml}
+    ${rsvpHtml}
+    <div style="background:${t.footerBg};padding:24px 16px;text-align:center;border-top:0.5px solid rgba(201,168,76,0.1);">
+      <div style="font-family:'${font}',cursive,serif;font-size:32px;color:${t.accentColor};">${n1} & ${n2}</div>
+      <div style="font-size:12px;color:rgba(255,253,247,0.3);margin-top:6px;">${d.dateDisplay||''} · ${d.wcity||''}</div>
+      ${d.footerQuote?`<div style="font-family:'Cormorant Garamond',serif;font-size:13px;font-style:italic;color:rgba(255,253,247,0.25);margin-top:8px;">"${d.footerQuote}"</div>`:''}
+      <div style="font-size:10px;color:rgba(255,253,247,0.15);margin-top:12px;">Made with love on <a href="/" style="color:rgba(201,168,76,0.3);text-decoration:none;">Vowite</a></div>
+    </div>
+  `;
+
+  document.getElementById('loadingState').style.display='none';
+  document.getElementById('inviteContainer').innerHTML=html;
+  document.getElementById('inviteContainer').style.display='block';
+
+  // Start countdown
+  if(d.wdate){
+    const target=new Date(d.wdate+'T09:00:00');
+    function tick(){
+      const diff=target-Date.now();
+      const set=(id,val)=>{const el=document.getElementById(id);if(el)el.textContent=String(Math.max(0,val)).padStart(2,'0');};
+      if(diff<=0)return;
+      set('g-d',Math.floor(diff/86400000));
+      set('g-h',Math.floor((diff%86400000)/3600000));
+      set('g-m',Math.floor((diff%3600000)/60000));
+      set('g-s',Math.floor((diff%60000)/1000));
+    }
+    tick();setInterval(tick,1000);
+  }
+
+  // Music
+  if(d.musicSrc){
+    const audio=new Audio(d.musicSrc);
+    audio.loop=true;audio.volume=0.5;
+    let playing=false;
+    const bar=document.getElementById('musicBar');
+    if(bar){
+      bar.style.cursor='pointer';
+      bar.onclick=()=>{
+        if(playing){audio.pause();document.getElementById('musicIcon').textContent='♪';document.getElementById('musicSub').textContent='Tap to play';}
+        else{audio.play().catch(()=>{});document.getElementById('musicIcon').textContent='🔇';document.getElementById('musicSub').textContent='Tap to mute';}
+        playing=!playing;
+      };
+    }
+  }
+}
+
+async function submitRSVP(inviteId){
+  const name=document.getElementById('rsvpName').value.trim();
+  const phone=document.getElementById('rsvpPhone').value.trim();
+  const checked=Array.from(document.querySelectorAll('.rsvp-event-check input:checked')).map(c=>c.value);
+  if(!name){alert('Please enter your name');return;}
+  const btn=document.querySelector('.btn-rsvp');
+  btn.disabled=true;btn.textContent='Confirming...';
+  const {error}=await sb.from('rsvps').insert({
+    invite_id:inviteId,
+    guest_name:name,
+    guest_phone:phone,
+    events:checked,
+    status:'confirmed'
+  });
+  if(error){alert('Something went wrong. Please try again.');btn.disabled=false;btn.textContent='Confirm attendance ✦';return;}
+  document.getElementById('rsvpForm').style.display='none';
+  document.getElementById('rsvpSuccess').style.display='block';
+}
+
+// Wave animation
+const waveStyle=document.createElement('style');
+waveStyle.textContent='@keyframes wave{0%,100%{transform:scaleY(1)}50%{transform:scaleY(1.8)}}';
+document.head.appendChild(waveStyle);
+
+loadInvite();
+</script>
+</body>
+</html>

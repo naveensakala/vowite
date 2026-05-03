@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Invite — Vowite</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  :root{--gold:#C9A84C;--gold-dark:#9C7A2E;--ivory:#FFFDF7;--ivory-dark:#F5EDD8;--espresso:#2C1A0E;--espresso-mid:#5C3D22;}
+  body{font-family:'DM Sans',sans-serif;background:var(--ivory);color:var(--espresso);min-height:100vh;}
+
+  /* TOPBAR */
+  .topbar{position:fixed;top:0;left:0;right:0;z-index:100;height:56px;background:rgba(255,253,247,0.95);backdrop-filter:blur(8px);border-bottom:0.5px solid rgba(201,168,76,0.2);display:flex;align-items:center;justify-content:space-between;padding:0 2rem;}
+  .topbar-logo img{height:36px;width:auto;}
+  .topbar-right{display:flex;align-items:center;gap:12px;}
+  .topbar-user{font-size:13px;color:var(--espresso-mid);}
+  .btn-signout{font-size:13px;color:var(--espresso-mid);background:none;border:0.5px solid rgba(44,26,14,0.2);padding:6px 14px;border-radius:100px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s;}
+  .btn-signout:hover{border-color:var(--gold);color:var(--gold-dark);}
+
+  /* LAYOUT */
+  .page{max-width:1000px;margin:0 auto;padding:80px 2rem 4rem;}
+
+  /* WELCOME */
+  .welcome{margin-bottom:2.5rem;}
+  .welcome-title{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:500;color:var(--espresso);margin-bottom:4px;}
+  .welcome-sub{font-size:14px;color:var(--espresso-mid);font-weight:300;}
+
+  /* NO INVITE STATE */
+  .no-invite{background:white;border:0.5px solid rgba(201,168,76,0.2);border-radius:24px;padding:4rem 2rem;text-align:center;}
+  .no-invite-icon{font-size:48px;margin-bottom:1rem;}
+  .no-invite h2{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:500;color:var(--espresso);margin-bottom:0.5rem;}
+  .no-invite p{font-size:14px;color:var(--espresso-mid);font-weight:300;margin-bottom:2rem;}
+  .btn-create{display:inline-block;background:var(--espresso);color:var(--ivory);padding:14px 32px;border-radius:100px;font-size:15px;font-weight:500;text-decoration:none;transition:all 0.2s;}
+  .btn-create:hover{background:var(--gold-dark);}
+
+  /* INVITE STATUS CARD */
+  .invite-card{background:white;border:0.5px solid rgba(201,168,76,0.2);border-radius:24px;padding:2rem;margin-bottom:1.5rem;}
+  .invite-card-top{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1rem;margin-bottom:1.5rem;}
+  .invite-names{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:500;color:var(--espresso);}
+  .invite-theme{font-size:13px;color:var(--espresso-mid);margin-top:4px;}
+  .status-badge{padding:6px 14px;border-radius:100px;font-size:12px;font-weight:500;letter-spacing:0.04em;}
+  .status-draft{background:rgba(201,168,76,0.1);color:var(--gold-dark);border:0.5px solid rgba(201,168,76,0.3);}
+  .status-published{background:rgba(76,175,130,0.1);color:#2e7d57;border:0.5px solid rgba(76,175,130,0.3);}
+  .invite-link-row{display:flex;align-items:center;gap:10px;background:var(--ivory);border:0.5px solid rgba(201,168,76,0.2);border-radius:12px;padding:12px 16px;margin-bottom:1.5rem;}
+  .invite-link{font-size:13px;color:var(--espresso-mid);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .btn-copy{background:var(--espresso);color:var(--ivory);border:none;padding:7px 16px;border-radius:100px;font-size:12px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s;flex-shrink:0;}
+  .btn-copy:hover{background:var(--gold-dark);}
+  .invite-actions{display:flex;gap:10px;flex-wrap:wrap;}
+  .btn-action{display:inline-flex;align-items:center;gap:6px;padding:10px 20px;border-radius:100px;font-size:13px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s;text-decoration:none;border:none;}
+  .btn-action-primary{background:var(--espresso);color:var(--ivory);}
+  .btn-action-primary:hover{background:var(--gold-dark);}
+  .btn-action-outline{background:transparent;color:var(--espresso);border:0.5px solid rgba(44,26,14,0.2);}
+  .btn-action-outline:hover{border-color:var(--gold);color:var(--gold-dark);}
+  .btn-action-green{background:#25D366;color:white;}
+  .btn-action-green:hover{background:#1da851;}
+
+  /* STATS */
+  .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:1.5rem;}
+  .stat-card{background:white;border:0.5px solid rgba(201,168,76,0.2);border-radius:16px;padding:1.25rem;}
+  .stat-num{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:600;color:var(--espresso);line-height:1;}
+  .stat-lbl{font-size:12px;color:var(--espresso-mid);margin-top:4px;font-weight:300;}
+
+  /* EVENTS HEADCOUNT */
+  .section-title{font-size:16px;font-weight:500;color:var(--espresso);margin-bottom:1rem;}
+  .event-bar-row{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+  .event-bar-name{font-size:13px;color:var(--espresso-mid);width:100px;flex-shrink:0;}
+  .event-bar-track{flex:1;height:6px;background:rgba(201,168,76,0.1);border-radius:100px;overflow:hidden;}
+  .event-bar-fill{height:100%;background:var(--gold);border-radius:100px;transition:width 0.6s ease;}
+  .event-bar-count{font-size:13px;font-weight:500;color:var(--espresso);width:30px;text-align:right;flex-shrink:0;}
+
+  /* GUEST TABLE */
+  .guest-table{width:100%;border-collapse:collapse;font-size:13px;}
+  .guest-table th{text-align:left;padding:10px 12px;font-size:11px;font-weight:500;color:var(--espresso-mid);letter-spacing:0.06em;text-transform:uppercase;border-bottom:0.5px solid rgba(201,168,76,0.15);}
+  .guest-table td{padding:10px 12px;border-bottom:0.5px solid rgba(201,168,76,0.08);color:var(--espresso-mid);}
+  .guest-table tr:last-child td{border:none;}
+  .guest-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:6px;}
+  .dot-confirmed{background:#4CAF82;}
+  .dot-pending{background:var(--gold);}
+  .dot-declined{background:#e57373;}
+
+  /* LOADING */
+  .loading{text-align:center;padding:4rem;color:var(--espresso-mid);font-size:14px;}
+  .spinner{width:32px;height:32px;border:2px solid rgba(201,168,76,0.2);border-top-color:var(--gold);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 1rem;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  @media(max-width:768px){.topbar{padding:0 1rem;}.page{padding:72px 1rem 3rem;}.invite-card-top{flex-direction:column;}.invite-actions{flex-direction:column;}.stats-grid{grid-template-columns:repeat(2,1fr);}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="topbar-logo" href="index.html"><img src="images/logo.png" alt="Vowite"></a>
+  <div class="topbar-right">
+    <span class="topbar-user" id="userEmail"></span>
+    <button class="btn-signout" onclick="signOut()">Sign out</button>
+  </div>
+</div>
+
+<div class="page">
+  <div class="loading" id="loadingState">
+    <div class="spinner"></div>
+    Loading your invite...
+  </div>
+
+  <div id="mainContent" style="display:none;">
+    <div class="welcome">
+      <h1 class="welcome-title" id="welcomeTitle">Welcome back 👋</h1>
+      <p class="welcome-sub" id="welcomeSub">Here's your Vowite dashboard</p>
+    </div>
+
+    <!-- NO INVITE -->
+    <div class="no-invite" id="noInvite" style="display:none;">
+      <div class="no-invite-icon">💌</div>
+      <h2>Your invite is waiting to be made</h2>
+      <p>Pick a theme and start building your wedding invite in minutes.</p>
+      <a href="index.html#themes" class="btn-create">Browse themes ✦</a>
+    </div>
+
+    <!-- INVITE EXISTS -->
+    <div id="inviteExists" style="display:none;">
+
+      <!-- STATUS CARD -->
+      <div class="invite-card">
+        <div class="invite-card-top">
+          <div>
+            <div class="invite-names" id="inviteNames">Priya & Arjun</div>
+            <div class="invite-theme" id="inviteTheme">Sindoor theme</div>
+          </div>
+          <div class="status-badge" id="statusBadge">Draft</div>
+        </div>
+        <div class="invite-link-row">
+          <span class="invite-link" id="inviteLink">vowite.vercel.app/invite/priya-weds-arjun</span>
+          <button class="btn-copy" onclick="copyLink()">Copy link</button>
+        </div>
+        <div class="invite-actions">
+          <button class="btn-action btn-action-primary" onclick="editInvite()">✏️ Edit invite</button>
+          <button class="btn-action btn-action-green" onclick="shareWhatsApp()">📲 Share on WhatsApp</button>
+          <button class="btn-action btn-action-outline" onclick="previewInvite()">👁 Preview</button>
+          <button class="btn-action btn-action-outline" onclick="downloadCSV()">⬇ Guest list CSV</button>
+        </div>
+      </div>
+
+      <!-- STATS -->
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-num" id="statTotal">0</div><div class="stat-lbl">Total RSVPs</div></div>
+        <div class="stat-card"><div class="stat-num" id="statConfirmed">0</div><div class="stat-lbl">Confirmed</div></div>
+        <div class="stat-card"><div class="stat-num" id="statPending">0</div><div class="stat-lbl">Pending</div></div>
+        <div class="stat-card"><div class="stat-num" id="statDeclined">0</div><div class="stat-lbl">Declined</div></div>
+      </div>
+
+      <!-- EVENT HEADCOUNT -->
+      <div class="invite-card" id="eventHeadcount" style="display:none;">
+        <div class="section-title">Headcount per event</div>
+        <div id="eventBars"></div>
+      </div>
+
+      <!-- GUEST LIST -->
+      <div class="invite-card" id="guestListCard" style="display:none;">
+        <div class="section-title">Guest list</div>
+        <table class="guest-table">
+          <thead><tr><th>Guest</th><th>Events</th><th>Status</th><th>Date</th></tr></thead>
+          <tbody id="guestTableBody"></tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script src="supabase.js"></script>
+<script>
+let currentUser = null;
+let currentInvite = null;
+let rsvpData = [];
+
+window.onSupabaseReady = async () => {
+  const { data: { session } } = await window.sb.auth.getSession();
+  if(!session){ window.location.href='auth.html'; return; }
+  currentUser = session.user;
+  document.getElementById('userEmail').textContent = currentUser.email;
+  await loadDashboard();
+};
+
+async function loadDashboard(){
+  // Load invite
+  const { data: invite } = await window.sb
+    .from('invites')
+    .select('*')
+    .eq('couple_id', currentUser.id)
+    .single();
+
+  document.getElementById('loadingState').style.display='none';
+  document.getElementById('mainContent').style.display='block';
+
+  if(!invite){
+    document.getElementById('noInvite').style.display='block';
+    return;
+  }
+
+  currentInvite = invite;
+  document.getElementById('inviteExists').style.display='block';
+
+  // Populate invite info
+  const d = invite.data || {};
+  const name1 = d.name1 || 'Partner 1';
+  const name2 = d.name2 || 'Partner 2';
+  document.getElementById('inviteNames').textContent = `${name1} & ${name2}`;
+  document.getElementById('inviteTheme').textContent = capitalize(invite.theme) + ' theme';
+  document.getElementById('welcomeTitle').textContent = `Welcome back, ${name1} 👋`;
+
+  // Status badge
+  const badge = document.getElementById('statusBadge');
+  if(invite.is_published){
+    badge.textContent='Published ✓';
+    badge.className='status-badge status-published';
+  } else {
+    badge.textContent='Draft';
+    badge.className='status-badge status-draft';
+  }
+
+  // Invite link
+  const slug = invite.slug || generateSlug(name1, name2);
+  const link = `${window.location.origin}/invite/${slug}`;
+  document.getElementById('inviteLink').textContent = link;
+
+  // Load RSVPs if enabled
+  if(invite.rsvp_enabled){
+    await loadRSVPs(invite.id, d.events||[]);
+  }
+}
+
+async function loadRSVPs(inviteId, events){
+  const { data: rsvps } = await window.sb
+    .from('rsvps')
+    .select('*')
+    .eq('invite_id', inviteId)
+    .order('created_at', { ascending: false });
+
+  if(!rsvps || rsvps.length === 0) return;
+  rsvpData = rsvps;
+
+  const confirmed = rsvps.filter(r=>r.status==='confirmed').length;
+  const pending = rsvps.filter(r=>r.status==='pending').length;
+  const declined = rsvps.filter(r=>r.status==='declined').length;
+
+  document.getElementById('statTotal').textContent = rsvps.length;
+  document.getElementById('statConfirmed').textContent = confirmed;
+  document.getElementById('statPending').textContent = pending;
+  document.getElementById('statDeclined').textContent = declined;
+
+  // Event headcount
+  if(events.length > 0){
+    document.getElementById('eventHeadcount').style.display='block';
+    const bars = document.getElementById('eventBars');
+    bars.innerHTML = '';
+    events.forEach(ev => {
+      const count = rsvps.filter(r => {
+        const evs = r.events || [];
+        return evs.includes(ev.name);
+      }).length;
+      const pct = rsvps.length > 0 ? (count/rsvps.length)*100 : 0;
+      bars.innerHTML += `
+        <div class="event-bar-row">
+          <div class="event-bar-name">${ev.icon||'🎉'} ${ev.name}</div>
+          <div class="event-bar-track"><div class="event-bar-fill" style="width:${pct}%"></div></div>
+          <div class="event-bar-count">${count}</div>
+        </div>`;
+    });
+  }
+
+  // Guest table
+  document.getElementById('guestListCard').style.display='block';
+  const tbody = document.getElementById('guestTableBody');
+  tbody.innerHTML = rsvps.map(r => `
+    <tr>
+      <td>${r.guest_name||'—'}</td>
+      <td>${(r.events||[]).join(', ')||'—'}</td>
+      <td><span class="guest-dot dot-${r.status}"></span>${capitalize(r.status)}</td>
+      <td>${new Date(r.created_at).toLocaleDateString('en-IN')}</td>
+    </tr>`).join('');
+}
+
+function copyLink(){
+  const link = document.getElementById('inviteLink').textContent;
+  navigator.clipboard.writeText(link);
+  const btn = document.querySelector('.btn-copy');
+  btn.textContent='Copied!';
+  setTimeout(()=>btn.textContent='Copy link', 2000);
+}
+
+function shareWhatsApp(){
+  const link = document.getElementById('inviteLink').textContent;
+  const msg = encodeURIComponent(`You're invited! Open our wedding invite here: ${link}`);
+  window.open(`https://wa.me/?text=${msg}`, '_blank');
+}
+
+function previewInvite(){
+  if(currentInvite) window.open(`/invite/${currentInvite.slug}`, '_blank');
+}
+
+function editInvite(){
+  if(currentInvite) window.location.href=`editor.html?theme=${currentInvite.theme}&id=${currentInvite.id}`;
+}
+
+function downloadCSV(){
+  if(rsvpData.length===0){alert('No RSVPs yet!');return;}
+  const rows = [['Name','Phone','Events','Status','Date']];
+  rsvpData.forEach(r=>rows.push([r.guest_name,r.guest_phone,(r.events||[]).join(' | '),r.status,new Date(r.created_at).toLocaleDateString()]));
+  const csv = rows.map(r=>r.join(',')).join('\n');
+  const a = document.createElement('a');
+  a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
+  a.download='vowite-guests.csv';
+  a.click();
+}
+
+async function signOut(){
+  await window.sb.auth.signOut();
+  window.location.href='index.html';
+}
+
+function generateSlug(n1,n2){
+  return (n1+'-weds-'+n2).toLowerCase().replace(/[^a-z0-9]+/g,'-');
+}
+
+function capitalize(s){ return s?s.charAt(0).toUpperCase()+s.slice(1):''; }
+</script>
+</body>
+</html>
