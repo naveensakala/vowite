@@ -15,7 +15,9 @@ export default function ContactPage() {
     const obs = new IntersectionObserver(entries => {
       entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible') })
     }, { threshold: 0.1 })
-    document.querySelectorAll('.fade-up').forEach(el => obs.observe(el))
+    setTimeout(() => {
+          document.querySelectorAll('.fade-up').forEach(el => obs.observe(el))
+        }, 100)
   }, [])
 
   async function submit(e) {
