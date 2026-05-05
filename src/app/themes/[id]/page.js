@@ -11,16 +11,25 @@ const THEME_VISUALS = {
   keerthana: { img: '/images/temple1.jpg', previewBg: 'linear-gradient(180deg,#FDF6EC,#F5ECD7)', accent: '#C9A84C', light: true },
 }
 
+const THEME_DEFAULTS = {
+  sindoor:    { name: 'Sindoor',       category: 'North Indian Hindu', price: 1999, tag: 'Popular' },
+  maangalyam: { name: 'Maangalyam',   category: 'South Indian',       price: 1999, tag: 'New' },
+  midnight:   { name: 'Midnight Gold', category: 'Modern Luxury',     price: 2499, tag: 'Premium' },
+  gulabi:     { name: 'Gulabi',        category: 'North Indian Hindu', price: 1999, tag: '' },
+  keerthana:  { name: 'Keerthana',     category: 'South Indian',       price: 1999, tag: '' },
+}
+
 async function getTheme(id) {
   const { data } = await supabase.from('themes').select('*').eq('id', id).single()
   return data
 }
 
 export default async function ThemeDetailPage({ params }) {
-  const { id } = await params
-  const theme = await getTheme(id)
-  if (!theme) return <div>Theme not found</div>
-  const vis = THEME_VISUALS[id] || THEME_VISUALS.sindoor
+  const { id } = params
+  if (!THEME_VISUALS[id]) return <div style={{ padding: '4rem', textAlign: 'center', fontFamily: 'sans-serif' }}>Theme not found</div>
+  const dbTheme = await getTheme(id)
+  const theme = { ...THEME_DEFAULTS[id], ...dbTheme }
+  const vis = THEME_VISUALS[id]
 
   return (
     <div style={{ fontFamily: "'DM Sans',sans-serif", background: 'var(--ivory)', minHeight: '100vh' }}>
@@ -42,7 +51,7 @@ export default async function ThemeDetailPage({ params }) {
           <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--gold)' }}></div>
           {theme.name} · {theme.category}
         </div>
-        <div style={{ fontSize: '13px', color: 'var(--espresso-mid)' }}>From <strong style={{ color: 'var(--gold-dark)' }}>₹{theme.price.toLocaleString('en-IN')}</strong> one-time</div>
+        <div style={{ fontSize: '13px', color: 'var(--espresso-mid)' }}>From <strong style={{ color: 'var(--gold-dark)' }}>₹{(theme.price ?? 1999).toLocaleString('en-IN')}</strong> one-time</div>
       </div>
 
       {/* DEMO INVITE */}
