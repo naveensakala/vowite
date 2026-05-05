@@ -42,7 +42,7 @@ export default async function ThemesPage() {
                     </div>
                   </div>
                   <div style={{ padding: '12px 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ fontSize: '14px', fontWeight: 500, color: 'var(--espresso)' }}>From ₹{theme.price.toLocaleString('en-IN')}</span>
+                    <span style={{ fontSize: '14px', fontWeight: 500, color: 'var(--espresso)' }}>From ₹{(theme.price || 0).toLocaleString('en-IN')}</span>
                     <span style={{ fontSize: '11px', background: 'rgba(201,168,76,0.12)', color: 'var(--gold-dark)', padding: '2px 10px', borderRadius: '100px', border: '0.5px solid rgba(201,168,76,0.25)' }}>{theme.tag}</span>
                   </div>
                 </Link>
