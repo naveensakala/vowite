@@ -1,6 +1,5 @@
 'use client'
-import { useEffect, useState } from 'react'
-import { use } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { THEME_STYLES } from '@/lib/themes'
 
@@ -15,21 +14,50 @@ export default function InvitePage({ params }) {
   const [selectedEvents, setSelectedEvents] = useState([])
   const [submitting, setSubmitting] = useState(false)
   const [countdown, setCountdown] = useState({ d: '00', h: '00', m: '00', s: '00' })
+  const heroRef = useRef(null)
 
   useEffect(() => {
     loadInvite()
   }, [slug])
 
+  // Theme-specific animations injected into hero
+  useEffect(() => {
+    if (!invite || !heroRef.current) return
+    const hero = heroRef.current
+    const els = []
+
+    if (invite.theme === 'midnight') {
+      for (let i = 0; i < 80; i++) {
+        const s = document.createElement('div')
+        const sz = Math.random() * 2 + 1
+        s.style.cssText = `position:absolute;width:${sz}px;height:${sz}px;background:white;border-radius:50%;left:${Math.random()*100}%;top:${Math.random()*100}%;animation:star-twinkle ${1+Math.random()*2}s ease-in-out ${Math.random()*2}s infinite;pointer-events:none`
+        hero.appendChild(s)
+        els.push(s)
+      }
+    }
+
+    if (invite.theme === 'gulabi') {
+      const colors = ['#F2C4CE', '#E8D5B0', '#C9A84C', '#F5EDD8']
+      for (let i = 0; i < 20; i++) {
+        const p = document.createElement('div')
+        const sz = 6 + Math.random() * 8
+        p.style.cssText = `position:absolute;width:${sz}px;height:${sz}px;background:${colors[Math.floor(Math.random()*colors.length)]};border-radius:50% 0 50% 0;left:${Math.random()*100}%;top:-10px;opacity:0.7;animation:petal-fall ${3+Math.random()*4}s linear ${Math.random()*4}s infinite;pointer-events:none`
+        hero.appendChild(p)
+        els.push(p)
+      }
+    }
+
+    return () => els.forEach(e => e.parentNode?.removeChild(e))
+  }, [invite])
+
   async function loadInvite() {
     const { data, error } = await supabase.from('invites').select('*').eq('slug', slug).single()
     if (error || !data) { setError(true); setLoading(false); return }
     setInvite(data)
-    // Pre-select all events
     const events = (data.data?.events || []).filter(e => e.on !== false)
     setSelectedEvents(events.map(e => e.name))
     setLoading(false)
 
-    // Start countdown
     if (data.data?.wdate) {
       const target = new Date(data.data.wdate + 'T09:00:00')
       const tick = () => {
@@ -91,24 +119,37 @@ export default function InvitePage({ params }) {
   const events = (d.events || []).filter(e => e.on !== false)
   const photos = d.photos || []
 
+  // Text colours adapt for light themes (keerthana) vs dark themes (all others)
+  const isDark = t.dark !== false
+  const tx = {
+    muted:   isDark ? 'rgba(255,253,247,0.5)' : 'rgba(44,26,14,0.55)',
+    sub:     isDark ? 'rgba(255,253,247,0.4)' : 'rgba(44,26,14,0.45)',
+    body:    isDark ? '#FFFDF7' : '#2C1A0E',
+    label:   isDark ? 'rgba(255,253,247,0.4)' : 'rgba(44,26,14,0.35)',
+    cardBg:  isDark ? 'rgba(201,168,76,0.06)' : 'rgba(255,255,255,0.7)',
+    cardBdr: isDark ? 'rgba(201,168,76,0.12)' : 'rgba(201,168,76,0.25)',
+  }
+
   return (
     <div style={{ fontFamily: "'DM Sans',sans-serif", background: '#0a0a0a', minHeight: '100vh', display: 'flex', justifyContent: 'center' }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500&family=Great+Vibes&display=swap');
         @keyframes wave{0%,100%{transform:scaleY(1)}50%{transform:scaleY(1.8)}}
         @keyframes spin{to{transform:rotate(360deg)}}
+        @keyframes star-twinkle{0%,100%{opacity:1}50%{opacity:0.15}}
+        @keyframes petal-fall{0%{transform:translateY(0) rotate(0deg);opacity:0.7}100%{transform:translateY(110vh) rotate(360deg);opacity:0}}
       `}</style>
       <div style={{ width: '100%', maxWidth: '480px', background: 'transparent' }}>
 
         {/* HERO */}
-        <div style={{ background: t.heroBg, padding: '40px 20px 32px', textAlign: 'center', position: 'relative' }}>
-          <div style={{ fontSize: '11px', color: 'rgba(255,253,247,0.5)', letterSpacing: '0.15em', marginBottom: '12px' }}>{d.blessing || '✦ WITH BLESSINGS ✦'}</div>
-          {d.aboveNames && <div style={{ fontSize: '13px', color: 'rgba(255,253,247,0.5)', marginBottom: '8px' }}>{d.aboveNames}</div>}
+        <div ref={heroRef} style={{ background: t.heroBg, padding: '40px 20px 32px', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
+          <div style={{ fontSize: '11px', color: tx.muted, letterSpacing: '0.15em', marginBottom: '12px' }}>{d.blessing || '✦ WITH BLESSINGS ✦'}</div>
+          {d.aboveNames && <div style={{ fontSize: '13px', color: tx.muted, marginBottom: '8px' }}>{d.aboveNames}</div>}
           <div style={{ fontFamily: `'${font}',cursive,serif`, fontSize: '52px', color: t.accentColor, lineHeight: 1.1 }}>{n1}</div>
-          <div style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: '14px', color: 'rgba(255,253,247,0.4)', fontStyle: 'italic', margin: '4px 0' }}>&</div>
+          <div style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: '14px', color: tx.sub, fontStyle: 'italic', margin: '4px 0' }}>&</div>
           <div style={{ fontFamily: `'${font}',cursive,serif`, fontSize: '52px', color: t.accentColor, lineHeight: 1.1 }}>{n2}</div>
-          <div style={{ fontSize: '12px', color: 'rgba(255,253,247,0.4)', marginTop: '12px', letterSpacing: '0.08em' }}>{d.dateDisplay} · {d.wcity}</div>
-          {d.lovestory && <div style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: '15px', fontStyle: 'italic', color: 'rgba(255,253,247,0.5)', marginTop: '16px', maxWidth: '320px', margin: '16px auto 0', lineHeight: 1.6 }}>"{d.lovestory}"</div>}
+          <div style={{ fontSize: '12px', color: tx.sub, marginTop: '12px', letterSpacing: '0.08em' }}>{d.dateDisplay} · {d.wcity}</div>
+          {d.lovestory && <div style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: '15px', fontStyle: 'italic', color: tx.muted, marginTop: '16px', maxWidth: '320px', margin: '16px auto 0', lineHeight: 1.6 }}>"{d.lovestory}"</div>}
         </div>
 
         <div style={{ height: '0.5px', background: `linear-gradient(90deg,transparent,${t.accentColor},transparent)` }}></div>
@@ -127,7 +168,7 @@ export default function InvitePage({ params }) {
           </div>
         )}
 
-        {/* COUNTDOWN */}
+        {/* COUNTDOWN — always dark bg across all themes */}
         <div style={{ background: t.countdownBg, padding: '20px', textAlign: 'center' }}>
           <div style={{ fontSize: '10px', letterSpacing: '0.1em', color: 'rgba(255,253,247,0.4)', marginBottom: '10px' }}>COUNTING DOWN TO FOREVER</div>
           <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', alignItems: 'center' }}>
@@ -145,15 +186,15 @@ export default function InvitePage({ params }) {
 
         {/* EVENTS */}
         <div style={{ background: t.sectionBg, padding: '20px 16px' }}>
-          <div style={{ fontSize: '11px', letterSpacing: '0.1em', color: 'rgba(255,253,247,0.4)', textAlign: 'center', marginBottom: '4px' }}>CELEBRATIONS</div>
+          <div style={{ fontSize: '11px', letterSpacing: '0.1em', color: tx.label, textAlign: 'center', marginBottom: '4px' }}>CELEBRATIONS</div>
           <div style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: '22px', color: t.accentColor, textAlign: 'center', fontStyle: 'italic', marginBottom: '16px' }}>Join us for every moment</div>
           {events.map(ev => (
-            <div key={ev.name} style={{ display: 'flex', gap: '12px', alignItems: 'flex-start', padding: '12px', background: 'rgba(201,168,76,0.06)', borderRadius: '12px', marginBottom: '10px', border: '0.5px solid rgba(201,168,76,0.12)' }}>
+            <div key={ev.name} style={{ display: 'flex', gap: '12px', alignItems: 'flex-start', padding: '12px', background: tx.cardBg, borderRadius: '12px', marginBottom: '10px', border: `0.5px solid ${tx.cardBdr}` }}>
               <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(201,168,76,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '16px', flexShrink: 0 }}>{ev.icon || '🎉'}</div>
               <div>
-                <div style={{ fontSize: '14px', fontWeight: 500, color: '#FFFDF7', marginBottom: '2px' }}>{ev.name}</div>
-                <div style={{ fontSize: '12px', color: 'rgba(255,253,247,0.5)' }}>{ev.time}</div>
-                <div style={{ fontSize: '12px', color: 'rgba(255,253,247,0.4)' }}>{ev.venue}</div>
+                <div style={{ fontSize: '14px', fontWeight: 500, color: tx.body, marginBottom: '2px' }}>{ev.name}</div>
+                <div style={{ fontSize: '12px', color: tx.muted }}>{ev.time}</div>
+                <div style={{ fontSize: '12px', color: tx.sub }}>{ev.venue}</div>
                 {ev.map && <a href={ev.map} target="_blank" rel="noopener noreferrer" style={{ fontSize: '11px', color: t.accentColor, textDecoration: 'none', marginTop: '4px', display: 'inline-block' }}>📍 Get directions</a>}
               </div>
             </div>
@@ -163,7 +204,7 @@ export default function InvitePage({ params }) {
         {/* GALLERY */}
         {photos.length > 0 && (
           <div style={{ padding: '20px 16px 8px', background: t.sectionBg }}>
-            <div style={{ fontSize: '11px', letterSpacing: '0.1em', color: 'rgba(255,253,247,0.4)', textAlign: 'center', marginBottom: '4px' }}>OUR STORY</div>
+            <div style={{ fontSize: '11px', letterSpacing: '0.1em', color: tx.label, textAlign: 'center', marginBottom: '4px' }}>OUR STORY</div>
             <div style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: '22px', color: t.accentColor, textAlign: 'center', fontStyle: 'italic', marginBottom: '12px' }}>Moments we cherish</div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gridAutoRows: '80px', gap: '5px' }}>
               {photos.map((src, i) => (
@@ -226,13 +267,14 @@ export default function InvitePage({ params }) {
           </div>
         )}
 
-        {/* FOOTER */}
+        {/* FOOTER — always dark bg */}
         <div style={{ background: t.footerBg, padding: '24px 16px', textAlign: 'center', borderTop: '0.5px solid rgba(201,168,76,0.1)' }}>
           <div style={{ fontFamily: `'${font}',cursive,serif`, fontSize: '32px', color: t.accentColor }}>{n1} & {n2}</div>
           <div style={{ fontSize: '12px', color: 'rgba(255,253,247,0.3)', marginTop: '6px' }}>{d.dateDisplay} · {d.wcity}</div>
           {d.footerQuote && <div style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: '13px', fontStyle: 'italic', color: 'rgba(255,253,247,0.25)', marginTop: '8px' }}>"{d.footerQuote}"</div>}
           <div style={{ fontSize: '10px', color: 'rgba(255,253,247,0.15)', marginTop: '12px' }}>Made with love on <a href="/" style={{ color: 'rgba(201,168,76,0.3)', textDecoration: 'none' }}>Vowite</a></div>
         </div>
+
       </div>
     </div>
   )
