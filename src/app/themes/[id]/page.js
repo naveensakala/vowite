@@ -46,11 +46,6 @@ export default async function ThemeDetailPage({ params }) {
 
   return (
     <div style={{ fontFamily: "'DM Sans',sans-serif", background: 'var(--ivory)', minHeight: '100vh' }}>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500&family=Great+Vibes&display=swap');
-        :root{--gold:#C9A84C;--gold-dark:#9C7A2E;--ivory:#FFFDF7;--espresso:#2C1A0E;--espresso-mid:#5C3D22;}
-      `}</style>
-
       {/* TOP BAR */}
       <div style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100, height: '54px', background: 'white', borderBottom: '0.5px solid rgba(201,168,76,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 2rem' }}>
         <Link href="/themes" style={{ fontSize: '13px', color: 'var(--espresso-mid)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '6px' }}>← Back to themes</Link>
