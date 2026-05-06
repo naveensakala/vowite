@@ -93,15 +93,15 @@ export default async function ThemeDetailPage({ params }) {
           {/* COUNTDOWN — always dark bg */}
           <div style={{ background: styles.countdownBg || '#1a1a2e', padding: '20px', textAlign: 'center' }}>
             <div style={{ fontSize: '10px', letterSpacing: '0.1em', color: 'rgba(255,253,247,0.4)', marginBottom: '10px' }}>COUNTING DOWN TO FOREVER</div>
-            <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', alignItems: 'center' }}>
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '4px', alignItems: 'center' }}>
               {[['45','DAYS'],['12','HRS'],['30','MIN'],['00','SEC']].map(([val, lbl], i) => (
-                <span key={lbl} style={{ display: 'inline-flex', alignItems: 'center', gap: '12px' }}>
-                  <span style={{ textAlign: 'center' }}>
+                <div key={lbl} style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <div style={{ textAlign: 'center', minWidth: '40px' }}>
                     <div style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: '32px', fontWeight: 600, color: vis.accent, lineHeight: 1 }}>{val}</div>
                     <div style={{ fontSize: '9px', color: 'rgba(255,253,247,0.4)' }}>{lbl}</div>
-                  </span>
-                  {i < 3 && <span style={{ fontSize: '20px', color: 'rgba(201,168,76,0.3)', marginBottom: '10px' }}>:</span>}
-                </span>
+                  </div>
+                  {i < 3 && <div style={{ fontSize: '20px', color: 'rgba(201,168,76,0.3)', paddingBottom: '10px' }}>:</div>}
+                </div>
               ))}
             </div>
           </div>
