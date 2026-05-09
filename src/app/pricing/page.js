@@ -53,7 +53,7 @@ export default function PricingPage() {
       `}</style>
 
       {/* HERO */}
-      <section style={{minHeight:'50vh',display:'flex',alignItems:'center',justifyContent:'center',textAlign:'center',padding:'8rem 2rem 3rem',position:'relative',overflow:'hidden'}}>
+      <section style={{minHeight:'50vh',display:'flex',alignItems:'center',justifyContent:'center',textAlign:'center',padding:'2rem 2rem 3rem',position:'relative',overflow:'hidden'}}>
         <div style={{position:'absolute',inset:0,background:'radial-gradient(ellipse 80% 60% at 50% 0%,rgba(242,196,206,0.2) 0%,transparent 70%)',pointerEvents:'none'}}></div>
         <div className="fade-up" style={{position:'relative',maxWidth:'640px'}}>
           <div style={{display:'inline-flex',alignItems:'center',gap:'6px',background:'rgba(201,168,76,0.1)',border:'0.5px solid rgba(201,168,76,0.3)',borderRadius:'100px',padding:'5px 14px',fontSize:'12px',color:'var(--gold-dark)',fontWeight:500,marginBottom:'1.5rem',letterSpacing:'0.04em'}}>✦ Simple pricing</div>

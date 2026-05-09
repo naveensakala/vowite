@@ -65,7 +65,9 @@ export default function RootLayout({ children }) {
     <html lang="en" className={`${cormorant.variable} ${dmSans.variable}`}>
       <body>
         <Navbar />
-        {children}
+        <main style={{ paddingTop: '68px' }}>
+          {children}
+        </main>
         <Footer />
         <WhatsAppButton />
       </body>

@@ -41,7 +41,7 @@ export default function AuthPage() {
   const inputStyle = { width: '100%', padding: '12px 16px', border: '0.5px solid rgba(44,26,14,0.2)', borderRadius: '12px', fontSize: '14px', fontFamily: "'DM Sans',sans-serif", color: 'var(--espresso)', background: 'var(--ivory)', outline: 'none' }
 
   return (
-    <div style={{ fontFamily: "'DM Sans',sans-serif", background: 'var(--ivory)', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
+    <div style={{ fontFamily: "'DM Sans',sans-serif", background: 'var(--ivory)', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem', minHeight: 'calc(100vh - 68px)' }}>
       <style>{`
         input:focus { border-color: var(--gold) !important; }
         .auth-tab { cursor: pointer; transition: all 0.2s; }

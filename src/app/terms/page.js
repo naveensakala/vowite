@@ -22,7 +22,7 @@ export default function TermsPage() {
 
   return (
     <>
-      <div style={{ maxWidth: '720px', margin: '0 auto', padding: '6rem 2rem 5rem', fontFamily: "'DM Sans',sans-serif" }}>
+      <div style={{ maxWidth: '720px', margin: '0 auto', padding: '2rem 2rem 5rem', fontFamily: "'DM Sans',sans-serif" }}>
         <h1 style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 'clamp(32px,5vw,52px)', fontWeight: 500, color: 'var(--espresso)', marginBottom: '0.5rem' }}>Terms & <em style={{ fontStyle: 'italic', color: 'var(--gold)' }}>Conditions</em></h1>
         <p style={{ fontSize: '13px', color: 'var(--espresso-mid)', marginBottom: '3rem' }}>Last updated: May 2026</p>
         <p style={{ fontSize: '15px', color: 'var(--espresso-mid)', lineHeight: 1.8, fontWeight: 300, marginBottom: '2rem' }}>Please read these terms carefully before using Vowite. By accessing or using our service, you agree to be bound by these terms.</p>

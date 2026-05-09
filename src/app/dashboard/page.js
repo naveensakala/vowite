@@ -74,7 +74,7 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '80px 2rem 4rem' }}>
+      <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '2rem 2rem 4rem' }}>
         {loading ? (
           <div style={{ textAlign: 'center', padding: '4rem' }}>
             <div style={{ width: '32px', height: '32px', border: '2px solid rgba(201,168,76,0.2)', borderTopColor: 'var(--gold)', borderRadius: '50%', animation: 'spin 0.8s linear infinite', margin: '0 auto 1rem' }}></div>

@@ -33,7 +33,7 @@ export default function AboutPage() {
       `}</style>
 
       {/* HERO */}
-      <section style={{minHeight:'70vh',display:'flex',alignItems:'center',justifyContent:'center',textAlign:'center',padding:'8rem 2rem 4rem',position:'relative',overflow:'hidden'}}>
+      <section style={{minHeight:'70vh',display:'flex',alignItems:'center',justifyContent:'center',textAlign:'center',padding:'2rem 2rem 4rem',position:'relative',overflow:'hidden'}}>
         <div style={{position:'absolute',inset:0,background:'radial-gradient(ellipse 80% 60% at 50% 0%,rgba(242,196,206,0.25) 0%,transparent 70%),radial-gradient(ellipse 50% 40% at 80% 80%,rgba(201,168,76,0.12) 0%,transparent 60%)',pointerEvents:'none'}}></div>
         <div id="petals" style={{position:'absolute',inset:0,pointerEvents:'none',overflow:'hidden'}}></div>
         <div className="fade-up" style={{position:'relative',maxWidth:'680px'}}>

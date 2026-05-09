@@ -39,7 +39,7 @@ export default async function ThemesPage() {
 
   return (
     <>
-      <div style={{ paddingTop: '80px', minHeight: '100vh', background: 'var(--ivory-dark)' }}>
+      <div style={{ minHeight: '100vh', background: 'var(--ivory-dark)' }}>
         <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '4rem 2rem' }}>
           <p className="section-eyebrow" style={{ textAlign: 'center' }}>Choose your style</p>
           <h1 className="section-title">Themes for every <em>tradition</em></h1>
