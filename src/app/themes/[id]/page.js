@@ -34,7 +34,7 @@ async function getTheme(id) {
 }
 
 export default async function ThemeDetailPage({ params }) {
-  const { id } = params
+  const { id } = await params
 
   if (!THEME_VISUALS[id]) {
     return (
