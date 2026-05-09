@@ -1,8 +1,5 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import Navbar from '@/components/Navbar'
-import Footer from '@/components/Footer'
-import WhatsAppButton from '@/components/WhatsAppButton'
 import { createClient } from '@supabase/supabase-js'
 
 export const revalidate = 3600
@@ -42,7 +39,6 @@ export default async function ThemesPage() {
 
   return (
     <>
-      <Navbar />
       <div style={{ paddingTop: '80px', minHeight: '100vh', background: 'var(--ivory-dark)' }}>
         <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '4rem 2rem' }}>
           <p className="section-eyebrow" style={{ textAlign: 'center' }}>Choose your style</p>
@@ -70,8 +66,6 @@ export default async function ThemesPage() {
           </div>
         </div>
       </div>
-      <Footer />
-      <WhatsAppButton />
     </>
   )
 }

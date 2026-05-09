@@ -2,9 +2,6 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import Navbar from '@/components/Navbar'
-import Footer from '@/components/Footer'
-import WhatsAppButton from '@/components/WhatsAppButton'
 import { supabase } from '@/lib/supabase'
 
 const THEMES = [
@@ -70,8 +67,6 @@ export default function HomePage() {
 
   return (
     <>
-      <Navbar />
-
       <style>{`
         @keyframes fall { 0%{transform:translateY(-20px) rotate(0deg);opacity:0.7} 100%{transform:translateY(110vh) rotate(360deg);opacity:0} }
         @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
@@ -449,8 +444,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      <Footer />
-      <WhatsAppButton phone="919999999999" />
     </>
   )
 }

@@ -1,9 +1,6 @@
 'use client'
 import { useEffect } from 'react'
 import Link from 'next/link'
-import Navbar from '@/components/Navbar'
-import Footer from '@/components/Footer'
-import WhatsAppButton from '@/components/WhatsAppButton'
 
 export default function AboutPage() {
   useEffect(() => {
@@ -26,7 +23,6 @@ export default function AboutPage() {
 
   return (
     <>
-      <Navbar />
       <style>{`
         @keyframes fall{0%{transform:translateY(-20px) rotate(0deg);opacity:0.6}100%{transform:translateY(110vh) rotate(360deg);opacity:0}}
         .fade-up{opacity:0;transform:translateY(24px);transition:opacity 0.6s ease,transform 0.6s ease;}
@@ -140,8 +136,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <Footer />
-      <WhatsAppButton />
     </>
   )
 }

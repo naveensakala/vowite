@@ -1,5 +1,3 @@
-import Navbar from '@/components/Navbar'
-import Footer from '@/components/Footer'
 
 export const metadata = { title: 'Privacy Policy — Vowite' }
 
@@ -20,7 +18,6 @@ export default function PrivacyPage() {
 
   return (
     <>
-      <Navbar />
       <div style={{ maxWidth: '720px', margin: '0 auto', padding: '6rem 2rem 5rem', fontFamily: "'DM Sans',sans-serif" }}>
         <h1 style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 'clamp(32px,5vw,52px)', fontWeight: 500, color: 'var(--espresso)', marginBottom: '0.5rem' }}>Privacy <em style={{ fontStyle: 'italic', color: 'var(--gold)' }}>Policy</em></h1>
         <p style={{ fontSize: '13px', color: 'var(--espresso-mid)', marginBottom: '3rem' }}>Last updated: May 2026</p>
@@ -33,7 +30,6 @@ export default function PrivacyPage() {
           </div>
         ))}
       </div>
-      <Footer />
     </>
   )
 }

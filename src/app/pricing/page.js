@@ -1,9 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import Navbar from '@/components/Navbar'
-import Footer from '@/components/Footer'
-import WhatsAppButton from '@/components/WhatsAppButton'
 import { supabase } from '@/lib/supabase'
 
 export default function PricingPage() {
@@ -45,7 +42,6 @@ export default function PricingPage() {
 
   return (
     <>
-      <Navbar />
       <style>{`
         .fade-up{opacity:0;transform:translateY(24px);transition:opacity 0.6s ease,transform 0.6s ease;}
         .fade-up.visible{opacity:1;transform:translateY(0);}
@@ -167,8 +163,6 @@ export default function PricingPage() {
         </div>
       </section>
 
-      <Footer />
-      <WhatsAppButton />
     </>
   )
 }

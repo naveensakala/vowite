@@ -1,9 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import Navbar from '@/components/Navbar'
-import Footer from '@/components/Footer'
-import WhatsAppButton from '@/components/WhatsAppButton'
 
 export default function ContactPage() {
   const [form, setForm] = useState({ name1:'',name2:'',email:'',phone:'',date:'',city:'',theme:'',package:'',events:'',special:'' })
@@ -48,7 +45,6 @@ export default function ContactPage() {
 
   return (
     <>
-      <Navbar />
       <style>{`
         .fade-up{opacity:0;transform:translateY(24px);transition:opacity 0.6s ease,transform 0.6s ease;}
         .fade-up.visible{opacity:1;transform:translateY(0);}
@@ -222,8 +218,6 @@ export default function ContactPage() {
         </div>
       </div>
 
-      <Footer />
-      <WhatsAppButton />
     </>
   )
 }
