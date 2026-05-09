@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { supabase } from '@/lib/supabase'
+import { createClient } from '@supabase/supabase-js'
 import { THEME_STYLES } from '@/lib/themes'
 
 const THEME_VISUALS = {
@@ -20,12 +20,17 @@ const THEME_DEFAULTS = {
 }
 
 async function getTheme(id) {
-  const { data } = await supabase
-    .from('themes')
-    .select('*')
-    .eq('id', id)
-    .single()
-  return { ...(THEME_DEFAULTS[id] || {}), ...(data || {}) }
+  try {
+    const client = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+      { auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false } }
+    )
+    const { data } = await client.from('themes').select('*').eq('id', id).single()
+    return { ...(THEME_DEFAULTS[id] || {}), ...(data || {}) }
+  } catch {
+    return THEME_DEFAULTS[id] || {}
+  }
 }
 
 export default async function ThemeDetailPage({ params }) {

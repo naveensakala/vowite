@@ -3,7 +3,9 @@ import Image from 'next/image'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import WhatsAppButton from '@/components/WhatsAppButton'
-import { supabase } from '@/lib/supabase'
+import { createClient } from '@supabase/supabase-js'
+
+export const revalidate = 3600
 
 const THEME_VISUALS = {
   sindoor: { bg: 'linear-gradient(135deg,#8B1A1A,#C9422A,#E8A020)' },
@@ -13,9 +15,26 @@ const THEME_VISUALS = {
   keerthana: { img: '/images/temple1.jpg' },
 }
 
+const FALLBACK_THEMES = [
+  { id: 'sindoor',    name: 'Sindoor',        category: 'North Indian Hindu', price: 999,  tag: 'Classic'  },
+  { id: 'maangalyam',name: 'Maangalyam',      category: 'South Indian',       price: 999,  tag: 'Classic'  },
+  { id: 'midnight',  name: 'Midnight Gold',   category: 'Modern Luxury',      price: 1499, tag: 'Special'  },
+  { id: 'gulabi',    name: 'Gulabi',           category: 'North Indian Hindu', price: 999,  tag: 'Classic'  },
+  { id: 'keerthana', name: 'Keerthana',        category: 'South Indian',       price: 2499, tag: 'Premium'  },
+]
+
 async function getThemes() {
-  const { data } = await supabase.from('themes').select('*').eq('is_active', true).order('sort_order')
-  return data || []
+  try {
+    const client = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+      { auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false } }
+    )
+    const { data } = await client.from('themes').select('*').eq('is_active', true).order('sort_order')
+    return (data && data.length > 0) ? data : FALLBACK_THEMES
+  } catch {
+    return FALLBACK_THEMES
+  }
 }
 
 export default async function ThemesPage() {
